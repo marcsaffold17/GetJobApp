@@ -713,7 +713,8 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                         'Create Account',
                                         style: TextStyle(
                                           fontFamily: 'JetB',
-                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 19,
                                           // fontWeight: FontWeight.bold,
                                           color: Color.fromARGB(
                                             255,
