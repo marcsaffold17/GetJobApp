@@ -114,10 +114,10 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
   void showSuccess(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: const Color.fromARGB(255, 229, 221, 212),
+        backgroundColor: const Color.fromARGB(255, 244, 243, 240),
         content: Text(
           message,
-          style: const TextStyle(color: Color.fromARGB(255, 81, 163, 108)),
+          style: const TextStyle(color: Color.fromARGB(255, 17, 84, 116)),
         ),
       ),
     );
@@ -448,6 +448,7 @@ class CreateAccountPage extends State<MyCreateAccountPage>
   final confirmPassWordText = TextEditingController();
 
   String? _passwordError;
+  String? _emailError;
 
   @override
   void initState() {
@@ -464,13 +465,18 @@ class CreateAccountPage extends State<MyCreateAccountPage>
     );
   }
 
-  @override
   void showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message, style: const TextStyle(color: Colors.red)),
-      ),
-    );
+    setState(() {
+      _emailError = message;
+    });
+  }
+
+  void _clearError() {
+    if (_emailError != null) {
+      setState(() {
+        _emailError = null;
+      });
+    }
   }
 
   void handleCreateAccount() {
@@ -565,6 +571,7 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                   userNameText: emailText,
                                   hintText: 'Email',
                                   obscure: false,
+                                  onChanged: (_) => _clearError(),
                                 ),
                                 SizedBox(height: 12),
                                 LoginTextField(
@@ -592,6 +599,43 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                     }
                                   },
                                 ),
+                                if (_emailError != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 10,
+                                      right: 60,
+                                    ),
+                                    child: Container(
+                                      width: 270,
+                                      decoration: BoxDecoration(
+                                        color: Color.fromARGB(255, 202, 59, 59),
+                                        borderRadius: BorderRadius.circular(
+                                          30.0,
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 8.0,
+                                          bottom: 8.0,
+                                        ),
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          _emailError!,
+                                          style: TextStyle(
+                                            color: Color.fromARGB(
+                                              255,
+                                              229,
+                                              221,
+                                              212,
+                                            ),
+                                            fontFamily: 'RubikL',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 if (_passwordError != null)
                                   Padding(
                                     padding: const EdgeInsets.only(
