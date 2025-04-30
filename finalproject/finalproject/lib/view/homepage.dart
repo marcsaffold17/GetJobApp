@@ -27,13 +27,30 @@ class _MyHomePageState extends State<MyHomePage> {
     Center(child: Text("Workout History")),
   ];
 
+  Widget _buildHomePage() {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [_buildHomePage()];
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       appBar: AppBar(
         title: const Text(""),
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(255, 244, 243, 240),
+        ),
         backgroundColor: const Color.fromARGB(255, 0, 43, 75),
-        iconTheme: const IconThemeData(color: Colors.white),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
@@ -41,11 +58,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      body: _pages[_selectedIndex],
+      // drawer: const NavBar(),
+      body: pages[_selectedIndex],
       bottomNavigationBar: GNav(
         onTabChange: _onItemTapped,
         textStyle: const TextStyle(
-          color: Colors.white,
+          color: Color.fromARGB(255, 244, 243, 240),
           fontFamily: 'MontserratB',
         ),
         padding: const EdgeInsets.all(16),
@@ -58,30 +76,30 @@ class _MyHomePageState extends State<MyHomePage> {
           GButton(
             icon: Icons.home,
             text: 'Home',
-            iconColor: Colors.white,
-            iconActiveColor: Colors.white,
-            textColor: Colors.white,
+            iconColor: Color.fromARGB(255, 244, 238, 227),
+            iconActiveColor: Color.fromARGB(255, 244, 238, 227),
+            textColor: Color.fromARGB(255, 244, 238, 227),
           ),
           GButton(
             icon: Icons.sports_handball_outlined,
             text: 'Exercise List',
-            iconColor: Colors.white,
-            iconActiveColor: Colors.white,
-            textColor: Colors.white,
+            iconColor: Color.fromARGB(255, 244, 238, 227),
+            iconActiveColor: Color.fromARGB(255, 244, 238, 227),
+            textColor: Color.fromARGB(255, 244, 238, 227),
           ),
           GButton(
             icon: Icons.star_border_outlined,
             text: "Favorites",
-            iconColor: Colors.white,
-            iconActiveColor: Colors.white,
-            textColor: Colors.white,
+            iconColor: Color.fromARGB(255, 244, 238, 227),
+            iconActiveColor: Color.fromARGB(255, 244, 238, 227),
+            textColor: Color.fromARGB(255, 244, 238, 227),
           ),
           GButton(
             icon: Icons.history,
-            text: "History",
-            iconColor: Colors.white,
-            iconActiveColor: Colors.white,
-            textColor: Colors.white,
+            text: "Workout History",
+            iconColor: Color.fromARGB(255, 244, 238, 227),
+            iconActiveColor: Color.fromARGB(255, 244, 238, 227),
+            textColor: Color.fromARGB(255, 244, 238, 227),
           ),
         ],
       ),
