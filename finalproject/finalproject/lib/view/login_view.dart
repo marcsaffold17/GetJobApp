@@ -12,10 +12,10 @@ class LoginButtonPage extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/UMDGYM.jpg"),
-                fit: BoxFit.cover,
-              ),
+              // image: DecorationImage(
+              //   image: AssetImage("assets/images/UMDGYM.jpg"),
+              //   fit: BoxFit.cover,
+              // ),
             ),
           ),
           Container(
@@ -27,11 +27,11 @@ class LoginButtonPage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 120),
-                Image.asset(
-                  'assets/images/BeastMode.png',
-                  height: 300,
-                  width: 400,
-                ),
+                // Image.asset(
+                //   'assets/images/BeastMode.png',
+                //   height: 300,
+                //   width: 400,
+                // ),
                 SizedBox(height: 40),
                 const Divider(
                   height: 20,
@@ -162,10 +162,10 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
               Container(
                 height: constraints.maxHeight,
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/UMDGYM.jpg"),
-                    fit: BoxFit.cover,
-                  ),
+                  // image: DecorationImage(
+                  //   image: AssetImage("assets/images/UMDGYM.jpg"),
+                  //   fit: BoxFit.cover,
+                  // ),
                 ),
               ),
               Container(
@@ -421,10 +421,10 @@ class CreateAccountPage extends State<MyCreateAccountPage>
               Container(
                 height: constraints.maxHeight,
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/UMDGYM.jpg"),
-                    fit: BoxFit.cover,
-                  ),
+                  // image: DecorationImage(
+                  //   image: AssetImage("assets/images/UMDGYM.jpg"),
+                  //   fit: BoxFit.cover,
+                  // ),
                 ),
               ),
               Container(
