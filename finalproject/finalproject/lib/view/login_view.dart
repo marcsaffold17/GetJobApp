@@ -114,6 +114,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
   late LoginPresenter presenter;
   final userNameText = TextEditingController();
   final passWordText = TextEditingController();
+  final emailText = TextEditingController();
   String? _loginError;
 
   @override
@@ -160,17 +161,14 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
             children: [
               SizedBox(height: 100),
               Container(
-                height: constraints.maxHeight,
-                decoration: const BoxDecoration(
-                  // image: DecorationImage(
-                  //   image: AssetImage("assets/images/UMDGYM.jpg"),
-                  //   fit: BoxFit.cover,
-                  // ),
-                ),
+                height: 200,
+                width: 200,
+                // decoration: const BoxDecoration(
+                // ),
               ),
               Container(
                 height: constraints.maxHeight,
-                color: const Color.fromARGB(160, 20, 50, 31),
+                color: const Color.fromARGB(255, 244, 243, 240),
               ),
               SingleChildScrollView(
                 child: ConstrainedBox(
@@ -183,7 +181,15 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                             color: Color.fromARGB(255, 20, 50, 31),
                           ),
                         ),
-                        SizedBox(height: 160),
+                        SizedBox(height: 100),
+                        SizedBox(
+                          width: 200,
+                          height: 200,
+                          child: Image(
+                            image: AssetImage("assets/images/Logo.png"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                         Align(
                           alignment: Alignment.topLeft,
                           child: RichText(
@@ -191,99 +197,85 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                               style: TextStyle(
                                 fontFamily: 'MontserratB',
                                 fontSize: 40,
-                                color: const Color.fromARGB(255, 244, 238, 227),
+                                color: const Color.fromARGB(255, 0, 43, 75),
                               ),
                               children: const <TextSpan>[
-                                TextSpan(text: '\n  Login'),
+                                TextSpan(text: '\n  Sign In'),
                               ],
                             ),
                           ),
                         ),
-                        SizedBox(height: 80),
+                        SizedBox(height: 20),
                         Positioned(
                           left: -5,
                           right: -5,
                           top: 200,
                           bottom: -15,
-                          child: Container(
-                            padding: const EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 244, 238, 227),
-                              border: Border.all(
-                                width: 5.0,
-                                color: Color.fromARGB(255, 244, 238, 227),
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(30.0),
-                              ),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  SizedBox(height: 20),
-                                  LoginTextField(
-                                    userNameText: userNameText,
-                                    hintText: 'Username',
-                                    obscure: false,
-                                    onChanged: (_) => _clearError(),
-                                  ),
-                                  SizedBox(height: 12),
-                                  LoginTextField(
-                                    userNameText: passWordText,
-                                    hintText: 'Password',
-                                    obscure: true,
-                                    onChanged: (_) => _clearError(),
-                                  ),
-                                  if (_loginError != null)
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 10,
-                                        right: 60,
-                                      ),
-                                      child: Container(
-                                        width: 250,
-                                        decoration: BoxDecoration(
-                                          color: Color.fromARGB(
-                                            255,
-                                            202,
-                                            59,
-                                            59,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            30.0,
-                                          ),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                SizedBox(height: 20),
+                                LoginTextField(
+                                  userNameText: emailText,
+                                  hintText: 'Email',
+                                  obscure: false,
+                                  onChanged: (_) => _clearError(),
+                                ),
+                                SizedBox(height: 12),
+                                LoginTextField(
+                                  userNameText: passWordText,
+                                  hintText: 'Password',
+                                  obscure: true,
+                                  onChanged: (_) => _clearError(),
+                                ),
+                                if (_loginError != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 10,
+                                      right: 60,
+                                    ),
+                                    child: Container(
+                                      width: 250,
+                                      decoration: BoxDecoration(
+                                        color: Color.fromARGB(255, 202, 59, 59),
+                                        borderRadius: BorderRadius.circular(
+                                          30.0,
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 8.0,
-                                            bottom: 8.0,
-                                          ),
-                                          child: Text(
-                                            textAlign: TextAlign.center,
-                                            _loginError!,
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                255,
-                                                229,
-                                                221,
-                                                212,
-                                              ),
-                                              fontFamily: 'RubikL',
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 8.0,
+                                          bottom: 8.0,
+                                        ),
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          _loginError!,
+                                          style: TextStyle(
+                                            color: Color.fromARGB(
+                                              255,
+                                              229,
+                                              221,
+                                              212,
                                             ),
+                                            fontFamily: 'RubikL',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
                                           ),
                                         ),
                                       ),
                                     ),
-
-                                  SizedBox(height: 20),
-                                  Container(
-                                    width: 400,
+                                  ),
+                                SizedBox(height: 20),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 16.0,
+                                  ), // Add space from the right
+                                  child: Container(
+                                    width: 200,
                                     height: 60,
                                     decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 20, 50, 31),
+                                      color: Color.fromARGB(255, 0, 43, 75),
                                       borderRadius: BorderRadius.circular(30.0),
                                     ),
                                     child: ElevatedButton(
@@ -302,7 +294,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                       onPressed: () async {
                                         bool isValid =
                                             await presenter.CheckAccountInfo(
-                                              userNameText.text,
+                                              emailText.text,
                                               passWordText.text,
                                             );
                                         if (isValid) {
@@ -335,8 +327,58 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                SizedBox(height: 140),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Don't have an account?"),
+                                    // Container(
+                                    //   width: 400,
+                                    //   height: 60,
+                                    //   decoration: BoxDecoration(
+                                    //     color: Colors.transparent,
+                                    //     // borderRadius: BorderRadius.circular(30.0),
+                                    //   ),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 12.0,
+                                          horizontal: 16.0,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            30.0,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) =>
+                                                    const MyCreateAccountPage(
+                                                      title:
+                                                          'Create Account Page',
+                                                    ),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Create Account',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 0, 43, 75),
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'RubikL',
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -345,7 +387,6 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                   ),
                 ),
               ),
-              backButton(context),
             ],
           );
         },
@@ -367,8 +408,8 @@ class CreateAccountPage extends State<MyCreateAccountPage>
   late LoginPresenter presenter;
   final userNameText = TextEditingController();
   final passWordText = TextEditingController();
-  final confirmPassWordText = TextEditingController();
   final emailText = TextEditingController();
+  final confirmPassWordText = TextEditingController();
 
   String? _passwordError;
 
@@ -405,7 +446,11 @@ class CreateAccountPage extends State<MyCreateAccountPage>
       setState(() {
         _passwordError = null;
       });
-      presenter.createAccount(userNameText.text, passWordText.text);
+      presenter.createAccount(
+        emailText.text,
+        userNameText.text,
+        passWordText.text,
+      );
     }
   }
 
@@ -420,16 +465,7 @@ class CreateAccountPage extends State<MyCreateAccountPage>
               SizedBox(height: 100),
               Container(
                 height: constraints.maxHeight,
-                decoration: const BoxDecoration(
-                  // image: DecorationImage(
-                  //   image: AssetImage("assets/images/UMDGYM.jpg"),
-                  //   fit: BoxFit.cover,
-                  // ),
-                ),
-              ),
-              Container(
-                height: constraints.maxHeight,
-                color: const Color.fromARGB(160, 20, 50, 31),
+                color: const Color.fromARGB(255, 244, 243, 240),
               ),
               SingleChildScrollView(
                 child: ConstrainedBox(
@@ -437,7 +473,15 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                   child: IntrinsicHeight(
                     child: Column(
                       children: [
-                        const SizedBox(height: 160),
+                        SizedBox(height: 100),
+                        SizedBox(
+                          width: 200,
+                          height: 200,
+                          child: Image(
+                            image: AssetImage("assets/images/Logo.png"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                         Align(
                           alignment: Alignment.topLeft,
                           child: RichText(
@@ -445,7 +489,7 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                               style: TextStyle(
                                 fontFamily: 'MontserratB',
                                 fontSize: 40,
-                                color: const Color.fromARGB(255, 244, 238, 227),
+                                color: const Color.fromARGB(255, 0, 43, 75),
                               ),
                               children: const <TextSpan>[
                                 TextSpan(text: '  Create\n  Account'),
@@ -453,114 +497,99 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                             ),
                           ),
                         ),
-                        SizedBox(height: 80),
+                        // SizedBox(height: 0),
                         Positioned(
                           left: -5,
                           right: -5,
                           top: 200,
                           bottom: -15,
-                          child: Container(
-                            padding: const EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 244, 238, 227),
-                              border: Border.all(
-                                width: 5.0,
-                                color: Color.fromARGB(255, 244, 238, 227),
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(30.0),
-                              ),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  SizedBox(height: 30),
-                                  LoginTextField(
-                                    userNameText: userNameText,
-                                    hintText: 'Username',
-                                    obscure: false,
-                                  ),
-                                  SizedBox(height: 12),
-                                  LoginTextField(
-                                    userNameText: emailText,
-                                    hintText: 'Email',
-                                    obscure: false,
-                                  ),
-                                  SizedBox(height: 12),
-                                  LoginTextField(
-                                    userNameText: passWordText,
-                                    hintText: 'Password',
-                                    obscure: true,
-                                    onChanged: (value) {
-                                      if (_passwordError != null) {
-                                        setState(() {
-                                          _passwordError = null;
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  SizedBox(height: 12),
-                                  LoginTextField(
-                                    userNameText: confirmPassWordText,
-                                    hintText: 'Confirm Password',
-                                    obscure: true,
-                                    onChanged: (value) {
-                                      if (_passwordError != null) {
-                                        setState(() {
-                                          _passwordError = null;
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  if (_passwordError != null)
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 10,
-                                        right: 80,
-                                      ),
-                                      child: Container(
-                                        width: 200,
-                                        decoration: BoxDecoration(
-                                          color: Color.fromARGB(
-                                            255,
-                                            202,
-                                            59,
-                                            59,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            30.0,
-                                          ),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                SizedBox(height: 30),
+                                LoginTextField(
+                                  userNameText: userNameText,
+                                  hintText: 'Username',
+                                  obscure: false,
+                                ),
+                                SizedBox(height: 12),
+                                LoginTextField(
+                                  userNameText: emailText,
+                                  hintText: 'Email',
+                                  obscure: false,
+                                ),
+                                SizedBox(height: 12),
+                                LoginTextField(
+                                  userNameText: passWordText,
+                                  hintText: 'Password',
+                                  obscure: true,
+                                  onChanged: (value) {
+                                    if (_passwordError != null) {
+                                      setState(() {
+                                        _passwordError = null;
+                                      });
+                                    }
+                                  },
+                                ),
+                                SizedBox(height: 12),
+                                LoginTextField(
+                                  userNameText: confirmPassWordText,
+                                  hintText: 'Confirm Password',
+                                  obscure: true,
+                                  onChanged: (value) {
+                                    if (_passwordError != null) {
+                                      setState(() {
+                                        _passwordError = null;
+                                      });
+                                    }
+                                  },
+                                ),
+                                if (_passwordError != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 10,
+                                      right: 80,
+                                    ),
+                                    child: Container(
+                                      width: 200,
+                                      decoration: BoxDecoration(
+                                        color: Color.fromARGB(255, 202, 59, 59),
+                                        borderRadius: BorderRadius.circular(
+                                          30.0,
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 8.0,
-                                            bottom: 8.0,
-                                          ),
-                                          child: Text(
-                                            textAlign: TextAlign.center,
-                                            _passwordError!,
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                255,
-                                                229,
-                                                221,
-                                                212,
-                                              ),
-                                              fontSize: 14,
-                                              fontFamily: 'RubikL',
-                                              fontWeight: FontWeight.bold,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 8.0,
+                                          bottom: 8.0,
+                                        ),
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+                                          _passwordError!,
+                                          style: TextStyle(
+                                            color: Color.fromARGB(
+                                              255,
+                                              229,
+                                              221,
+                                              212,
                                             ),
+                                            fontSize: 14,
+                                            fontFamily: 'RubikL',
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
                                     ),
-                                  SizedBox(height: 20),
-                                  Container(
-                                    width: 400,
+                                  ),
+                                SizedBox(height: 20),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 16.0),
+                                  child: Container(
+                                    width: 200,
                                     height: 60,
                                     decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 20, 50, 31),
+                                      color: Color.fromARGB(255, 0, 43, 75),
                                       borderRadius: BorderRadius.circular(30.0),
                                     ),
                                     child: ElevatedButton(
@@ -593,11 +622,60 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Already have an account?"),
+
+                                    // Container(
+                                    //   width: 400,
+                                    //   height: 60,
+                                    //   decoration: BoxDecoration(
+                                    //     color: Colors.transparent,
+                                    //     // borderRadius: BorderRadius.circular(30.0),
+                                    //   ),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 12.0,
+                                          horizontal: 16.0,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            30.0,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => const MyLoginPage(
+                                                  title: 'Create Account Page',
+                                                ),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Login',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 0, 43, 75),
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'RubikL',
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            //container
                           ),
+                          //container
                         ),
                       ],
                     ),
@@ -649,27 +727,33 @@ class LoginTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      style: const TextStyle(fontFamily: 'RubikL', fontWeight: FontWeight.bold),
-      controller: userNameText,
-      obscureText: obscure,
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(
-            color: Color.fromARGB(255, 20, 50, 31),
-            width: 2,
-          ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: TextField(
+        style: const TextStyle(
+          fontFamily: 'RubikL',
+          fontWeight: FontWeight.bold,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide(
-            width: 3.0,
-            color: Color.fromARGB(255, 81, 163, 108),
+        controller: userNameText,
+        obscureText: obscure,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(
+              color: Color.fromARGB(255, 0, 43, 75),
+              width: 2,
+            ),
           ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide(
+              width: 3.0,
+              color: Color.fromARGB(255, 34, 124, 157),
+            ),
+          ),
+          hintText: hintText,
         ),
-        hintText: hintText,
       ),
     );
   }
