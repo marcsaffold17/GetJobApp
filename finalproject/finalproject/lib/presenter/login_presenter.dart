@@ -11,30 +11,32 @@ class LoginPresenter {
 
   LoginPresenter(this._view) : _authModel = AuthModel();
 
-  void createAccount(String email, String username, String password) {
-    _authModel
-        .createAccount(email, username, password)
-        .then((_) {
-          _view.showSuccess("Account created successfully");
-        })
-        .catchError((error) {
-          _view.showError("Couldn't create account");
-        });
-  }
-
-  Future<bool> CheckAccountInfo(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     try {
-      bool isValid = await _authModel.CheckAccountInfo(email, password);
-      if (isValid) {
-        _view.showSuccess("Correct Password");
+      bool success = await _authModel.login(email, password);
+      if (success) {
+        _view.showSuccess("Login successful");
         return true;
       } else {
-        _view.showError("Invalid Username/Password");
+        _view.showError("Invalid email or password");
         return false;
       }
-    } catch (error) {
-      _view.showError("Error checking account");
-      return false; // Ensure a return value even if an error occurs
+    } catch (e) {
+      _view.showError(e.toString());
+      return false;
+    }
+  }
+
+  Future<void> createAccount(
+    String email,
+    String username,
+    String password,
+  ) async {
+    try {
+      await _authModel.createAccount(email, password, username);
+      _view.showSuccess("Account created successfully");
+    } catch (e) {
+      _view.showError(e.toString());
     }
   }
 }

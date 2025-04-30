@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../presenter/login_presenter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../main.dart';
+import 'package:email_validator/email_validator.dart';
 
 class ResetPasswordPage extends StatelessWidget {
   ResetPasswordPage({super.key});
@@ -11,7 +13,10 @@ class ResetPasswordPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 244, 243, 240),
-        // title: const Text('Reset Password'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Stack(
         children: [
@@ -21,57 +26,60 @@ class ResetPasswordPage extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-            child: Column(
-              children: [
-                SizedBox(height: 120),
-                LoginTextField(
-                  userNameText: emailText,
-                  hintText: 'Email',
-                  obscure: false,
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 0, 43, 75),
-                    minimumSize: const Size(250, 50),
-                  ),
-                  child: const Text(
-                    'Create Account',
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Reset Password',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 244, 243, 240),
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'RubikL',
-                      fontSize: 25,
+                      color: Color.fromARGB(255, 0, 43, 75),
                     ),
                   ),
-                ),
-                // SizedBox(height: 30),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder:
-                //             (context) => const MyLoginPage(title: 'Login Page'),
-                //       ),
-                //     );
-                //   },
-                //   style: ElevatedButton.styleFrom(
-                //     backgroundColor: Color.fromARGB(255, 244, 238, 227),
-                //     minimumSize: const Size(250, 50),
-                //   ),
-                //   child: const Text(
-                //     'Login',
-                //     style: TextStyle(
-                //       color: Color.fromARGB(255, 20, 50, 31),
-                //       fontWeight: FontWeight.bold,
-                //       fontFamily: 'RubikL',
-                //       fontSize: 25,
-                //     ),
-                //   ),
-                // ),
-                // SizedBox(height: 100),
-              ],
+                  const SizedBox(height: 30),
+                  LoginTextField(
+                    userNameText: emailText,
+                    hintText: 'Email',
+                    obscure: false,
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await FirebaseAuth.instance.sendPasswordResetEmail(
+                          email: emailText.text.trim(),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Password reset email sent'),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: ${e.toString()}')),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+                      minimumSize: const Size(250, 50),
+                    ),
+                    child: const Text(
+                      'Send Reset Link',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 244, 243, 240),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'RubikL',
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -117,7 +125,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
   @override
   void showError(String message) {
     setState(() {
-      _loginError = message; // Store the error message
+      _loginError = message;
     });
   }
 
@@ -138,12 +146,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
           return Stack(
             children: [
               SizedBox(height: 100),
-              Container(
-                height: 200,
-                width: 200,
-                // decoration: const BoxDecoration(
-                // ),
-              ),
+              Container(height: 200, width: 200),
               Container(
                 height: constraints.maxHeight,
                 color: const Color.fromARGB(255, 244, 243, 240),
@@ -246,22 +249,17 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                   ),
                                 SizedBox(height: 20),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                    right: 16.0,
-                                  ), // Add space from the right
-                                  child: Container(
+                                  padding: const EdgeInsets.only(right: 16.0),
+                                  child: SizedBox(
                                     width: 200,
                                     height: 60,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 0, 43, 75),
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.transparent,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 12.0,
-                                          horizontal: 16.0,
+                                        backgroundColor: const Color.fromARGB(
+                                          255,
+                                          0,
+                                          43,
+                                          75,
                                         ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
@@ -270,20 +268,51 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                         ),
                                       ),
                                       onPressed: () async {
-                                        bool isValid =
-                                            await presenter.CheckAccountInfo(
-                                              emailText.text,
-                                              passWordText.text,
-                                            );
-                                        if (isValid) {
-                                          // globalUsername = userNameText.text;
-                                          Navigator.push(
+                                        FocusScope.of(context).unfocus();
+                                        if (emailText.text.isEmpty ||
+                                            passWordText.text.isEmpty) {
+                                          showError(
+                                            "Please enter both email and password",
+                                          );
+                                          return;
+                                        }
+                                        bool success =
+                                            await showDialog<bool>(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (context) {
+                                                return FutureBuilder<bool>(
+                                                  future: presenter.login(
+                                                    emailText.text.trim(),
+                                                    passWordText.text,
+                                                  ),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      );
+                                                    }
+                                                    Navigator.of(context).pop(
+                                                      snapshot.data ?? false,
+                                                    );
+                                                    return Container();
+                                                  },
+                                                );
+                                              },
+                                            ) ??
+                                            false;
+
+                                        if (success && mounted) {
+                                          Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
                                               builder:
                                                   (context) => MyHomePage(
                                                     title: 'Home Page',
-                                                    // username: userNameText.text,
                                                   ),
                                             ),
                                           );
@@ -346,13 +375,6 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("Don't have an account?"),
-                                    // Container(
-                                    //   width: 400,
-                                    //   height: 60,
-                                    //   decoration: BoxDecoration(
-                                    //     color: Colors.transparent,
-                                    //     // borderRadius: BorderRadius.circular(30.0),
-                                    //   ),
                                     TextButton(
                                       style: TextButton.styleFrom(
                                         backgroundColor: Colors.transparent,
@@ -451,20 +473,32 @@ class CreateAccountPage extends State<MyCreateAccountPage>
   }
 
   void handleCreateAccount() {
+    if (!EmailValidator.validate(emailText.text.trim())) {
+      showError("Please enter a valid email address");
+      return;
+    }
     if (passWordText.text != confirmPassWordText.text) {
       setState(() {
         _passwordError = "Passwords do not match";
       });
-    } else {
-      setState(() {
-        _passwordError = null;
-      });
-      presenter.createAccount(
-        emailText.text.trim(),
-        userNameText.text.trim(),
-        passWordText.text,
-      );
+      return;
     }
+    if (passWordText.text.length < 6) {
+      setState(() {
+        _passwordError = "Password must be at least 6 characters";
+      });
+      return;
+    }
+
+    setState(() {
+      _passwordError = null;
+    });
+
+    presenter.createAccount(
+      emailText.text.trim(),
+      userNameText.text.trim(),
+      passWordText.text,
+    );
   }
 
   @override
@@ -510,7 +544,6 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                             ),
                           ),
                         ),
-                        // SizedBox(height: 0),
                         Positioned(
                           left: -5,
                           right: -5,
@@ -641,14 +674,6 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("Already have an account?"),
-
-                                    // Container(
-                                    //   width: 400,
-                                    //   height: 60,
-                                    //   decoration: BoxDecoration(
-                                    //     color: Colors.transparent,
-                                    //     // borderRadius: BorderRadius.circular(30.0),
-                                    //   ),
                                     TextButton(
                                       style: TextButton.styleFrom(
                                         backgroundColor: Colors.transparent,
@@ -688,7 +713,6 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                               ],
                             ),
                           ),
-                          //container
                         ),
                       ],
                     ),

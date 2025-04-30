@@ -1,45 +1,43 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthModel {
-  final FirebaseFirestore db = FirebaseFirestore.instance;
-  final databaseReference = FirebaseFirestore.instance.collection("Login-Info");
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<bool> login(String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email.trim(),
+        password: password,
+      );
+      return true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        return false;
+      }
+      throw Exception("Login failed: ${e.message}");
+    }
+  }
 
   Future<void> createAccount(
     String email,
-    String username,
     String password,
+    String username,
   ) async {
-    databaseReference.doc(email).set({
-      "Username": username,
-      "Password": password,
-    });
-  }
+    try {
+      final UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(
+            email: email.trim(),
+            password: password,
+          );
 
-  Future<bool> CheckAccountInfo(String email, String password) async {
-    var docRef = db.collection("Login-Info").doc(email);
-    var doc = await docRef.get();
-
-    if (doc.exists) {
-      print("works");
-      bool isValid = await checkPassword(email, password);
-      return isValid;
-    } else {
-      print("Invalid Username/Password");
-      return false;
+      // Store additional user info in Firestore if needed
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user?.uid)
+          .set({'username': username, 'email': email.trim()});
+    } catch (e) {
+      throw Exception("Account creation failed: ${e.toString()}");
     }
-  }
-}
-
-Future<bool> checkPassword(String username, String password) async {
-  final FirebaseFirestore db = FirebaseFirestore.instance;
-  DocumentSnapshot ds = await db.collection("Login-Info").doc(username).get();
-  String Password = ds.get("Password").toString();
-  print(Password);
-  if (Password == password) {
-    print("Correct Password");
-    return true;
-  } else {
-    print("Incorrect");
-    return false;
   }
 }
