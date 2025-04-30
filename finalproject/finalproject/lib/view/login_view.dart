@@ -11,13 +11,13 @@ class ResetPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 244, 243, 240),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back),
+      //     onPressed: () => Navigator.pop(context),
+      //   ),
+      // ),
       body: Stack(
         children: [
           Container(
@@ -82,6 +82,7 @@ class ResetPasswordPage extends StatelessWidget {
               ),
             ),
           ),
+          backButton(context),
         ],
       ),
     );
@@ -217,7 +218,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                       right: 60,
                                     ),
                                     child: Container(
-                                      width: 250,
+                                      width: 270,
                                       decoration: BoxDecoration(
                                         color: Color.fromARGB(255, 202, 59, 59),
                                         borderRadius: BorderRadius.circular(
@@ -738,7 +739,7 @@ Widget backButton(BuildContext context) {
         child: IconButton(
           icon: Icon(Icons.arrow_back),
           iconSize: 35,
-          color: Color.fromARGB(255, 244, 238, 227),
+          color: Color.fromARGB(255, 0, 43, 75),
           onPressed: () {
             Navigator.pop(context);
           },
