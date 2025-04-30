@@ -558,7 +558,7 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                 color: const Color.fromARGB(255, 0, 43, 75),
                               ),
                               children: const <TextSpan>[
-                                TextSpan(text: '   Create\n  Account'),
+                                TextSpan(text: '  Create\n  Account'),
                               ],
                             ),
                           ),
