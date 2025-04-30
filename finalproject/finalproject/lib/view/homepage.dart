@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.username});
+  const MyHomePage({super.key, this.title, this.username});
 
-  final String title;
-  final String username;
+  final String? title;
+  final String? username;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(""),
-        backgroundColor: const Color.fromARGB(255, 20, 50, 31),
+        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
         iconTheme: const IconThemeData(color: Colors.white),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -50,8 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         padding: const EdgeInsets.all(16),
         gap: 8,
-        backgroundColor: const Color.fromARGB(255, 20, 50, 31),
-        tabBackgroundColor: const Color.fromARGB(255, 49, 112, 75),
+        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+        tabBackgroundColor: const Color.fromARGB(255, 17, 84, 116),
         tabBorderRadius: 12,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         tabs: const [
