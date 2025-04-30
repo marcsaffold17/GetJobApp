@@ -2,97 +2,75 @@ import 'package:flutter/material.dart';
 import '../presenter/login_presenter.dart';
 import '../main.dart';
 
-class LoginButtonPage extends StatelessWidget {
-  const LoginButtonPage({super.key});
+class ResetPasswordPage extends StatelessWidget {
+  ResetPasswordPage({super.key});
+  final emailText = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+        // title: const Text('Reset Password'),
+      ),
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
-              // image: DecorationImage(
-              //   image: AssetImage("assets/images/UMDGYM.jpg"),
-              //   fit: BoxFit.cover,
-              // ),
-            ),
-          ),
-          Container(
             decoration: const BoxDecoration(
-              color: Color.fromARGB(160, 20, 50, 31),
+              color: Color.fromARGB(255, 244, 243, 240),
             ),
           ),
           Positioned.fill(
             child: Column(
               children: [
                 SizedBox(height: 120),
-                // Image.asset(
-                //   'assets/images/BeastMode.png',
-                //   height: 300,
-                //   width: 400,
-                // ),
-                SizedBox(height: 40),
-                const Divider(
-                  height: 20,
-                  thickness: 7,
-                  indent: 30,
-                  endIndent: 30,
-                  color: Color.fromARGB(255, 244, 238, 227),
+                LoginTextField(
+                  userNameText: emailText,
+                  hintText: 'Email',
+                  obscure: false,
                 ),
-                SizedBox(height: 40),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => const MyCreateAccountPage(
-                              title: 'Create Account Page',
-                            ),
-                      ),
-                    );
-                  },
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 244, 238, 227),
+                    backgroundColor: Color.fromARGB(255, 0, 43, 75),
                     minimumSize: const Size(250, 50),
                   ),
                   child: const Text(
                     'Create Account',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 20, 50, 31),
+                      color: Color.fromARGB(255, 244, 243, 240),
                       fontWeight: FontWeight.bold,
                       fontFamily: 'RubikL',
                       fontSize: 25,
                     ),
                   ),
                 ),
-                SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => const MyLoginPage(title: 'Login Page'),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 244, 238, 227),
-                    minimumSize: const Size(250, 50),
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 20, 50, 31),
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'RubikL',
-                      fontSize: 25,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 100),
+                // SizedBox(height: 30),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder:
+                //             (context) => const MyLoginPage(title: 'Login Page'),
+                //       ),
+                //     );
+                //   },
+                //   style: ElevatedButton.styleFrom(
+                //     backgroundColor: Color.fromARGB(255, 244, 238, 227),
+                //     minimumSize: const Size(250, 50),
+                //   ),
+                //   child: const Text(
+                //     'Login',
+                //     style: TextStyle(
+                //       color: Color.fromARGB(255, 20, 50, 31),
+                //       fontWeight: FontWeight.bold,
+                //       fontFamily: 'RubikL',
+                //       fontSize: 25,
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 100),
               ],
             ),
           ),
@@ -328,7 +306,42 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 140),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 12.0,
+                                        horizontal: 16.0,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          30.0,
+                                        ),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) => ResetPasswordPage(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Forgot Password?',
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 43, 75),
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'RubikL',
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 100),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -447,8 +460,8 @@ class CreateAccountPage extends State<MyCreateAccountPage>
         _passwordError = null;
       });
       presenter.createAccount(
-        emailText.text,
-        userNameText.text,
+        emailText.text.trim(),
+        userNameText.text.trim(),
         passWordText.text,
       );
     }
