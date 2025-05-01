@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../Model/video_model.dart';
+import '../model/video_model.dart';
 import '../presenter/video_presenter.dart';
-import '../repositories/video_repository.dart';
+import '../repository/video_repository.dart';
 
 class VideoPage extends StatefulWidget {
   @override

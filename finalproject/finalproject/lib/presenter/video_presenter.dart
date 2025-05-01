@@ -1,5 +1,5 @@
 import '../model/video_model.dart';
-import '../repositories/video_repository.dart';
+import '../repository/video_repository.dart';
 
 abstract class VideoView {
   void showVideos(List<VideoModel> videos);
