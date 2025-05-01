@@ -81,9 +81,6 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Software Engineering Jobs'),
-      ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _errorMessage != null
