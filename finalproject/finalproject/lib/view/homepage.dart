@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import '../view/SWESearch_view.dart';
 import '../view/DSTest.dart';
 import '../view/SWETest.dart';
+import '../view/favorites.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -42,7 +43,6 @@ class _MyHomePageState extends State<MyHomePage> {
     Center(child: Text("Home Page")),
     SWESearchView(),
     Center(child: Text("Favorites")),
-    Center(child: Text("Workout History")),
   ];
 
   @override
@@ -107,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           GButton(
             icon: Icons.history,
-            text: "Workout History",
+            text: "Favorited Jobs",
             iconColor: Color.fromARGB(255, 244, 238, 227),
             iconActiveColor: Color.fromARGB(255, 244, 238, 227),
             textColor: Color.fromARGB(255, 244, 238, 227),
