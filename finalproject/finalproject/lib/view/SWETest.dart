@@ -1,4 +1,3 @@
-import '../view/homepage.dart';
 import '../presenter/SWE_List_presenter.dart';
 import '../model/SWE_List_model.dart';
 // import '../presenter/DS_List_presenter.dart';
@@ -80,7 +79,7 @@ class _JobListScreenState extends State<JobListScreen> implements JobView {
                             ),
                           ),
                           Text(
-                            'Score: ${job.companyScore} | ${job.location}',
+                            'Score: ${job.companyScore} | ${job.location} | ${job.date}\n${job.salary}',
                             style: TextStyle(
                               fontSize: 11,
                               fontFamily: 'JetB',

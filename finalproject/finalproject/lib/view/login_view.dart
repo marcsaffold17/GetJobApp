@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../presenter/login_presenter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../main.dart';
 import 'package:email_validator/email_validator.dart';
 import '../view/homepage.dart';
 

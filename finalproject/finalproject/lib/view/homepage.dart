@@ -88,14 +88,14 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           GButton(
             icon: Icons.sports_handball_outlined,
-            text: 'Exercise List',
+            text: 'DS Jobs',
             iconColor: Color.fromARGB(255, 244, 238, 227),
             iconActiveColor: Color.fromARGB(255, 244, 238, 227),
             textColor: Color.fromARGB(255, 244, 238, 227),
           ),
           GButton(
             icon: Icons.star_border_outlined,
-            text: "Favorites",
+            text: "SE jobs",
             iconColor: Color.fromARGB(255, 244, 238, 227),
             iconActiveColor: Color.fromARGB(255, 244, 238, 227),
             textColor: Color.fromARGB(255, 244, 238, 227),
