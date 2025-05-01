@@ -16,12 +16,21 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   String _searchQuery = '';
   bool _isLoading = true;
   String? _errorMessage;
+  final int _itemsPerPage = 20;
+  int _currentnum = 20;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _presenter = JobPresenter(this);
-    _presenter.loadJobsFromCSV('assets/datasets/SWE-JAS.csv'); // Update path if needed
+    _presenter.loadJobsFromCSV('assets/datasets/SWE-JAS.csv');
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200){
+        _loadMoreJobs();
+      }
+      });
   }
 
   @override
@@ -49,8 +58,25 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
     setState(() {
       _searchQuery = query;
       _filteredJobs = results;
+      _currentnum = _itemsPerPage.clamp(0, results.length);
     });
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _loadMoreJobs() {
+    if (_currentnum < _filteredJobs.length) {
+      setState(() {
+        _currentnum = (_currentnum + _itemsPerPage).clamp(0, _filteredJobs.length);
+      });
+    }
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +104,8 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
             child: _filteredJobs.isEmpty
                 ? const Center(child: Text('No jobs found.'))
                 : ListView.builder(
-              itemCount: _filteredJobs.length,
+              controller: _scrollController,
+              itemCount: _currentnum,
               itemBuilder: (context, index) {
                 final job = _filteredJobs[index];
                 return Card(
@@ -110,7 +137,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                 );
               },
             ),
-          ),
+          )
         ],
       ),
     );
