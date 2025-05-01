@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import '../view/login_view.dart';
 import '../view/DSTest.dart';
 import '../view/SWETest.dart';
+import '../view/compareSalariesCities_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
       ),
       // home: const DJobListScreen(), // use to access the csv test page
       // home: const JobListScreen(),
-      home: const MyLoginPage(title: 'login Page'),
+      home: CompareCitiesScreen(),
+      //home: const CompareCitiesScreen(title: 'login Page'),
     );
   }
 }
