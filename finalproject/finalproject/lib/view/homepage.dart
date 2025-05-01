@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+
 import '../view/SWESearch_view.dart';
+import '../view/DSTest.dart';
+import '../view/SWETest.dart';
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, this.title, this.username});
@@ -43,6 +47,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final List<Widget> pages = [
+      _buildHomePage(),
+      DJobListScreen(),
+      JobListScreen(),
+    ];
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       appBar: AppBar(
@@ -81,14 +91,16 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           GButton(
             icon: Icons.sports_handball_outlined,
-            text: 'Job Search',
+
+            text: 'DS Jobs',
+            
             iconColor: Color.fromARGB(255, 244, 238, 227),
             iconActiveColor: Color.fromARGB(255, 244, 238, 227),
             textColor: Color.fromARGB(255, 244, 238, 227),
           ),
           GButton(
             icon: Icons.star_border_outlined,
-            text: "Favorites",
+            text: "SE jobs",
             iconColor: Color.fromARGB(255, 244, 238, 227),
             iconActiveColor: Color.fromARGB(255, 244, 238, 227),
             textColor: Color.fromARGB(255, 244, 238, 227),

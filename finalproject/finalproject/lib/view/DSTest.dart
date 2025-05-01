@@ -1,4 +1,3 @@
-import '../view/homepage.dart';
 import '../presenter/DS_List_presenter.dart';
 import '../model/DS_List_model.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +34,10 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
     ).showSnackBar(SnackBar(content: Text(message)));
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Jobs')),
+      backgroundColor: Color.fromARGB(255, 244, 243, 240),
+      // appBar: AppBar(title: const Text('Jobs')),
       body:
           jobs.isEmpty
               ? const Center(child: CircularProgressIndicator())
@@ -47,9 +46,45 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                 itemBuilder: (context, index) {
                   final job = jobs[index];
                   return ListTile(
-                    title: Text('${job.jobTitle} @ ${job.jobTitle}'),
-                    subtitle: Text(
-                      'Score: ${job.salary} | ${job.companyLocation}',
+                    tileColor: Colors.transparent,
+                    title: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 230, 230, 226),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            job.jobTitle,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'inter',
+                              color: Color.fromARGB(255, 0, 43, 75),
+                            ),
+                          ),
+                          Text(
+                            "${job.jobCategory} | ${job.workYear}",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontFamily: 'JetB',
+                              color: Color.fromARGB(255, 17, 84, 116),
+                            ),
+                          ),
+                          Text(
+                            'Company Size: ${job.companySize} | ${job.employeeResidence}\nSalary: ${job.salaryInUSD} | ${job.employmentType} | ${job.workSetting}',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontFamily: 'JetB',
+                              color: Color.fromARGB(255, 17, 84, 116),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
