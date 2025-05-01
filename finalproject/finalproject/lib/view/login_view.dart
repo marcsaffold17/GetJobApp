@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../presenter/login_presenter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../main.dart';
 import 'package:email_validator/email_validator.dart';
+import '../view/homepage.dart';
 
 class ResetPasswordPage extends StatelessWidget {
   ResetPasswordPage({super.key});
@@ -73,7 +73,7 @@ class ResetPasswordPage extends StatelessWidget {
                       style: TextStyle(
                         color: Color.fromARGB(255, 244, 243, 240),
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'RubikL',
+                        fontFamily: 'JetB',
                         fontSize: 20,
                       ),
                     ),
@@ -141,6 +141,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 244, 243, 240),
       resizeToAvoidBottomInset: true,
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -182,7 +183,10 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                 color: const Color.fromARGB(255, 0, 43, 75),
                               ),
                               children: const <TextSpan>[
-                                TextSpan(text: '\n  Sign In'),
+                                TextSpan(
+                                  text: '\n  Sign In',
+                                  style: TextStyle(fontFamily: 'inter'),
+                                ),
                               ],
                             ),
                           ),
@@ -240,7 +244,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                               221,
                                               212,
                                             ),
-                                            fontFamily: 'RubikL',
+                                            fontFamily: 'JetB',
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
                                           ),
@@ -248,7 +252,42 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                       ),
                                     ),
                                   ),
-                                SizedBox(height: 20),
+                                // SizedBox(height: 20),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 30),
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 0,
+                                        horizontal: 0,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          30.0,
+                                        ),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) => ResetPasswordPage(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Forgot Password?',
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 43, 75),
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'JetB',
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 16.0),
                                   child: SizedBox(
@@ -322,7 +361,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                       child: const Text(
                                         'Login',
                                         style: TextStyle(
-                                          fontFamily: 'RubikL',
+                                          fontFamily: 'JetB',
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: Color.fromARGB(
@@ -336,46 +375,19 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 15),
-                                  child: TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 12.0,
-                                        horizontal: 16.0,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          30.0,
-                                        ),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder:
-                                              (context) => ResetPasswordPage(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Forgot Password?',
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 0, 43, 75),
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'RubikL',
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ),
                                 SizedBox(height: 100),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text("Don't have an account?"),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "Don't have an account?",
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 17, 84, 116),
+                                        fontFamily: 'JetB',
+                                        fontSize: 14,
+                                      ),
+                                    ),
                                     TextButton(
                                       style: TextButton.styleFrom(
                                         backgroundColor: Colors.transparent,
@@ -405,10 +417,11 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                       child: const Text(
                                         'Create Account',
                                         style: TextStyle(
+                                          decoration: TextDecoration.underline,
                                           color: Color.fromARGB(255, 0, 43, 75),
                                           fontWeight: FontWeight.bold,
-                                          fontFamily: 'RubikL',
-                                          fontSize: 20,
+                                          fontFamily: 'JetB',
+                                          fontSize: 18,
                                         ),
                                       ),
                                     ),
@@ -541,7 +554,7 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                           child: RichText(
                             text: TextSpan(
                               style: TextStyle(
-                                fontFamily: 'MontserratB',
+                                fontFamily: 'inter',
                                 fontSize: 40,
                                 color: const Color.fromARGB(255, 0, 43, 75),
                               ),
@@ -628,8 +641,8 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                               221,
                                               212,
                                             ),
-                                            fontFamily: 'RubikL',
-                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'JetB',
+                                            // fontWeight: FontWeight.bold,
                                             fontSize: 14,
                                           ),
                                         ),
@@ -666,7 +679,7 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                               212,
                                             ),
                                             fontSize: 14,
-                                            fontFamily: 'RubikL',
+                                            fontFamily: 'JetB',
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -700,9 +713,10 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                       child: const Text(
                                         'Create Account',
                                         style: TextStyle(
-                                          fontFamily: 'RubikL',
-                                          fontSize: 20,
+                                          fontFamily: 'JetB',
                                           fontWeight: FontWeight.bold,
+                                          fontSize: 19,
+                                          // fontWeight: FontWeight.bold,
                                           color: Color.fromARGB(
                                             255,
                                             244,
@@ -718,7 +732,13 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text("Already have an account?"),
+                                    Text(
+                                      "Already have an account?",
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 17, 84, 116),
+                                        fontFamily: 'JetB',
+                                      ),
+                                    ),
                                     TextButton(
                                       style: TextButton.styleFrom(
                                         backgroundColor: Colors.transparent,
@@ -746,9 +766,10 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                       child: const Text(
                                         'Login',
                                         style: TextStyle(
+                                          decoration: TextDecoration.underline,
                                           color: Color.fromARGB(255, 0, 43, 75),
                                           fontWeight: FontWeight.bold,
-                                          fontFamily: 'RubikL',
+                                          fontFamily: 'JetB',
                                           fontSize: 20,
                                         ),
                                       ),
@@ -812,10 +833,7 @@ class LoginTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: TextField(
-        style: const TextStyle(
-          fontFamily: 'RubikL',
-          fontWeight: FontWeight.bold,
-        ),
+        style: const TextStyle(fontFamily: 'JetB', fontWeight: FontWeight.bold),
         controller: userNameText,
         obscureText: obscure,
         onChanged: onChanged,

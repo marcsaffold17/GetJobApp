@@ -31,11 +31,10 @@ class AuthModel {
             password: password,
           );
 
-      // Store additional user info in Firestore if needed
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userCredential.user?.uid)
-          .set({'username': username, 'email': email.trim()});
+      await FirebaseFirestore.instance.collection('Login-Info').doc(email).set({
+        'username': username,
+        'email': email.trim(),
+      });
     } catch (e) {
       throw Exception("Account creation failed: ${e.toString()}");
     }
