@@ -22,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Widget> _pages = [
     Center(child: Text("Home Page")),
-    Center(child: Text("Exercise List")),
+    Center(child: Text("Job Search")),
     Center(child: Text("Favorites")),
     Center(child: Text("Workout History")),
   ];
@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           GButton(
             icon: Icons.sports_handball_outlined,
-            text: 'Exercise List',
+            text: 'Job Search',
             iconColor: Color.fromARGB(255, 244, 238, 227),
             iconActiveColor: Color.fromARGB(255, 244, 238, 227),
             textColor: Color.fromARGB(255, 244, 238, 227),
