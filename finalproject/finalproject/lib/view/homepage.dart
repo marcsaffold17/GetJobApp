@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+
+import '../view/SWESearch_view.dart';
 import '../view/DSTest.dart';
 import '../view/SWETest.dart';
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, this.title, this.username});
@@ -22,13 +25,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  final List<Widget> _pages = [
-    Center(child: Text("Home Page")),
-    Center(child: Text("Exercise List")),
-    Center(child: Text("Favorites")),
-    Center(child: Text("Workout History")),
-  ];
-
   Widget _buildHomePage() {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 243, 240),
@@ -42,8 +38,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  final List<Widget> _pages = [
+    Center(child: Text("Home Page")),
+    SWESearchView(),
+    Center(child: Text("Favorites")),
+    Center(child: Text("Workout History")),
+  ];
+
   @override
   Widget build(BuildContext context) {
+
     final List<Widget> pages = [
       _buildHomePage(),
       DJobListScreen(),
@@ -64,8 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      // drawer: const NavBar(),
-      body: pages[_selectedIndex],
+      body: _pages[_selectedIndex],
       bottomNavigationBar: GNav(
         onTabChange: _onItemTapped,
         textStyle: const TextStyle(
@@ -88,7 +91,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           GButton(
             icon: Icons.sports_handball_outlined,
+
             text: 'DS Jobs',
+            
             iconColor: Color.fromARGB(255, 244, 238, 227),
             iconActiveColor: Color.fromARGB(255, 244, 238, 227),
             textColor: Color.fromARGB(255, 244, 238, 227),
