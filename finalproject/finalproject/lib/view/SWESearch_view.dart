@@ -158,6 +158,70 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                     ),
                     subtitle: Text(
                         '${job.company} • ${job.location}'),
+                    trailing: IconButton(
+                      icon:
+                      job.isFavorite
+                          ? Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Icon(
+                            Icons.star_border,
+                            color: const Color.fromARGB(
+                              255,
+                              151,
+                              135,
+                              8,
+                            ), // Outline
+                            size: 32,
+                          ),
+                          Icon(
+                            Icons.star,
+                            color: const Color.fromARGB(
+                              255,
+                              242,
+                              201,
+                              76,
+                            ),
+                            size: 24,
+                          ),
+                        ],
+                      )
+                          : Icon(
+                        Icons.star_border,
+                        color: Colors.grey,
+                        size: 32,
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          job.isFavorite = !job.isFavorite;
+                          if (job.isFavorite) {
+                            _favoriteJobs.add(
+                              job.jobTitle,
+                            );
+                          } else {
+                            _favoriteJobs.remove(
+                              job.jobTitle,
+                            );
+                          }
+                        });
+                        if (job.isFavorite) {
+                            await favoritesRef
+                                .doc(job.jobTitle)
+                                .set({
+                              'Title': job.jobTitle,
+                              'company': job.company,
+                              'Company Score': job.companyScore,
+                              'location': job.location,
+                              'Date': job.date,
+                              'Salary': job.salary,
+                            });
+                        } else {
+                          await favoritesRef
+                              .doc(job.jobTitle)
+                              .delete();
+                        }
+                      },
+                    ),
                     children: [
                       ListTile(
                         title: Text(
@@ -171,20 +235,6 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                             const SizedBox(height: 8),
                             Text('Salary: ${job.salary}'),
                           ],
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(
-                            _favoriteJobs
-                                .contains(job.jobTitle)
-                                ? Icons.star
-                                : Icons.star_border,
-                            color: _favoriteJobs
-                                .contains(job.jobTitle)
-                                ? Colors.amber
-                                : Colors.grey,
-                          ),
-                          onPressed: () =>
-                              _toggleFavorite(job),
                         ),
                       ),
                     ],

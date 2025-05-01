@@ -5,6 +5,7 @@ class JobEntry {
   final String location;
   final String date;
   final String salary;
+  bool isFavorite = false;
 
   JobEntry({
     required this.company,
@@ -13,6 +14,7 @@ class JobEntry {
     required this.location,
     required this.date,
     required this.salary,
+    required this.isFavorite,
   });
 
   factory JobEntry.fromMap(Map<String, dynamic> map) {
@@ -24,6 +26,7 @@ class JobEntry {
       location: (map['Location'] ?? '').toString(),
       date: (map['Date'] ?? '').toString(),
       salary: (map['Salary'] ?? '').toString(),
+      isFavorite: false,
     );
   }
 }
