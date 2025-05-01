@@ -22,8 +22,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         scaffoldBackgroundColor: Color.fromARGB(255, 244, 243, 240),
       ),
-      home: const MyHomePage(),
-      // home: const MyLoginPage(title: 'login Page'),
+      // home: const DJobListScreen(), // use to access the csv test page
+      // home: const JobListScreen(),
+      home: const MyLoginPage(title: 'login Page'),
     );
   }
 }
