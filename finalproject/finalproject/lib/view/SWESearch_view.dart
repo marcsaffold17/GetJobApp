@@ -81,11 +81,32 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
               itemCount: _filteredJobs.length,
               itemBuilder: (context, index) {
                 final job = _filteredJobs[index];
-                return ListTile(
-                  title: Text(job.jobTitle),
-                  subtitle:
-                  Text('${job.company} • ${job.location}'),
-                  trailing: Text(job.salary),
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 3,
+                  child: ExpansionTile(
+                    title: Text(job.jobTitle,
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('${job.company} • ${job.location}'),
+                    trailing: Text(job.salary),
+                    children: [
+                      ListTile(
+                        title: Text('Company Score: ${job.companyScore}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 4),
+                            Text('Date Posted: ${job.date}'),
+                            const SizedBox(height: 8),
+                            Text('Salary: ${job.salary}'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
