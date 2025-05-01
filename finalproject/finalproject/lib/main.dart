@@ -1,9 +1,6 @@
-import 'package:finalproject/view/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../view/login_view.dart';
-import '../view/DSTest.dart';
-import '../view/SWETest.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +19,6 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         // scaffoldBackgroundColor: Color.fromARGB(255, 244, 243, 240),
       ),
-      // home: const DJobListScreen(), // use to access the csv test page
-      // home: const JobListScreen(),
       home: const MyLoginPage(title: 'login Page'),
     );
   }
