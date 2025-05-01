@@ -13,6 +13,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   late JobPresenter _presenter;
   List<JobEntry> _allJobs = [];
   List<JobEntry> _filteredJobs = [];
+  String _searchQuery = '';
   bool _isLoading = true;
   String? _errorMessage;
 
@@ -20,30 +21,48 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   void initState() {
     super.initState();
     _presenter = JobPresenter(this);
-    // TODO: Load jobs from CSV here
+    _presenter.loadJobsFromCSV('assets/datasets/SWE-JAS.csv'); // Update path if needed
   }
 
   @override
   void onJobsLoaded(List<JobEntry> jobs) {
-    // TODO: Set the job lists and stop loading
+    setState(() {
+      _allJobs = jobs;
+      _filteredJobs = jobs;
+      _isLoading = false;
+    });
   }
 
   @override
   void onError(String message) {
-    // TODO: Handle error by setting _errorMessage and updating UI
+    setState(() {
+      _isLoading = false;
+      _errorMessage = message;
+    });
   }
 
   void _filterJobs(String query) {
-    // TODO: Implement filtering logic for job titles
+    final lowerQuery = query.toLowerCase();
+    final results = _allJobs
+        .where((job) => job.jobTitle.toLowerCase().contains(lowerQuery))
+        .toList();
+    setState(() {
+      _searchQuery = query;
+      _filteredJobs = results;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search SWE Jobs'),
+        title: const Text('Search Software Engineering Jobs'),
       ),
-      body: Column(
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _errorMessage != null
+          ? Center(child: Text(_errorMessage!))
+          : Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
@@ -52,14 +71,28 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                 labelText: 'Search by job title',
                 border: OutlineInputBorder(),
               ),
-              onChanged: (query) {
-                // TODO: Call _filterJobs here
+              onChanged: _filterJobs,
+            ),
+          ),
+          Expanded(
+            child: _filteredJobs.isEmpty
+                ? const Center(child: Text('No jobs found.'))
+                : ListView.builder(
+              itemCount: _filteredJobs.length,
+              itemBuilder: (context, index) {
+                final job = _filteredJobs[index];
+                return ListTile(
+                  title: Text(job.jobTitle),
+                  subtitle:
+                  Text('${job.company} • ${job.location}'),
+                  trailing: Text(job.salary),
+                );
               },
             ),
           ),
-          // TODO: Display loading spinner, error message, or job list here
         ],
       ),
     );
   }
 }
+
