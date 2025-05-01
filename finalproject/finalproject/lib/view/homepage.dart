@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Center(child: Text("Home Page")),
     SWESearchView(),
     Center(child: Text("Favorites")),
+    FavoritesPage(),
   ];
 
   @override
@@ -52,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _buildHomePage(),
       DJobListScreen(),
       JobListScreen(),
+      FavoritesPage(),
     ];
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 243, 240),
@@ -92,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
           GButton(
             icon: Icons.sports_handball_outlined,
 
-            text: 'DS Jobs',
+            text: 'Software Jobs',
             
             iconColor: Color.fromARGB(255, 244, 238, 227),
             iconActiveColor: Color.fromARGB(255, 244, 238, 227),
@@ -107,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           GButton(
             icon: Icons.history,
-            text: "Favorited Jobs",
+            text: "Favorite Jobs",
             iconColor: Color.fromARGB(255, 244, 238, 227),
             iconActiveColor: Color.fromARGB(255, 244, 238, 227),
             textColor: Color.fromARGB(255, 244, 238, 227),

@@ -3,6 +3,8 @@ import '../presenter/login_presenter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
 import '../view/homepage.dart';
+import '../globals/user_info.dart';
+
 
 class ResetPasswordPage extends StatelessWidget {
   ResetPasswordPage({super.key});
@@ -347,6 +349,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                             false;
 
                                         if (success && mounted) {
+                                          currentUserEmail = emailText.text.trim();
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'SWESearch_view.dart';
+import '../globals/user_info.dart';
+
 
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});
@@ -6,9 +10,6 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favorites'),
-      ),
       body: const Center(
         child: Text('Your favorites will appear here.'),
       ),
