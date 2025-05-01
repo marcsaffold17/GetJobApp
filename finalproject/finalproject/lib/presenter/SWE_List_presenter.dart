@@ -9,10 +9,16 @@ abstract class JobView {
 
 class JobPresenter {
   final JobView view;
+  List<JobEntry>? _cachedJobs;
 
   JobPresenter(this.view);
 
   Future<void> loadJobsFromCSV(String assetPath) async {
+    if (_cachedJobs != null) {
+      print('Using cached jobs');
+      view.onJobsLoaded(_cachedJobs!);
+      return;
+    }
     try {
       final rawData = await rootBundle.loadString(assetPath);
       print('Raw CSV Data: $rawData'); // Debug log
@@ -40,7 +46,7 @@ class JobPresenter {
             final map = Map<String, dynamic>.fromIterables(headers, row);
             return JobEntry.fromMap(map);
           }).toList();
-
+      _cachedJobs = jobs;
       print('Jobs loaded: ${jobs.length}'); // Debug log
       view.onJobsLoaded(jobs);
     } catch (e) {
