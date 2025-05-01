@@ -1,18 +1,16 @@
 import '../view/homepage.dart';
-import '../presenter/SWE_List_presenter.dart';
-import '../model/SWE_List_model.dart';
-// import '../presenter/DS_List_presenter.dart';
-// import '../model/DS_List_model.dart';
+import '../presenter/DS_List_presenter.dart';
+import '../model/DS_List_model.dart';
 import 'package:flutter/material.dart';
 
-class JobListScreen extends StatefulWidget {
-  const JobListScreen({super.key});
+class DJobListScreen extends StatefulWidget {
+  const DJobListScreen({super.key});
 
   @override
-  State<JobListScreen> createState() => _JobListScreenState();
+  State<DJobListScreen> createState() => _DJobListScreenState();
 }
 
-class _JobListScreenState extends State<JobListScreen> implements JobView {
+class _DJobListScreenState extends State<DJobListScreen> implements JobView {
   late JobPresenter presenter;
   List<JobEntry> jobs = [];
 
@@ -20,7 +18,7 @@ class _JobListScreenState extends State<JobListScreen> implements JobView {
   void initState() {
     super.initState();
     presenter = JobPresenter(this);
-    presenter.loadJobsFromCSV('assets/datasets/SWE-JAS.csv');
+    presenter.loadJobsFromCSV('assets/datasets/DS-JAS.csv');
   }
 
   @override
@@ -49,9 +47,9 @@ class _JobListScreenState extends State<JobListScreen> implements JobView {
                 itemBuilder: (context, index) {
                   final job = jobs[index];
                   return ListTile(
-                    title: Text('${job.jobTitle} @ ${job.company}'),
+                    title: Text('${job.jobTitle} @ ${job.jobTitle}'),
                     subtitle: Text(
-                      'Score: ${job.companyScore} | ${job.location}',
+                      'Score: ${job.salary} | ${job.companyLocation}',
                     ),
                   );
                 },
