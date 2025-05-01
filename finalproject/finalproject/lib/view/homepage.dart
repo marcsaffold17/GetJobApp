@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import '../view/DSTest.dart';
+import '../view/SWETest.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, this.title, this.username});
@@ -42,7 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [_buildHomePage()];
+    final List<Widget> pages = [
+      _buildHomePage(),
+      DJobListScreen(),
+      JobListScreen(),
+    ];
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       appBar: AppBar(
