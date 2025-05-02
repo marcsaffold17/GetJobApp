@@ -254,12 +254,30 @@ class _ChecklistPageState extends State<ChecklistPage> {
                                         item.date != null
                                             ? 'Due: ${DateFormat.yMMMd().format(item.date!)}'
                                             : 'No due date',
-                                        style: const TextStyle(fontSize: 14),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontFamily:
+                                              'JetB', // or 'MontserratB' or any other you've added
+                                          color: Color.fromARGB(255, 0, 43, 75),
+                                        ),
                                       ),
                                       TextButton(
                                         onPressed:
                                             () => _selectDate(context, index),
-                                        child: const Text('Set Date'),
+                                        child: const Text(
+                                          'Set Date',
+                                          style: TextStyle(
+                                            fontFamily:
+                                                'JetB', // use your preferred font
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(
+                                              255,
+                                              34,
+                                              124,
+                                              157,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
