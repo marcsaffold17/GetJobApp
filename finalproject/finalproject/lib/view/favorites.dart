@@ -57,7 +57,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 child: ListTile(
                   title: Text(data['Title'] ?? 'No Title'),
                   subtitle: Text('${data['company'] ?? 'Unknown'} • ${data['location'] ?? 'Unknown'}'),
-                  trailing: Text(data['Salary'] ?? 'No Salary'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      // Remove from favorites
+                      favoritesRef.doc(docs[index].id).delete();
+                    },
+                  ),
                   onTap: () {
                     // Optional: Navigate to job details
                   },
