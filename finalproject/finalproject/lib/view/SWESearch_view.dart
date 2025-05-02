@@ -63,12 +63,6 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
     });
   }
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   void _loadMoreJobs() {
     if (_currentnum < _filteredJobs.length) {
       setState(() {
@@ -81,10 +75,15 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
-      backgroundColor: Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       body:
           _isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -112,7 +111,12 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                               itemBuilder: (context, index) {
                                 final job = _filteredJobs[index];
                                 return Card(
-                                  color: Color.fromARGB(255, 230, 230, 226),
+                                  color: const Color.fromARGB(
+                                    255,
+                                    230,
+                                    230,
+                                    226,
+                                  ),
                                   margin: const EdgeInsets.symmetric(
                                     horizontal: 12,
                                     vertical: 6,
@@ -123,19 +127,14 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                                   elevation: 3,
                                   child: ExpansionTile(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        12,
-                                      ), // Keep rounded corners
-                                      side: BorderSide.none, // Remove border
-                                    ),
-                                    collapsedShape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        12,
-                                      ), // Keep when collapsed
+                                      borderRadius: BorderRadius.circular(12),
                                       side: BorderSide.none,
                                     ),
-                                    // collapsedShape: Border(),
-                                    backgroundColor: Color.fromARGB(
+                                    collapsedShape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      side: BorderSide.none,
+                                    ),
+                                    backgroundColor: const Color.fromARGB(
                                       255,
                                       230,
                                       230,
@@ -150,28 +149,28 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                                     ),
                                     subtitle: Text(
                                       '${job.company} • ${job.location}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color.fromARGB(255, 17, 84, 116),
                                         fontFamily: 'JetB',
                                       ),
                                     ),
                                     trailing: Text(
                                       job.salaryRange,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color.fromARGB(255, 17, 84, 116),
                                         fontFamily: 'JetB',
                                         fontSize: 10,
                                       ),
                                     ),
                                     children: [
-                                      Divider(
+                                      const Divider(
                                         color: Color.fromARGB(255, 0, 43, 75),
                                         thickness: 2,
                                       ),
                                       ListTile(
                                         title: Text(
                                           'Company Score: ${job.companyScore}',
-                                          style: DescriptionTStyle(),
+                                          style: _descriptionTextStyle(),
                                         ),
                                         subtitle: Column(
                                           crossAxisAlignment:
@@ -180,12 +179,12 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                                             const SizedBox(height: 4),
                                             Text(
                                               'Date Posted: ${job.date}',
-                                              style: DescriptionTStyle(),
+                                              style: _descriptionTextStyle(),
                                             ),
                                             const SizedBox(height: 8),
                                             Text(
                                               'Salary: ${job.salary}',
-                                              style: DescriptionTStyle(),
+                                              style: _descriptionTextStyle(),
                                             ),
                                           ],
                                         ),
@@ -201,8 +200,8 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
     );
   }
 
-  TextStyle DescriptionTStyle() {
-    return TextStyle(
+  TextStyle _descriptionTextStyle() {
+    return const TextStyle(
       color: Color.fromARGB(255, 34, 124, 157),
       fontFamily: 'JetB',
       fontSize: 12,
