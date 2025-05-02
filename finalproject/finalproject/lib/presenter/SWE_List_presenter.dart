@@ -44,7 +44,7 @@ class JobPresenter {
       final jobs =
           dataRows.map((row) {
             final map = Map<String, dynamic>.fromIterables(headers, row);
-            final id = '${map['Title']}_${map['company']}_${map['location']}'.replaceAll(' ', '_').replaceAll('/', '_').replaceAll(r'\', '_');
+            final id = '${map['Job Title']}_${map['Company']}_${map['Location']}'.replaceAll(' ', '_').replaceAll('/', '_').replaceAll(r'\', '_');
             return JobEntry.fromMap(map, id:id);
           }).toList();
       _cachedJobs = jobs;

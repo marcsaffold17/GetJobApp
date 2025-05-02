@@ -99,7 +99,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   }
 
   void _toggleFavorite(JobEntry job) async {
-    final jobId = job.jobTitle;
+    final jobId = job.id;
 
     if (_favoriteJobs.contains(jobId)) {
       await favoritesRef.doc(jobId).delete();
@@ -130,7 +130,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   }
 
   Widget _buildFavoriteIcon(JobEntry job) {
-    final isFavorite = _favoriteJobs.contains(job.jobTitle);
+    final isFavorite = _favoriteJobs.contains(job.id);
     return isFavorite
         ? Stack(
       alignment: Alignment.center,
