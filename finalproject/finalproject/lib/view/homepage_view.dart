@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'DSTest_view.dart';
-import 'SWETest_view.dart';
 import 'navBar_view.dart';
 
 class MyHomePage extends StatefulWidget {
