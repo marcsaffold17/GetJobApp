@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class JobEntry {
   final int workYear;
   final String jobTitle;
@@ -42,5 +44,11 @@ class JobEntry {
       companyLocation: (map['company_location'] ?? '').toString(),
       companySize: (map['company_size'] ?? '').toString(),
     );
+  }
+  String get formattedSalaryInUSD {
+    return NumberFormat.currency(
+      symbol: "\$",
+      decimalDigits: 0,
+    ).format(salaryInUSD);
   }
 }

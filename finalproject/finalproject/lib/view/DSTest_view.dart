@@ -94,9 +94,34 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: TextField(
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 17, 84, 116),
+                        fontFamily: 'JetB',
+                      ),
                       decoration: const InputDecoration(
                         labelText: 'Search by job category',
-                        border: OutlineInputBorder(),
+                        labelStyle: TextStyle(
+                          color: Color.fromARGB(150, 17, 84, 116),
+                          fontFamily: 'JetB',
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(255, 17, 84, 116),
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(
+                              255,
+                              34,
+                              124,
+                              157,
+                            ), // Border when focused
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
                       ),
                       onChanged: _filterJobs,
                     ),
@@ -148,18 +173,18 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                       ),
                                     ),
                                     subtitle: Text(
-                                      '${job.jobCategory} • ${job.employeeResidence} • ${job.workYear}',
+                                      '${job.jobCategory} • ${job.employeeResidence}',
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 17, 84, 116),
                                         fontFamily: 'JetB',
                                       ),
                                     ),
                                     trailing: Text(
-                                      "\$${job.salaryInUSD}",
+                                      job.formattedSalaryInUSD,
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 17, 84, 116),
                                         fontFamily: 'JetB',
-                                        fontSize: 10,
+                                        fontSize: 12,
                                       ),
                                     ),
                                     children: [
@@ -176,9 +201,12 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const SizedBox(height: 4),
                                             Text(
                                               'Employment Type: ${job.employmentType}',
+                                              style: _descriptionTextStyle(),
+                                            ),
+                                            Text(
+                                              'Work Year: ${job.workYear}',
                                               style: _descriptionTextStyle(),
                                             ),
                                             Text(
@@ -187,8 +215,16 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                             ),
                                             const SizedBox(height: 8),
                                             Text(
-                                              'Salary: \$${job.salary}',
-                                              style: _descriptionTextStyle(),
+                                              'Salary: ${job.formattedSalaryInUSD}',
+                                              style: TextStyle(
+                                                color: Color.fromARGB(
+                                                  255,
+                                                  17,
+                                                  84,
+                                                  116,
+                                                ),
+                                                fontFamily: 'JetB',
+                                              ),
                                             ),
                                           ],
                                         ),

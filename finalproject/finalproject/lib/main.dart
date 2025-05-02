@@ -17,7 +17,14 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        // scaffoldBackgroundColor: Color.fromARGB(255, 244, 243, 240),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Color.fromARGB(255, 17, 84, 116),
+          selectionColor: Color.fromARGB(100, 34, 124, 157),
+          selectionHandleColor: Color.fromARGB(255, 17, 84, 116),
+        ),
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: const Color.fromARGB(255, 17, 84, 116),
+        ),
       ),
       home: const MyLoginPage(title: 'login Page'),
     );

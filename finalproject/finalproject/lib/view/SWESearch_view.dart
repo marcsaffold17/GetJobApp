@@ -83,9 +83,10 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
 
   void _filterJobs(String query) {
     final lower = query.toLowerCase();
-    final results = _allJobs
-        .where((job) => job.jobTitle.toLowerCase().contains(lower))
-        .toList();
+    final results =
+        _allJobs
+            .where((job) => job.jobTitle.toLowerCase().contains(lower))
+            .toList();
     setState(() {
       _searchQuery = query;
       _filteredJobs = results;
@@ -96,8 +97,10 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   void _loadMoreJobs() {
     if (_currentLoaded < _filteredJobs.length) {
       setState(() {
-        _currentLoaded =
-            (_currentLoaded + _itemsPerPage).clamp(0, _filteredJobs.length);
+        _currentLoaded = (_currentLoaded + _itemsPerPage).clamp(
+          0,
+          _filteredJobs.length,
+        );
       });
     }
   }
@@ -130,14 +133,20 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   Widget _buildFavoriteIcon(JobEntry job) {
     return job.isFavorite
         ? Stack(
-      alignment: Alignment.center,
-      children: const [
-        Icon(Icons.star_border,
-            color: Color.fromARGB(255, 151, 135, 8), size: 32),
-        Icon(Icons.star,
-            color: Color.fromARGB(255, 242, 201, 76), size: 24),
-      ],
-    )
+          alignment: Alignment.center,
+          children: const [
+            Icon(
+              Icons.star_border,
+              color: Color.fromARGB(255, 151, 135, 8),
+              size: 32,
+            ),
+            Icon(
+              Icons.star,
+              color: Color.fromARGB(255, 242, 201, 76),
+              size: 24,
+            ),
+          ],
+        )
         : const Icon(Icons.star_border, color: Colors.grey, size: 32);
   }
 
@@ -151,130 +160,170 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 243, 240),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _errorMessage != null
-          ? Center(child: Text(_errorMessage!))
-          : Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: TextField(
-              decoration: const InputDecoration(
-                labelText: 'Search by job title',
-                border: OutlineInputBorder(),
-              ),
-              onChanged: _filterJobs,
-            ),
-          ),
-
-          // Button goes to compareSalariesCities_view.dart
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CompareCitiesScreen(jobs: _filteredJobs),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 0, 43, 75),
-              foregroundColor: Color.fromARGB(255, 244, 243, 240),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Text(
-              'Compare Salaries by City',
-              style: TextStyle(
-                fontFamily: 'inter',
-                color: Color.fromARGB(255, 244, 243, 240),
-                fontSize: 12,
-              ),
-            ),
-          ),
-
-          Expanded(
-            child: _filteredJobs.isEmpty
-                ? const Center(child: Text('No jobs found.'))
-                : ListView.builder(
-              controller: _scrollController,
-              itemCount: _currentLoaded,
-              itemBuilder: (context, index) {
-                final job = _filteredJobs[index];
-                return Card(
-                  color: const Color.fromARGB(255, 230, 230, 226),
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 3,
-                  child: ExpansionTile(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: BorderSide.none,
-                    ),
-                    collapsedShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: BorderSide.none,
-                    ),
-                    backgroundColor:
-                    const Color.fromARGB(255, 230, 230, 226),
-                    title: Text(
-                      job.jobTitle,
-                      style: const TextStyle(
-                        fontFamily: 'inter',
-                        color: Color.fromARGB(255, 0, 43, 75),
-                      ),
-                    ),
-                    subtitle: Text(
-                      '${job.company} • ${job.location}',
-                      style: const TextStyle(
-                        fontFamily: 'JetB',
+      body:
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : _errorMessage != null
+              ? Center(child: Text(_errorMessage!))
+              : Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: TextField(
+                      style: TextStyle(
                         color: Color.fromARGB(255, 17, 84, 116),
+                        fontFamily: 'JetB',
                       ),
-                    ),
-                    trailing: IconButton(
-                      icon: _buildFavoriteIcon(job),
-                      onPressed: () => _toggleFavorite(job),
-                    ),
-                    children: [
-                      const Divider(
-                        color: Color.fromARGB(255, 0, 43, 75),
-                        thickness: 2,
+                      decoration: const InputDecoration(
+                        labelText: 'Search by job title',
+                        labelStyle: TextStyle(
+                          color: Color.fromARGB(150, 17, 84, 116),
+                          fontFamily: 'JetB',
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(255, 17, 84, 116),
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(
+                              255,
+                              34,
+                              124,
+                              157,
+                            ), // Border when focused
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
                       ),
-                      ListTile(
-                        title: Text(
-                          'Company Score: ${job.companyScore}',
-                          style: _descriptionStyle(),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 4),
-                            Text(
-                              'Date Posted: ${job.date}',
-                              style: _descriptionStyle(),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Salary: ${job.salary}',
-                              style: _descriptionStyle(),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                      onChanged: _filterJobs,
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+
+                  // Button goes to compareSalariesCities_view.dart
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  CompareCitiesScreen(jobs: _filteredJobs),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 0, 43, 75),
+                      foregroundColor: Color.fromARGB(255, 244, 243, 240),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Compare Salaries by City',
+                      style: TextStyle(
+                        fontFamily: 'inter',
+                        color: Color.fromARGB(255, 244, 243, 240),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+
+                  Expanded(
+                    child:
+                        _filteredJobs.isEmpty
+                            ? const Center(child: Text('No jobs found.'))
+                            : ListView.builder(
+                              controller: _scrollController,
+                              itemCount: _currentLoaded,
+                              itemBuilder: (context, index) {
+                                final job = _filteredJobs[index];
+                                return Card(
+                                  color: const Color.fromARGB(
+                                    255,
+                                    230,
+                                    230,
+                                    226,
+                                  ),
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 3,
+                                  child: ExpansionTile(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      side: BorderSide.none,
+                                    ),
+                                    collapsedShape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      side: BorderSide.none,
+                                    ),
+                                    backgroundColor: const Color.fromARGB(
+                                      255,
+                                      230,
+                                      230,
+                                      226,
+                                    ),
+                                    title: Text(
+                                      job.jobTitle,
+                                      style: const TextStyle(
+                                        fontFamily: 'inter',
+                                        color: Color.fromARGB(255, 0, 43, 75),
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      '${job.company} • ${job.location}',
+                                      style: const TextStyle(
+                                        fontFamily: 'JetB',
+                                        color: Color.fromARGB(255, 17, 84, 116),
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: _buildFavoriteIcon(job),
+                                      onPressed: () => _toggleFavorite(job),
+                                    ),
+                                    children: [
+                                      const Divider(
+                                        color: Color.fromARGB(255, 0, 43, 75),
+                                        thickness: 2,
+                                      ),
+                                      ListTile(
+                                        title: Text(
+                                          'Company Score: ${job.companyScore}',
+                                          style: _descriptionStyle(),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              'Date Posted: ${job.date}',
+                                              style: _descriptionStyle(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Salary: ${job.salary}',
+                                              style: _descriptionStyle(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                  ),
+                ],
+              ),
     );
   }
 }
