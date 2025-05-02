@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 import '../view/SWESearch_view.dart';
-import '../view/DSTest.dart';
-import '../view/SWETest.dart';
 import '../view/favorites.dart';
 
 
@@ -51,8 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final List<Widget> pages = [
       _buildHomePage(),
-      DJobListScreen(),
-      JobListScreen(),
+     // DJobListScreen(),
+      SWESearchView(),
       FavoritesPage(),
     ];
     return Scaffold(
