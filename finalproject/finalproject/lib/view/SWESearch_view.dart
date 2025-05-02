@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../globals/user_info.dart';
 import '../presenter/SWE_List_presenter.dart';
 import '../model/SWE_List_model.dart';
+import '../view/compareSalariesCities_view.dart';
 
 class SWESearchView extends StatefulWidget {
   const SWESearchView({super.key});
@@ -166,6 +167,34 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
               onChanged: _filterJobs,
             ),
           ),
+
+          // Button goes to compareSalariesCities_view.dart
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CompareCitiesScreen(jobs: _filteredJobs),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 0, 43, 75),
+              foregroundColor: Color.fromARGB(255, 244, 243, 240),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              'Compare Salaries by City',
+              style: TextStyle(
+                fontFamily: 'inter',
+                color: Color.fromARGB(255, 244, 243, 240),
+                fontSize: 12,
+              ),
+            ),
+          ),
+
           Expanded(
             child: _filteredJobs.isEmpty
                 ? const Center(child: Text('No jobs found.'))

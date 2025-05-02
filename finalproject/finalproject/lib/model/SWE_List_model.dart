@@ -46,3 +46,19 @@ extension JobEntrySalaryExtension on JobEntry {
     return parts.length > 1 ? '(${parts[1].trim()}' : '';
   }
 }
+
+// Averages out the salary for every city on spreadsheet
+extension ParsedSalary on JobEntry {
+  double? get parsedSalary {
+    final numeric = RegExp(r'[\d,]+').allMatches(salary).map((m) {
+      return m.group(0)!.replaceAll(',', '');
+    }).toList();
+
+    if (numeric.isEmpty) return null;
+
+    final values = numeric.map(double.tryParse).whereType<double>().toList();
+    if (values.isEmpty) return null;
+
+    return values.length == 2 ? (values[0] + values[1]) / 2 : values[0];
+  }
+}
