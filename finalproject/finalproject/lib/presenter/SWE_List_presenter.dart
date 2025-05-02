@@ -25,9 +25,9 @@ class JobPresenter {
 
       // Parse the CSV with proper delimiter handling
       final rows = const CsvToListConverter().convert(
-        rawData,
+        rawData.replaceAll('\ufeff', ''),
         fieldDelimiter: ',',
-        eol: '\n',
+        // eol: '\r\n',
         shouldParseNumbers: true,
         textDelimiter: '"',
       );
