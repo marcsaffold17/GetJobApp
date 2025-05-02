@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
+
 import '../view/SWESearch_view.dart';
 import '../view/DSTest.dart';
 import '../view/SWETest.dart';
+import '../view/video_page.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -43,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
     SWESearchView(),
     Center(child: Text("Favorites")),
     Center(child: Text("Workout History")),
+    VideoPage(),
   ];
 
   @override
@@ -112,6 +115,13 @@ class _MyHomePageState extends State<MyHomePage> {
             iconActiveColor: Color.fromARGB(255, 244, 238, 227),
             textColor: Color.fromARGB(255, 244, 238, 227),
           ),
+          GButton(
+            icon: Icons.video_collection,
+            text: "Videos",
+            iconColor: Color.fromARGB(255, 244, 238, 227),
+            iconActiveColor: Color.fromARGB(255, 244, 238, 227),
+            textColor: Color.fromARGB(255, 244, 238, 227),
+          )
         ],
       ),
     );
