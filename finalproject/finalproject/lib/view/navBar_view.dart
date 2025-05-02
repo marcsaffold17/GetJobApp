@@ -16,38 +16,32 @@ class NavigationMenuView extends StatelessWidget {
         () => NavigationBarTheme(
           data: NavigationBarThemeData(
             labelTextStyle: WidgetStateProperty.all(
-              TextStyle(color: Color.fromRGBO(118, 73, 142, 1)),
+              TextStyle(
+                color: Color.fromARGB(255, 17, 84, 116),
+                fontFamily: 'inter',
+              ),
             ),
-            indicatorColor: Color.fromRGBO(118, 73, 142, 0.2),
+            indicatorColor: Color.fromARGB(200, 17, 84, 116),
           ),
           child: NavigationBar(
             height: 80,
             elevation: 0,
             shadowColor: Colors.blue,
-            backgroundColor: Color.fromRGBO(230, 230, 226, 1),
+            backgroundColor: Color.fromARGB(255, 230, 230, 226),
             selectedIndex: presenter.selectedIndex.value,
             onDestinationSelected: presenter.onItemTapped,
             destinations: const [
               NavigationDestination(
-                icon: Icon(
-                  LineIcons.home,
-                  color: Color.fromRGBO(118, 73, 142, 1),
-                ),
+                icon: Icon(Icons.home, color: Color.fromARGB(255, 0, 43, 75)),
                 label: 'Home',
               ),
               NavigationDestination(
-                icon: Icon(
-                  LineIcons.book,
-                  color: Color.fromRGBO(118, 73, 142, 1),
-                ),
-                label: 'Graphs',
+                icon: Icon(Icons.book, color: Color.fromARGB(255, 0, 43, 75)),
+                label: 'DataScience',
               ),
               NavigationDestination(
-                icon: Icon(
-                  LineIcons.user,
-                  color: Color.fromRGBO(118, 73, 142, 1),
-                ),
-                label: 'Profile',
+                icon: Icon(Icons.grade, color: Color.fromARGB(255, 0, 43, 75)),
+                label: 'Software Eng',
               ),
             ],
           ),
