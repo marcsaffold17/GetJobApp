@@ -122,6 +122,19 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                                   ),
                                   elevation: 3,
                                   child: ExpansionTile(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        12,
+                                      ), // Keep rounded corners
+                                      side: BorderSide.none, // Remove border
+                                    ),
+                                    collapsedShape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        12,
+                                      ), // Keep when collapsed
+                                      side: BorderSide.none,
+                                    ),
+                                    // collapsedShape: Border(),
                                     backgroundColor: Color.fromARGB(
                                       255,
                                       230,
