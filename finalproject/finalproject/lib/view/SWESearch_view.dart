@@ -65,10 +65,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
     final snapshot = await favoritesRef.get();
     final ids = snapshot.docs.map((doc) => doc.id).toSet();
     setState(() {
-      _favoriteJobIds = ids;
-      for (var job in _allJobs) {
-        job.isFavorite = _favoriteJobIds.contains(job.id);
-      }
+
     });
   }
 

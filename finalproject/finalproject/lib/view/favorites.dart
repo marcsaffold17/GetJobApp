@@ -54,7 +54,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 elevation: 3,
                 child: ExpansionTile(
                   title: Text(data['Title'] ?? 'No Title'),
-                  subtitle: Text('${data['company'] ?? 'Unknown'} • ${data['location'] ?? 'Unknown'}'),
+                  subtitle: Text('${data['Company'] ?? 'Unknown'} • ${data['Location'] ?? 'Unknown'}'),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () {

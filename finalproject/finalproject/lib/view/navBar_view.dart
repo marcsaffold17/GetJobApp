@@ -39,6 +39,10 @@ class NavigationMenuView extends StatelessWidget {
                 icon: Icon(Icons.book, color: Color.fromARGB(255, 0, 43, 75)),
                 label: 'Jobs',
               ),
+              NavigationDestination(
+                icon: Icon(Icons.favorite, color: Color.fromARGB(255, 0, 43, 75)),
+                label: 'Favorites',
+              ),
             ],
           ),
         ),
