@@ -1,4 +1,5 @@
 class JobEntry {
+  final String id;
   final String company;
   final double companyScore;
   final String jobTitle;
@@ -8,6 +9,7 @@ class JobEntry {
   bool isFavorite = false;
 
   JobEntry({
+    required this.id,
     required this.company,
     required this.companyScore,
     required this.jobTitle,
@@ -17,8 +19,9 @@ class JobEntry {
     required this.isFavorite,
   });
 
-  factory JobEntry.fromMap(Map<String, dynamic> map) {
+  factory JobEntry.fromMap(Map<String, dynamic> map,  {required String id}) {
     return JobEntry(
+      id: id,
       company: (map['Company'] ?? '').toString(),
       companyScore:
           double.tryParse((map['Company Score'] ?? '0.0').toString()) ?? 0.0,
