@@ -3,8 +3,7 @@ import '../globals/user_info.dart';
 import '../presenter/login_presenter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
-import 'homepage_view.dart';
-import 'navBar_view.dart';
+import '../view/navBar_view.dart';
 
 class ResetPasswordPage extends StatelessWidget {
   ResetPasswordPage({super.key});
@@ -356,9 +355,6 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                               builder:
                                                   (context) =>
                                                       NavigationMenuView(),
-                                              // (context) => MyHomePage(
-                                              //   title: 'Home Page',
-                                              // ),
                                             ),
                                           );
                                         }
