@@ -23,16 +23,16 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   final ScrollController _scrollController = ScrollController();
   Set<String> _favoriteJobs = {};
 
-  final favoritesRef = FirebaseFirestore.instance
-      .collection('Login-Info')
-      .doc(currentUserEmail)
-      .collection('favorites');
+  late CollectionReference favoritesRef;
 
   @override
   void initState() {
     super.initState();
     _presenter = JobPresenter(this);
-    _loadFavorites();
+    favoritesRef = FirebaseFirestore.instance
+        .collection('Login-Info')
+        .doc(currentUserEmail)
+        .collection('favorites');
     _presenter.loadJobsFromCSV('assets/datasets/SWE-JAS.csv');
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
@@ -44,8 +44,18 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
 
   void _loadFavorites() async {
     final snapshot = await favoritesRef.get();
+    final favorites = snapshot.docs.map((doc) => doc.id).toSet();
+
     setState(() {
-      _favoriteJobs = snapshot.docs.map((doc) => doc.id).toSet();
+      _favoriteJobs = favorites;
+
+      // Sync favorites with job entries
+      for (var job in _allJobs) {
+        job.isFavorite = _favoriteJobs.contains(job.jobTitle);
+      }
+      for (var job in _filteredJobs) {
+        job.isFavorite = _favoriteJobs.contains(job.jobTitle);
+      }
     });
   }
 
@@ -56,6 +66,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
       _filteredJobs = jobs;
       _isLoading = false;
     });
+    _loadFavorites(); // Load favorites after jobs are set
   }
 
   @override
@@ -94,18 +105,20 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
       await favoritesRef.doc(jobId).delete();
       setState(() {
         _favoriteJobs.remove(jobId);
+        job.isFavorite = false;
       });
     } else {
       await favoritesRef.doc(jobId).set({
-        'jobTitle': job.jobTitle,
+        'Title': job.jobTitle,
         'company': job.company,
+        'Company Score': job.companyScore,
         'location': job.location,
-        'date': job.date,
-        'salary': job.salary,
-        'companyScore': job.companyScore,
+        'Date': job.date,
+        'Salary': job.salary,
       });
       setState(() {
         _favoriteJobs.add(jobId);
+        job.isFavorite = true;
       });
     }
   }
@@ -114,6 +127,21 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Widget _buildFavoriteIcon(JobEntry job) {
+    final isFavorite = _favoriteJobs.contains(job.jobTitle);
+    return isFavorite
+        ? Stack(
+      alignment: Alignment.center,
+      children: const [
+        Icon(Icons.star_border,
+            color: Color.fromARGB(255, 151, 135, 8), size: 32),
+        Icon(Icons.star,
+            color: Color.fromARGB(255, 242, 201, 76), size: 24),
+      ],
+    )
+        : const Icon(Icons.star_border, color: Colors.grey, size: 32);
   }
 
   @override
@@ -159,68 +187,8 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                     subtitle: Text(
                         '${job.company} • ${job.location}'),
                     trailing: IconButton(
-                      icon:
-                      job.isFavorite
-                          ? Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Icon(
-                            Icons.star_border,
-                            color: const Color.fromARGB(
-                              255,
-                              151,
-                              135,
-                              8,
-                            ), // Outline
-                            size: 32,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: const Color.fromARGB(
-                              255,
-                              242,
-                              201,
-                              76,
-                            ),
-                            size: 24,
-                          ),
-                        ],
-                      )
-                          : Icon(
-                        Icons.star_border,
-                        color: Colors.grey,
-                        size: 32,
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          job.isFavorite = !job.isFavorite;
-                          if (job.isFavorite) {
-                            _favoriteJobs.add(
-                              job.jobTitle,
-                            );
-                          } else {
-                            _favoriteJobs.remove(
-                              job.jobTitle,
-                            );
-                          }
-                        });
-                        if (job.isFavorite) {
-                            await favoritesRef
-                                .doc(job.jobTitle)
-                                .set({
-                              'Title': job.jobTitle,
-                              'company': job.company,
-                              'Company Score': job.companyScore,
-                              'location': job.location,
-                              'Date': job.date,
-                              'Salary': job.salary,
-                            });
-                        } else {
-                          await favoritesRef
-                              .doc(job.jobTitle)
-                              .delete();
-                        }
-                      },
+                      icon: _buildFavoriteIcon(job),
+                      onPressed: () => _toggleFavorite(job),
                     ),
                     children: [
                       ListTile(
