@@ -16,7 +16,8 @@ class JobEntry {
     required this.location,
     required this.date,
     required this.salary,
-    required this.isFavorite,
+    required bool isFavorite,
+
   });
 
   factory JobEntry.fromMap(Map<String, dynamic> map,  {required String id}) {

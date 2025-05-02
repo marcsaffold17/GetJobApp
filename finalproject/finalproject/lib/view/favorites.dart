@@ -21,9 +21,33 @@ class _FavoritesPageState extends State<FavoritesPage> {
         .collection('favorites');
   }
 
+  TextStyle _descriptionStyle() => const TextStyle(
+    color: Color.fromARGB(255, 34, 124, 157),
+    fontFamily: 'JetB',
+    fontSize: 12,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 230, 230, 226),
+        elevation: 2,
+        centerTitle: true,
+        title: const Text(
+          'Favorite Jobs',
+          style: TextStyle(
+            fontFamily: 'inter',
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Color.fromARGB(255, 0, 43, 75),
+          ),
+        ),
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(255, 0, 43, 75),
+        ),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: favoritesRef.snapshots(),
         builder: (context, snapshot) {
@@ -47,14 +71,36 @@ class _FavoritesPageState extends State<FavoritesPage> {
               final data = docs[index].data() as Map<String, dynamic>;
 
               return Card(
+                color: const Color.fromARGB(255, 230, 230, 226),
                 margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 3,
                 child: ExpansionTile(
-                  title: Text(data['Title'] ?? 'No Title'),
-                  subtitle: Text('${data['company'] ?? 'Unknown'} • ${data['location'] ?? 'Unknown'}'),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide.none,
+                  ),
+                  collapsedShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide.none,
+                  ),
+                  backgroundColor: const Color.fromARGB(255, 230, 230, 226),
+                  title: Text(
+                    data['Title'] ?? 'No Title',
+                    style: const TextStyle(
+                      fontFamily: 'inter',
+                      color: Color.fromARGB(255, 0, 43, 75),
+                    ),
+                  ),
+                  subtitle: Text(
+                    '${data['Company'] ?? 'Unknown'} • ${data['Location'] ?? 'Unknown'}',
+                    style: const TextStyle(
+                      fontFamily: 'JetB',
+                      color: Color.fromARGB(255, 17, 84, 116),
+                    ),
+                  ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
@@ -62,22 +108,32 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     },
                   ),
                   children: [
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-                      child: Column(
+                    const Divider(
+                      color: Color.fromARGB(255, 0, 43, 75),
+                      thickness: 2,
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Company Score: ${data['Company Score'] ?? 'N/A'}',
+                        style: _descriptionStyle(),
+                      ),
+                      subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Company Score: ${data['Company Score'] ?? 'N/A'}'),
-                          SizedBox(height: 4),
-                          Text('Date Posted: ${data['Date'] ?? 'N/A'}'),
-                          SizedBox(height: 4),
-                          Text('Salary: ${data['Salary'] ?? 'N/A'}'),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Date Posted: ${data['Date'] ?? 'N/A'}',
+                            style: _descriptionStyle(),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Salary: ${data['Salary'] ?? 'N/A'}',
+                            style: _descriptionStyle(),
+                          ),
                         ],
                       ),
                     ),
                   ],
-
                 ),
               );
             },
