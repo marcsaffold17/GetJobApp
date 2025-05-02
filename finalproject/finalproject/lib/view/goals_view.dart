@@ -39,7 +39,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   void _addItem(String text) {
     setState(() {
-      items.add(ChecklistItem(text: text, isChecked: false));
+      items.add(ChecklistItem(text: text, isChecked: false, date: null));
     });
     _textController.clear();
     _save();
@@ -90,10 +90,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
         ),
         centerTitle: true,
         title: const Text(
-          'My Checklist',
+          'Career Goals',
           style: TextStyle(
             color: Color.fromARGB(255, 244, 238, 227),
-            fontFamily: 'MontserratB',
+            fontFamily: 'inter',
           ),
         ),
         backgroundColor: const Color.fromARGB(255, 0, 43, 75),
@@ -130,7 +130,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                           hintText: 'Add a career goal...',
                           hintStyle: TextStyle(
                             color: Color.fromARGB(199, 4, 4, 4),
-                            fontFamily: 'RubikL',
+                            fontFamily: 'JetB',
                             fontWeight: FontWeight.bold,
                           ),
                           border: InputBorder.none,
@@ -214,7 +214,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                                         child: Text(
                                           item.text,
                                           style: TextStyle(
-                                            fontFamily: 'RubikL',
+                                            fontFamily: 'JetB',
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18,
                                             decoration:

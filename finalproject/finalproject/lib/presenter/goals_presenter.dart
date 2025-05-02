@@ -10,27 +10,21 @@ class ChecklistPresenter {
 
   Future<List<ChecklistItem>> loadItems() async {
     final snapshot = await _checklistRef.get();
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return ChecklistItem(
-        text: data['text'] ?? '',
-        isChecked: data['isChecked'] ?? false,
-      );
-    }).toList();
+    return snapshot.docs
+        .map((doc) => ChecklistItem.fromMap(doc.data()))
+        .toList();
   }
 
   Future<void> saveItems(List<ChecklistItem> items) async {
-    // First, clear the current checklist
     final batch = FirebaseFirestore.instance.batch();
-    final currentDocs = await _checklistRef.get();
-    for (final doc in currentDocs.docs) {
+
+    final snapshot = await _checklistRef.get();
+    for (var doc in snapshot.docs) {
       batch.delete(doc.reference);
     }
 
-    // Then, write all current items
-    for (final item in items) {
-      final docRef = _checklistRef.doc(); // auto ID
-      batch.set(docRef, {'text': item.text, 'isChecked': item.isChecked});
+    for (var item in items) {
+      batch.set(_checklistRef.doc(), item.toMap());
     }
 
     await batch.commit();

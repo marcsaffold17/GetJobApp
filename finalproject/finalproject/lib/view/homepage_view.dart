@@ -17,7 +17,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    // Replace with your actual dark blue color if it's defined elsewhere
     const darkBlue = Color(0xFF003366); // Example dark blue
 
     return Scaffold(
@@ -47,10 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 );
               },
-              child: const Text(
-                'Go to Checklist',
-                style: TextStyle(fontSize: 16),
-              ),
+              child: const Text('Career Goals', style: TextStyle(fontSize: 16)),
             ),
           ),
         ],
