@@ -94,8 +94,16 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: TextField(
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 17, 84, 116),
+                        fontFamily: 'JetB',
+                      ),
                       decoration: const InputDecoration(
                         labelText: 'Search by job category',
+                        labelStyle: TextStyle(
+                          color: Color.fromARGB(150, 17, 84, 116),
+                          fontFamily: 'JetB',
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color.fromARGB(255, 17, 84, 116),
