@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'SWESearch_view.dart';
 import '../globals/user_info.dart';
-import '../model/SWE_List_model.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
@@ -54,19 +52,32 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 elevation: 3,
-                child: ListTile(
+                child: ExpansionTile(
                   title: Text(data['Title'] ?? 'No Title'),
                   subtitle: Text('${data['company'] ?? 'Unknown'} • ${data['location'] ?? 'Unknown'}'),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
-                      // Remove from favorites
                       favoritesRef.doc(docs[index].id).delete();
                     },
                   ),
-                  onTap: () {
-                    // Optional: Navigate to job details
-                  },
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Company Score: ${data['Company Score'] ?? 'N/A'}'),
+                          SizedBox(height: 4),
+                          Text('Date Posted: ${data['Date'] ?? 'N/A'}'),
+                          SizedBox(height: 4),
+                          Text('Salary: ${data['Salary'] ?? 'N/A'}'),
+                        ],
+                      ),
+                    ),
+                  ],
+
                 ),
               );
             },
@@ -76,4 +87,3 @@ class _FavoritesPageState extends State<FavoritesPage> {
     );
   }
 }
-
