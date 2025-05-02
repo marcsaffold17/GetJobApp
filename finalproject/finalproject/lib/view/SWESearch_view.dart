@@ -83,6 +83,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(),
       backgroundColor: Color.fromARGB(255, 244, 243, 240),
       body:
           _isLoading
