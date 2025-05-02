@@ -33,3 +33,15 @@ class JobEntry {
     );
   }
 }
+
+extension JobEntrySalaryExtension on JobEntry {
+  String get salaryRange {
+    final parts = salary.split('(');
+    return parts.first.trim();
+  }
+
+  String get salarySource {
+    final parts = salary.split('(');
+    return parts.length > 1 ? '(${parts[1].trim()}' : '';
+  }
+}

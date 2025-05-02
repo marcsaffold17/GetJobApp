@@ -21,7 +21,7 @@ class NavigationMenuView extends StatelessWidget {
                 fontFamily: 'inter',
               ),
             ),
-            indicatorColor: Color.fromARGB(200, 17, 84, 116),
+            indicatorColor: Color.fromARGB(190, 17, 84, 116),
           ),
           child: NavigationBar(
             height: 80,
@@ -37,11 +37,7 @@ class NavigationMenuView extends StatelessWidget {
               ),
               NavigationDestination(
                 icon: Icon(Icons.book, color: Color.fromARGB(255, 0, 43, 75)),
-                label: 'DataScience',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.grade, color: Color.fromARGB(255, 0, 43, 75)),
-                label: 'Software Eng',
+                label: 'Jobs',
               ),
             ],
           ),

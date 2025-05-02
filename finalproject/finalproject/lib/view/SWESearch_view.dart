@@ -27,10 +27,10 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
     _presenter.loadJobsFromCSV('assets/datasets/SWE-JAS.csv');
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200){
+          _scrollController.position.maxScrollExtent - 200) {
         _loadMoreJobs();
       }
-      });
+    });
   }
 
   @override
@@ -52,14 +52,26 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
 
   void _filterJobs(String query) {
     final lowerQuery = query.toLowerCase();
-    final results = _allJobs
-        .where((job) => job.jobTitle.toLowerCase().contains(lowerQuery))
-        .toList();
+    final results =
+        _allJobs
+            .where((job) => job.jobTitle.toLowerCase().contains(lowerQuery))
+            .toList();
     setState(() {
       _searchQuery = query;
       _filteredJobs = results;
       _currentnum = _itemsPerPage.clamp(0, results.length);
     });
+  }
+
+  void _loadMoreJobs() {
+    if (_currentnum < _filteredJobs.length) {
+      setState(() {
+        _currentnum = (_currentnum + _itemsPerPage).clamp(
+          0,
+          _filteredJobs.length,
+        );
+      });
+    }
   }
 
   @override
@@ -68,76 +80,131 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
     super.dispose();
   }
 
-  void _loadMoreJobs() {
-    if (_currentnum < _filteredJobs.length) {
-      setState(() {
-        _currentnum = (_currentnum + _itemsPerPage).clamp(0, _filteredJobs.length);
-      });
-    }
-
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _errorMessage != null
-          ? Center(child: Text(_errorMessage!))
-          : Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: TextField(
-              decoration: const InputDecoration(
-                labelText: 'Search by job title',
-                border: OutlineInputBorder(),
-              ),
-              onChanged: _filterJobs,
-            ),
-          ),
-          Expanded(
-            child: _filteredJobs.isEmpty
-                ? const Center(child: Text('No jobs found.'))
-                : ListView.builder(
-              controller: _scrollController,
-              itemCount: _currentnum,
-              itemBuilder: (context, index) {
-                final job = _filteredJobs[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 3,
-                  child: ExpansionTile(
-                    title: Text(job.jobTitle,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('${job.company} • ${job.location}'),
-                    trailing: Text(job.salary),
-                    children: [
-                      ListTile(
-                        title: Text('Company Score: ${job.companyScore}'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 4),
-                            Text('Date Posted: ${job.date}'),
-                            const SizedBox(height: 8),
-                            Text('Salary: ${job.salary}'),
-                          ],
-                        ),
+      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      body:
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : _errorMessage != null
+              ? Center(child: Text(_errorMessage!))
+              : Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        labelText: 'Search by job title',
+                        border: OutlineInputBorder(),
                       ),
-                    ],
+                      onChanged: _filterJobs,
+                    ),
                   ),
-                );
-              },
-            ),
-          )
-        ],
-      ),
+                  Expanded(
+                    child:
+                        _filteredJobs.isEmpty
+                            ? const Center(child: Text('No jobs found.'))
+                            : ListView.builder(
+                              controller: _scrollController,
+                              itemCount: _currentnum,
+                              itemBuilder: (context, index) {
+                                final job = _filteredJobs[index];
+                                return Card(
+                                  color: const Color.fromARGB(
+                                    255,
+                                    230,
+                                    230,
+                                    226,
+                                  ),
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 3,
+                                  child: ExpansionTile(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      side: BorderSide.none,
+                                    ),
+                                    collapsedShape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      side: BorderSide.none,
+                                    ),
+                                    backgroundColor: const Color.fromARGB(
+                                      255,
+                                      230,
+                                      230,
+                                      226,
+                                    ),
+                                    title: Text(
+                                      job.jobTitle,
+                                      style: const TextStyle(
+                                        fontFamily: 'inter',
+                                        color: Color.fromARGB(255, 0, 43, 75),
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      '${job.company} • ${job.location}',
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 17, 84, 116),
+                                        fontFamily: 'JetB',
+                                      ),
+                                    ),
+                                    trailing: Text(
+                                      job.salaryRange,
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 17, 84, 116),
+                                        fontFamily: 'JetB',
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                    children: [
+                                      const Divider(
+                                        color: Color.fromARGB(255, 0, 43, 75),
+                                        thickness: 2,
+                                      ),
+                                      ListTile(
+                                        title: Text(
+                                          'Company Score: ${job.companyScore}',
+                                          style: _descriptionTextStyle(),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              'Date Posted: ${job.date}',
+                                              style: _descriptionTextStyle(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Salary: ${job.salary}',
+                                              style: _descriptionTextStyle(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                  ),
+                ],
+              ),
+    );
+  }
+
+  TextStyle _descriptionTextStyle() {
+    return const TextStyle(
+      color: Color.fromARGB(255, 34, 124, 157),
+      fontFamily: 'JetB',
+      fontSize: 12,
     );
   }
 }
-
