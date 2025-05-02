@@ -96,7 +96,24 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                     child: TextField(
                       decoration: const InputDecoration(
                         labelText: 'Search by job category',
-                        border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(255, 17, 84, 116),
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(
+                              255,
+                              34,
+                              124,
+                              157,
+                            ), // Border when focused
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
                       ),
                       onChanged: _filterJobs,
                     ),
