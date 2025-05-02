@@ -19,7 +19,7 @@ class JobEntry {
     required this.isFavorite,
   });
 
-  factory JobEntry.fromMap(Map<String, dynamic> map,  {required String id}) {
+  factory JobEntry.fromMap(Map<String, dynamic> map, {required String id}) {
     return JobEntry(
       id: id,
       company: (map['Company'] ?? '').toString(),

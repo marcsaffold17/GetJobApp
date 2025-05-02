@@ -155,11 +155,11 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                       ),
                                     ),
                                     trailing: Text(
-                                      "\$${job.salaryInUSD}",
+                                      job.formattedSalaryInUSD,
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 17, 84, 116),
                                         fontFamily: 'JetB',
-                                        fontSize: 10,
+                                        fontSize: 12,
                                       ),
                                     ),
                                     children: [
@@ -190,8 +190,16 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                             ),
                                             const SizedBox(height: 8),
                                             Text(
-                                              'Salary: \$${job.salary}',
-                                              style: _descriptionTextStyle(),
+                                              'Salary: ${job.formattedSalaryInUSD}',
+                                              style: TextStyle(
+                                                color: Color.fromARGB(
+                                                  255,
+                                                  17,
+                                                  84,
+                                                  116,
+                                                ),
+                                                fontFamily: 'JetB',
+                                              ),
                                             ),
                                           ],
                                         ),
