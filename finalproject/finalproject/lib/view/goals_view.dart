@@ -22,7 +22,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   final favoritesRef = FirebaseFirestore.instance
       .collection('Login-Info')
-      .doc(globalUsername)
+      .doc(globalEmail)
       .collection('checklist');
 
   @override

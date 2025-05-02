@@ -5,7 +5,7 @@ import 'global_presenter.dart';
 class ChecklistPresenter {
   final _checklistRef = FirebaseFirestore.instance
       .collection('Login-Info')
-      .doc(globalUsername)
+      .doc(globalEmail)
       .collection('checklist');
 
   Future<List<ChecklistItem>> loadItems() async {

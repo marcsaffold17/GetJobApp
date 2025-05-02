@@ -1,3 +1,3 @@
 library;
 
-String? globalUsername;
+String? globalEmail;
