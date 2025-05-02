@@ -151,6 +151,10 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                                       ),
                                     ),
                                     children: [
+                                      Divider(
+                                        color: Color.fromARGB(255, 0, 43, 75),
+                                        thickness: 2,
+                                      ),
                                       ListTile(
                                         title: Text(
                                           'Company Score: ${job.companyScore}',
