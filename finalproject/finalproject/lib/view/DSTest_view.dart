@@ -148,7 +148,7 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                       ),
                                     ),
                                     subtitle: Text(
-                                      '${job.jobCategory} • ${job.employeeResidence} • ${job.workYear}',
+                                      '${job.jobCategory} • ${job.employeeResidence}',
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 17, 84, 116),
                                         fontFamily: 'JetB',
@@ -176,9 +176,12 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const SizedBox(height: 4),
                                             Text(
                                               'Employment Type: ${job.employmentType}',
+                                              style: _descriptionTextStyle(),
+                                            ),
+                                            Text(
+                                              'Work Year: ${job.workYear}',
                                               style: _descriptionTextStyle(),
                                             ),
                                             Text(
