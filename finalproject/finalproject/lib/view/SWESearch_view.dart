@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../globals/user_info.dart';
 import '../presenter/SWE_List_presenter.dart';
 import '../model/SWE_List_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class SWESearchView extends StatefulWidget {
   const SWESearchView({super.key});
@@ -16,32 +15,25 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   late JobPresenter _presenter;
   List<JobEntry> _allJobs = [];
   List<JobEntry> _filteredJobs = [];
-  String _searchQuery = '';
+  Set<String> _favoriteJobIds = {};
+  final _scrollController = ScrollController();
+  final int _itemsPerPage = 20;
+  int _currentLoaded = 20;
   bool _isLoading = true;
   String? _errorMessage;
-  final int _itemsPerPage = 20;
-  int _currentnum = 20;
-  final ScrollController _scrollController = ScrollController();
-  Set<String> _favoriteJobs = {};
-  CollectionReference? favoritesRef; // Nullable until initialized
+  String _searchQuery = '';
+
+  final favoritesRef = FirebaseFirestore.instance
+      .collection('Login-Info')
+      .doc(currentUserEmail)
+      .collection('favorites');
 
   @override
   void initState() {
     super.initState();
-    _initializeFirebase();
-  }
-
-  // Initialize Firebase and setup favoritesRef
-  void _initializeFirebase() async {
-    await Firebase.initializeApp(); // Ensure Firebase is initialized
-    favoritesRef = FirebaseFirestore.instance
-        .collection('Login-Info')
-        .doc(currentUserEmail)
-        .collection('favorites');
-
-    // After Firebase is initialized, load jobs
     _presenter = JobPresenter(this);
     _presenter.loadJobsFromCSV('assets/datasets/SWE-JAS.csv');
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
@@ -51,13 +43,14 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
   }
 
   @override
-  void onJobsLoaded(List<JobEntry> jobs) {
+  void onJobsLoaded(List<JobEntry> jobs) async {
+    _allJobs = jobs;
+    _filteredJobs = jobs;
+    await _loadFavorites();
     setState(() {
-      _allJobs = jobs;
-      _filteredJobs = jobs;
       _isLoading = false;
+      _currentLoaded = _itemsPerPage.clamp(0, _filteredJobs.length);
     });
-    _loadFavorites(); // Load favorites after jobs are set
   }
 
   @override
@@ -68,84 +61,65 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
     });
   }
 
-  void _loadFavorites() async {
-    if (favoritesRef == null) {
-      return; // Return if favoritesRef is not yet initialized
-    }
-
-    final snapshot = await favoritesRef!.get();
-    final favorites = snapshot.docs.map((doc) => doc.id).toSet();
+  Future<void> _loadFavorites() async {
+    final snapshot = await favoritesRef.get();
+    final ids = snapshot.docs.map((doc) => doc.id).toSet();
     setState(() {
-      _favoriteJobs = favorites;
-      // Sync favorites with job entries
+      _favoriteJobIds = ids;
       for (var job in _allJobs) {
-        job.isFavorite = _favoriteJobs.contains(job.id);
-      }
-      for (var job in _filteredJobs) {
-        job.isFavorite = _favoriteJobs.contains(job.id);
+        job.isFavorite = _favoriteJobIds.contains(job.id);
       }
     });
   }
 
   void _filterJobs(String query) {
-    final lowerQuery = query.toLowerCase();
+    final lower = query.toLowerCase();
     final results = _allJobs
-        .where((job) => job.jobTitle.toLowerCase().contains(lowerQuery))
+        .where((job) => job.jobTitle.toLowerCase().contains(lower))
         .toList();
     setState(() {
       _searchQuery = query;
       _filteredJobs = results;
-      _currentnum = _itemsPerPage.clamp(0, results.length);
+      _currentLoaded = _itemsPerPage.clamp(0, results.length);
     });
   }
 
   void _loadMoreJobs() {
-    if (_currentnum < _filteredJobs.length) {
+    if (_currentLoaded < _filteredJobs.length) {
       setState(() {
-        _currentnum =
-            (_currentnum + _itemsPerPage).clamp(0, _filteredJobs.length);
+        _currentLoaded =
+            (_currentLoaded + _itemsPerPage).clamp(0, _filteredJobs.length);
       });
     }
   }
 
   void _toggleFavorite(JobEntry job) async {
-    if (favoritesRef == null) {
-      return; // Prevent any operation if favoritesRef is not initialized
-    }
+    final jobId = job.jobTitle + job.company + job.location;
 
-    final jobId = job.jobTitle;
-
-    if (_favoriteJobs.contains(jobId)) {
-      await favoritesRef!.doc(jobId).delete(); // Remove from Firestore
+    if (_favoriteJobIds.contains(jobId)) {
+      await favoritesRef.doc(jobId).delete();
       setState(() {
-        _favoriteJobs.remove(jobId); // Remove from local set
-        job.isFavorite = false; // Update job state
+        _favoriteJobIds.remove(jobId);
+        job.isFavorite = false;
       });
     } else {
-      await favoritesRef!.doc(jobId).set({
+      await favoritesRef.doc(jobId).set({
         'Title': job.jobTitle,
-        'company': job.company,
+        'Company': job.company,
         'Company Score': job.companyScore,
-        'location': job.location,
+        'Location': job.location,
         'Date': job.date,
         'Salary': job.salary,
-      }); // Add to Firestore
+      });
       setState(() {
-        _favoriteJobs.add(jobId); // Add to local set
-        job.isFavorite = true; // Update job state
+        _favoriteJobIds.add(jobId);
+        job.isFavorite = true;
       });
     }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
   }
 
   Widget _buildFavoriteIcon(JobEntry job) {
-    final isFavorite = _favoriteJobs.contains(job.id);
-    return isFavorite
+    return job.isFavorite
         ? Stack(
       alignment: Alignment.center,
       children: const [
@@ -158,13 +132,11 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
         : const Icon(Icons.star_border, color: Colors.grey, size: 32);
   }
 
-  TextStyle _descriptionTextStyle() {
-    return const TextStyle(
-      color: Color.fromARGB(255, 34, 124, 157),
-      fontFamily: 'JetB',
-      fontSize: 12,
-    );
-  }
+  TextStyle _descriptionStyle() => const TextStyle(
+    color: Color.fromARGB(255, 34, 124, 157),
+    fontFamily: 'JetB',
+    fontSize: 12,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +149,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
           : Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12),
             child: TextField(
               decoration: const InputDecoration(
                 labelText: 'Search by job title',
@@ -191,20 +163,13 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                 ? const Center(child: Text('No jobs found.'))
                 : ListView.builder(
               controller: _scrollController,
-              itemCount: _currentnum,
+              itemCount: _currentLoaded,
               itemBuilder: (context, index) {
                 final job = _filteredJobs[index];
                 return Card(
-                  color: const Color.fromARGB(
-                    255,
-                    230,
-                    230,
-                    226,
-                  ),
+                  color: const Color.fromARGB(255, 230, 230, 226),
                   margin: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
+                      horizontal: 12, vertical: 6),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -218,12 +183,8 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                       borderRadius: BorderRadius.circular(12),
                       side: BorderSide.none,
                     ),
-                    backgroundColor: const Color.fromARGB(
-                      255,
-                      230,
-                      230,
-                      226,
-                    ),
+                    backgroundColor:
+                    const Color.fromARGB(255, 230, 230, 226),
                     title: Text(
                       job.jobTitle,
                       style: const TextStyle(
@@ -234,8 +195,8 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                     subtitle: Text(
                       '${job.company} • ${job.location}',
                       style: const TextStyle(
-                        color: Color.fromARGB(255, 17, 84, 116),
                         fontFamily: 'JetB',
+                        color: Color.fromARGB(255, 17, 84, 116),
                       ),
                     ),
                     trailing: IconButton(
@@ -250,7 +211,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                       ListTile(
                         title: Text(
                           'Company Score: ${job.companyScore}',
-                          style: _descriptionTextStyle(),
+                          style: _descriptionStyle(),
                         ),
                         subtitle: Column(
                           crossAxisAlignment:
@@ -259,16 +220,16 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                             const SizedBox(height: 4),
                             Text(
                               'Date Posted: ${job.date}',
-                              style: _descriptionTextStyle(),
+                              style: _descriptionStyle(),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               'Salary: ${job.salary}',
-                              style: _descriptionTextStyle(),
+                              style: _descriptionStyle(),
                             ),
                           ],
                         ),
-                      ),
+                      )
                     ],
                   ),
                 );
