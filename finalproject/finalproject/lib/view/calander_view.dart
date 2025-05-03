@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'DSTest_view.dart';
-import 'navBar_view.dart';
-import 'goals_view.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../model/calander_model.dart';
 
@@ -55,13 +52,56 @@ class _MyCalanderPage extends State<MyCalanderPage> {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        _rangeStart = null; // Important to clean those
+        _rangeStart = null;
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
 
       _selectedEvents.value = _getEventsForDay(selectedDay);
     }
+    // _showAddEventDialog(selectedDay);
+  }
+
+  void _showAddEventDialog(DateTime day) {
+    final TextEditingController _eventController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text("Add Event"),
+            content: TextField(
+              controller: _eventController,
+              decoration: const InputDecoration(labelText: "Event Title"),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (_eventController.text.isEmpty) return;
+
+                  setState(() {
+                    final event = Event(_eventController.text);
+                    if (kEvents[day] != null) {
+                      kEvents[day]!.add(event);
+                    } else {
+                      kEvents[day] = [event];
+                    }
+                    _selectedEvents.value = _getEventsForDay(day);
+                  });
+
+                  Navigator.pop(context);
+                },
+                child: const Text("Add"),
+              ),
+            ],
+          ),
+    );
   }
 
   void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
@@ -143,6 +183,35 @@ class _MyCalanderPage extends State<MyCalanderPage> {
                   },
                 );
               },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: SizedBox(
+              width: 250,
+              height: 60,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 0, 43, 75),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 20,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                onPressed: () => _showAddEventDialog(_focusedDay),
+                child: Text(
+                  "Add Interview",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 244, 243, 240),
+                    fontFamily: 'JetB',
+                    fontSize: 16,
+                  ),
+                ),
+              ),
             ),
           ),
         ],

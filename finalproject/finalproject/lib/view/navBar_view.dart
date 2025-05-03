@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:get/get.dart';
 
 import '../presenter/navBar_presenter.dart';
@@ -40,7 +39,10 @@ class NavigationMenuView extends StatelessWidget {
                 label: 'Jobs',
               ),
               NavigationDestination(
-                icon: Icon(Icons.favorite, color: Color.fromARGB(255, 0, 43, 75)),
+                icon: Icon(
+                  Icons.favorite,
+                  color: Color.fromARGB(255, 0, 43, 75),
+                ),
                 label: 'Favorites',
               ),
             ],
