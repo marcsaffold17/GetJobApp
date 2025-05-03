@@ -212,11 +212,19 @@ class _MyCalanderPage extends State<MyCalanderPage> {
                 ),
                 leftChevronIcon: Icon(
                   Icons.chevron_left,
-                  color: Color.fromARGB(255, 17, 84, 116),
+                  color: Color.fromARGB(255, 0, 43, 75),
                 ),
                 rightChevronIcon: Icon(
                   Icons.chevron_right,
-                  color: Color.fromARGB(255, 17, 84, 116),
+                  color: Color.fromARGB(255, 0, 43, 75),
+                ),
+                formatButtonDecoration: BoxDecoration(
+                  color: Color.fromARGB(255, 0, 43, 75),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                formatButtonTextStyle: TextStyle(
+                  color: Color.fromARGB(255, 244, 243, 240),
+                  fontFamily: 'JetB',
                 ),
               ),
               daysOfWeekStyle: DaysOfWeekStyle(
@@ -232,11 +240,11 @@ class _MyCalanderPage extends State<MyCalanderPage> {
               calendarStyle: const CalendarStyle(
                 outsideDaysVisible: false,
                 todayDecoration: BoxDecoration(
-                  color: Color.fromARGB(255, 17, 84, 116),
+                  color: Color.fromARGB(255, 34, 124, 157),
                   shape: BoxShape.circle,
                 ),
                 selectedDecoration: BoxDecoration(
-                  color: Color.fromARGB(255, 34, 124, 157),
+                  color: Color.fromARGB(255, 17, 84, 116),
                   shape: BoxShape.circle,
                 ),
                 weekendTextStyle: TextStyle(
