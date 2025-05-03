@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../model/calander_model.dart';
+import '../model/calendar_model.dart';
 
-class MyCalanderPage extends StatefulWidget {
-  const MyCalanderPage({super.key});
+class MyCalendarPage extends StatefulWidget {
+  const MyCalendarPage({super.key});
 
   @override
-  _MyCalanderPage createState() => _MyCalanderPage();
+  _MyCalendarPage createState() => _MyCalendarPage();
 }
 
-class _MyCalanderPage extends State<MyCalanderPage> {
+class _MyCalendarPage extends State<MyCalendarPage> {
   late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode =
