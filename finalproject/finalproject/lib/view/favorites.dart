@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../globals/user_info.dart';
 import '../presenter/global_presenter.dart';
 
 class FavoritesPage extends StatefulWidget {
