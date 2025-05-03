@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../globals/user_info.dart';
+import '../presenter/global_presenter.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
@@ -17,7 +18,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     super.initState();
     favoritesRef = FirebaseFirestore.instance
         .collection('Login-Info')
-        .doc(currentUserEmail)
+        .doc(globalEmail)
         .collection('favorites');
   }
 
@@ -44,9 +45,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
             color: Color.fromARGB(255, 0, 43, 75),
           ),
         ),
-        iconTheme: const IconThemeData(
-          color: Color.fromARGB(255, 0, 43, 75),
-        ),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 0, 43, 75)),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: favoritesRef.snapshots(),

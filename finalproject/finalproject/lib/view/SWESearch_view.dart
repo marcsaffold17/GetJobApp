@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../globals/user_info.dart';
 import '../presenter/SWE_List_presenter.dart';
 import '../model/SWE_List_model.dart';
 import '../view/compareSalariesCities_view.dart';
+import '../presenter/global_presenter.dart';
 
 class SWESearchView extends StatefulWidget {
   const SWESearchView({super.key});
@@ -26,7 +26,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
 
   final favoritesRef = FirebaseFirestore.instance
       .collection('Login-Info')
-      .doc(currentUserEmail)
+      .doc(globalEmail)
       .collection('favorites');
 
   @override
