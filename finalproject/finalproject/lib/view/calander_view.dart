@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../model/calander_model.dart';
 
@@ -126,37 +125,92 @@ class _MyCalanderPage extends State<MyCalanderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      appBar: AppBar(backgroundColor: Color.fromARGB(255, 244, 243, 240)),
+      backgroundColor: Color.fromARGB(255, 244, 243, 240),
       body: Column(
         children: [
-          TableCalendar<Event>(
-            firstDay: kFirstDay,
-            lastDay: kLastDay,
-            focusedDay: _focusedDay,
-            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-            rangeStartDay: _rangeStart,
-            rangeEndDay: _rangeEnd,
-            calendarFormat: _calendarFormat,
-            rangeSelectionMode: _rangeSelectionMode,
-            eventLoader: _getEventsForDay,
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            calendarStyle: const CalendarStyle(
-              // Use `CalendarStyle` to customize the UI
-              outsideDaysVisible: false,
+          SizedBox(height: 20),
+          Container(
+            width: 380,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 230, 230, 226),
+              border: Border.all(
+                color: Color.fromARGB(255, 0, 43, 75),
+                width: 3.0,
+              ),
+              borderRadius: BorderRadius.circular(30.0),
             ),
-            onDaySelected: _onDaySelected,
-            onRangeSelected: _onRangeSelected,
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-            },
+            child: TableCalendar<Event>(
+              firstDay: kFirstDay,
+              lastDay: kLastDay,
+              focusedDay: _focusedDay,
+              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+              rangeStartDay: _rangeStart,
+              rangeEndDay: _rangeEnd,
+              calendarFormat: _calendarFormat,
+              rangeSelectionMode: _rangeSelectionMode,
+              eventLoader: _getEventsForDay,
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              headerStyle: HeaderStyle(
+                titleCentered: true,
+                titleTextStyle: TextStyle(
+                  color: Color.fromARGB(255, 0, 43, 75),
+                  fontFamily: 'inter',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                leftChevronIcon: Icon(
+                  Icons.chevron_left,
+                  color: Color.fromARGB(255, 17, 84, 116),
+                ),
+                rightChevronIcon: Icon(
+                  Icons.chevron_right,
+                  color: Color.fromARGB(255, 17, 84, 116),
+                ),
+              ),
+              daysOfWeekStyle: DaysOfWeekStyle(
+                weekendStyle: TextStyle(
+                  color: Color.fromARGB(255, 17, 84, 116),
+                  fontFamily: 'inter',
+                ),
+                weekdayStyle: TextStyle(
+                  color: Color.fromARGB(255, 17, 84, 116),
+                  fontFamily: 'inter',
+                ),
+              ),
+              calendarStyle: const CalendarStyle(
+                outsideDaysVisible: false,
+                todayDecoration: BoxDecoration(
+                  color: Color.fromARGB(255, 17, 84, 116),
+                  shape: BoxShape.circle,
+                ),
+                selectedDecoration: BoxDecoration(
+                  color: Color.fromARGB(255, 34, 124, 157),
+                  shape: BoxShape.circle,
+                ),
+                weekendTextStyle: TextStyle(
+                  color: Color.fromARGB(255, 17, 84, 116),
+                  fontFamily: 'JetB',
+                ),
+                defaultTextStyle: TextStyle(
+                  color: Color.fromARGB(255, 17, 84, 116),
+                  fontFamily: 'JetB',
+                ),
+                outsideTextStyle: TextStyle(color: Colors.grey),
+              ),
+              onDaySelected: _onDaySelected,
+              onRangeSelected: _onRangeSelected,
+              onFormatChanged: (format) {
+                if (_calendarFormat != format) {
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                }
+              },
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
+              },
+            ),
           ),
           const SizedBox(height: 8.0),
           Expanded(
