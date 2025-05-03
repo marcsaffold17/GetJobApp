@@ -178,8 +178,10 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                         labelText: 'Search by job title',
                         labelStyle: TextStyle(
                           color: Color.fromARGB(150, 17, 84, 116),
-                          fontFamily: 'JetB',
+                          fontFamily: 'inter',
                         ),
+                        filled: true,
+                        fillColor: Color.fromARGB(40, 34, 124, 157),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color.fromARGB(255, 17, 84, 116),
