@@ -68,35 +68,86 @@ class _MyCalanderPage extends State<MyCalanderPage> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text("Add Event"),
+            backgroundColor: Color.fromARGB(255, 244, 243, 240),
+            title: const Text(
+              "Add Event",
+              style: TextStyle(
+                fontFamily: 'inter',
+                color: Color.fromARGB(255, 0, 43, 75),
+              ),
+            ),
             content: TextField(
               controller: _eventController,
-              decoration: const InputDecoration(labelText: "Event Title"),
+              style: TextStyle(
+                color: Color.fromARGB(255, 34, 124, 157),
+                fontFamily: 'JetB',
+              ),
+              decoration: const InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 17, 84, 116),
+                    width: 2.0,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 34, 124, 157),
+                    width: 2.0,
+                  ),
+                ),
+                labelText: "Event Title",
+                labelStyle: TextStyle(
+                  color: Color.fromARGB(150, 17, 84, 116),
+                  fontFamily: 'JetB',
+                ),
+              ),
             ),
             actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("Cancel"),
+              Container(
+                width: 80,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 202, 59, 59),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(color: Color.fromARGB(255, 244, 243, 240)),
+                  ),
+                ),
               ),
-              TextButton(
-                onPressed: () {
-                  if (_eventController.text.isEmpty) return;
+              Container(
+                width: 80,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 17, 84, 116),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    if (_eventController.text.isEmpty) return;
 
-                  setState(() {
-                    final event = Event(_eventController.text);
-                    if (kEvents[day] != null) {
-                      kEvents[day]!.add(event);
-                    } else {
-                      kEvents[day] = [event];
-                    }
-                    _selectedEvents.value = _getEventsForDay(day);
-                  });
+                    setState(() {
+                      final event = Event(_eventController.text);
+                      if (kEvents[day] != null) {
+                        kEvents[day]!.add(event);
+                      } else {
+                        kEvents[day] = [event];
+                      }
+                      _selectedEvents.value = _getEventsForDay(day);
+                    });
 
-                  Navigator.pop(context);
-                },
-                child: const Text("Add"),
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    "Add",
+                    style: TextStyle(color: Color.fromARGB(255, 244, 243, 240)),
+                  ),
+                ),
               ),
             ],
           ),
@@ -133,7 +184,7 @@ class _MyCalanderPage extends State<MyCalanderPage> {
           Container(
             width: 380,
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 230, 230, 226),
+              color: Color.fromARGB(40, 34, 124, 157),
               border: Border.all(
                 color: Color.fromARGB(255, 0, 43, 75),
                 width: 3.0,
@@ -226,12 +277,30 @@ class _MyCalanderPage extends State<MyCalanderPage> {
                         vertical: 4.0,
                       ),
                       decoration: BoxDecoration(
-                        border: Border.all(),
+                        // color: Color.fromARGB(255, 230, 230, 226),
+                        color: Color.fromARGB(255, 17, 84, 116),
                         borderRadius: BorderRadius.circular(12.0),
+                        border: Border.all(),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
                       ),
+
                       child: ListTile(
                         onTap: () => print('${value[index]}'),
-                        title: Text('${value[index]}'),
+                        title: Text(
+                          '${value[index]}',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 244, 243, 240),
+                            fontFamily: 'JetB',
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     );
                   },
