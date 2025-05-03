@@ -176,7 +176,18 @@ class _MyCalanderPage extends State<MyCalanderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Color.fromARGB(255, 244, 243, 240)),
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 244, 243, 240),
+        title: Text(
+          "Calender",
+          style: TextStyle(
+            color: Color.fromARGB(255, 0, 43, 75),
+            fontFamily: 'inter',
+          ),
+        ),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Color.fromARGB(255, 0, 43, 75)),
+      ),
       backgroundColor: Color.fromARGB(255, 244, 243, 240),
       body: Column(
         children: [
@@ -285,10 +296,12 @@ class _MyCalanderPage extends State<MyCalanderPage> {
                         vertical: 4.0,
                       ),
                       decoration: BoxDecoration(
-                        // color: Color.fromARGB(255, 230, 230, 226),
                         color: Color.fromARGB(255, 17, 84, 116),
                         borderRadius: BorderRadius.circular(12.0),
-                        border: Border.all(),
+                        border: Border.all(
+                          color: Color.fromARGB(255, 0, 43, 75),
+                          width: 2.5,
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
