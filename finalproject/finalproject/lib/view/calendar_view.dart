@@ -3,6 +3,9 @@ import 'package:table_calendar/table_calendar.dart';
 import '../model/calendar_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../model/alarm_model.dart';
+import '../presenter/alarm_presenter.dart';
+import '../view/alarm_view.dart';
 
 
 class MyCalendarPage extends StatefulWidget {
@@ -71,7 +74,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
 
     final email = user.email!;
     final snapshot = await FirebaseFirestore.instance
-        .collection('LoginInfo')
+        .collection('Login-Info')
         .doc(email)
         .collection('events')
         .get();
@@ -187,6 +190,15 @@ class _MyCalendarPage extends State<MyCalendarPage> {
                       'title': eventTitle,
                       'date': Timestamp.fromDate(eventDate),
                     });
+
+                    final alarmModel = AlarmModel(
+                      id: DateTime.now().millisecondsSinceEpoch.toString(),
+                      dateTime: eventDate,
+                    );
+
+                    final presenter = AlarmPresenter(AlarmDummyView());
+
+                    await presenter.setAlarm(alarmModel);
 
                     setState(() {
                       final event = Event(eventTitle);
@@ -419,5 +431,18 @@ class _MyCalendarPage extends State<MyCalendarPage> {
         ],
       ),
     );
+  }
+}
+
+// Dummy view reusing code from alarm_view.dart
+class AlarmDummyView implements AlarmView {
+  @override
+  void showAlarmSetSuccess() {
+    print('Alarm created successfully');
+  }
+
+  @override
+  void showAlarmError(String message) {
+    print('Alarm error: $message');
   }
 }

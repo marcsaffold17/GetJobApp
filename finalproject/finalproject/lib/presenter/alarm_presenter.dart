@@ -26,7 +26,7 @@ class AlarmPresenter {
         vibrate: true,
         fadeDuration: 3.0,
         notificationTitle: 'Alarm',
-        notificationBody: 'Interview Time!!',
+        notificationBody: alarmModel.title ?? 'Interview Time!!',
         enableNotificationOnKill: true,
       );
 

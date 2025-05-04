@@ -3,13 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AlarmModel {
   final DateTime dateTime;
   final String id;
+  final String? title;
 
-  AlarmModel({required this.id, required this.dateTime});
+  AlarmModel({required this.id, required this.dateTime, this.title});
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'dateTime': dateTime.toIso8601String(),
+      'title': title,
     };
   }
 
@@ -17,6 +19,7 @@ class AlarmModel {
     return AlarmModel(
       id: map['id'] ?? '',
       dateTime: DateTime.parse(map['dateTime']),
+      title: map['title'],
     );
   }
 
