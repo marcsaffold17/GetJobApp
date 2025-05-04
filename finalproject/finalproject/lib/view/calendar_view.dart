@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../model/calendar_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class MyCalendarPage extends StatefulWidget {
   const MyCalendarPage({super.key});
@@ -26,6 +29,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
 
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+    _loadEventsFromFirestore();
   }
 
   @override
@@ -59,6 +63,44 @@ class _MyCalendarPage extends State<MyCalendarPage> {
       _selectedEvents.value = _getEventsForDay(selectedDay);
     }
     // _showAddEventDialog(selectedDay);
+  }
+
+  Future<void> _loadEventsFromFirestore() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final email = user.email!;
+    final snapshot = await FirebaseFirestore.instance
+        .collection('LoginInfo')
+        .doc(email)
+        .collection('events')
+        .get();
+
+    final loadedEvents = <DateTime, List<Event>>{};
+
+    for (final doc in snapshot.docs) {
+      final data = doc.data();
+      final timestamp = data['date'] as Timestamp;
+      final title = data['title'] as String;
+
+      final dateOnly = DateTime(
+        timestamp.toDate().year,
+        timestamp.toDate().month,
+        timestamp.toDate().day,
+      );
+
+      if (loadedEvents[dateOnly] == null) {
+        loadedEvents[dateOnly] = [Event(title)];
+      } else {
+        loadedEvents[dateOnly]!.add(Event(title));
+      }
+    }
+    
+    setState(() {
+      kEvents.clear();
+      kEvents.addAll(loadedEvents);
+      _selectedEvents.value = _getEventsForDay(_selectedDay!);
+    });
   }
 
   void _showAddEventDialog(DateTime day) {
@@ -128,21 +170,37 @@ class _MyCalendarPage extends State<MyCalendarPage> {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_eventController.text.isEmpty) return;
 
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user == null) return;
+                    final email = user.email!;
+                    final eventTitle = _eventController.text;
+                    final eventDate = DateTime(day.year, day.month, day.day);
+
+                    await FirebaseFirestore.instance
+                        .collection('Login-Info')
+                        .doc(email)
+                        .collection('events')
+                        .add({
+                      'title': eventTitle,
+                      'date': Timestamp.fromDate(eventDate),
+                    });
+
                     setState(() {
-                      final event = Event(_eventController.text);
-                      if (kEvents[day] != null) {
-                        kEvents[day]!.add(event);
+                      final event = Event(eventTitle);
+                      if (kEvents[eventDate] != null) {
+                        kEvents[eventDate]!.add(event);
                       } else {
-                        kEvents[day] = [event];
+                        kEvents[eventDate] = [event];
                       }
-                      _selectedEvents.value = _getEventsForDay(day);
+                      _selectedEvents.value = _getEventsForDay(eventDate);
                     });
 
                     Navigator.pop(context);
                   },
+
                   child: const Text(
                     "Add",
                     style: TextStyle(color: Color.fromARGB(255, 244, 243, 240)),
@@ -179,7 +237,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 244, 243, 240),
         title: Text(
-          "Calender",
+          "Calendar",
           style: TextStyle(
             color: Color.fromARGB(255, 0, 43, 75),
             fontFamily: 'inter',
