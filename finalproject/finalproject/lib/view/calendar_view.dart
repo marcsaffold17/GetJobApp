@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../model/calendar_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../model/alarm_model.dart';
+import '../model/calendar_model.dart';
+import '../presenter/global_presenter.dart';
 import '../presenter/alarm_presenter.dart';
+import '../model/alarm_model.dart';
 import '../view/alarm_view.dart';
-
 
 class MyCalendarPage extends StatefulWidget {
   const MyCalendarPage({super.key});
@@ -15,42 +15,36 @@ class MyCalendarPage extends StatefulWidget {
   _MyCalendarPage createState() => _MyCalendarPage();
 }
 
-class _MyCalendarPage extends State<MyCalendarPage> {
-  late final ValueNotifier<List<Event>> _selectedEvents;
+class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode =
-      RangeSelectionMode
-          .toggledOff; // Can be toggled on/off by longpressing a date
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+  Map<DateTime, List<Event>> _events = {};
+  late AlarmPresenter _alarmPresenter;
 
   @override
   void initState() {
     super.initState();
-
     _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
-    _loadEventsFromFirestore();
+    _loadEventsForMonth(_focusedDay);
+    _alarmPresenter = AlarmPresenter(this);
   }
 
-  @override
-  void dispose() {
-    _selectedEvents.dispose();
-    super.dispose();
-  }
+  Future<List<Event>> _getEventsForDay(DateTime day) async {
+    final dateKey = DateUtils.dateOnly(day).toIso8601String();
+    final snapshot =
+    await FirebaseFirestore.instance
+        .collection('Login-Info')
+        .doc(globalEmail)
+        .collection('Calendar')
+        .doc(dateKey)
+        .collection('events')
+        .get();
 
-  List<Event> _getEventsForDay(DateTime day) {
-    // Implementation example
-    return kEvents[day] ?? [];
-  }
-
-  List<Event> _getEventsForRange(DateTime start, DateTime end) {
-    // Implementation example
-    final days = daysInRange(start, end);
-
-    return [for (final d in days) ..._getEventsForDay(d)];
+    return snapshot.docs.map((doc) => Event(doc['title'])).toList();
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -62,166 +56,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
-
-      _selectedEvents.value = _getEventsForDay(selectedDay);
     }
-    // _showAddEventDialog(selectedDay);
-  }
-
-  Future<void> _loadEventsFromFirestore() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
-
-    final email = user.email!;
-    final snapshot = await FirebaseFirestore.instance
-        .collection('Login-Info')
-        .doc(email)
-        .collection('events')
-        .get();
-
-    final loadedEvents = <DateTime, List<Event>>{};
-
-    for (final doc in snapshot.docs) {
-      final data = doc.data();
-      final timestamp = data['date'] as Timestamp;
-      final title = data['title'] as String;
-
-      final dateOnly = DateTime(
-        timestamp.toDate().year,
-        timestamp.toDate().month,
-        timestamp.toDate().day,
-      );
-
-      if (loadedEvents[dateOnly] == null) {
-        loadedEvents[dateOnly] = [Event(title)];
-      } else {
-        loadedEvents[dateOnly]!.add(Event(title));
-      }
-    }
-    
-    setState(() {
-      kEvents.clear();
-      kEvents.addAll(loadedEvents);
-      _selectedEvents.value = _getEventsForDay(_selectedDay!);
-    });
-  }
-
-  void _showAddEventDialog(DateTime day) {
-    final TextEditingController _eventController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            backgroundColor: Color.fromARGB(255, 244, 243, 240),
-            title: const Text(
-              "Add Event",
-              style: TextStyle(
-                fontFamily: 'inter',
-                color: Color.fromARGB(255, 0, 43, 75),
-              ),
-            ),
-            content: TextField(
-              controller: _eventController,
-              style: TextStyle(
-                color: Color.fromARGB(255, 34, 124, 157),
-                fontFamily: 'JetB',
-              ),
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 17, 84, 116),
-                    width: 2.0,
-                  ),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 34, 124, 157),
-                    width: 2.0,
-                  ),
-                ),
-                labelText: "Event Title",
-                labelStyle: TextStyle(
-                  color: Color.fromARGB(150, 17, 84, 116),
-                  fontFamily: 'JetB',
-                ),
-              ),
-            ),
-            actions: [
-              Container(
-                width: 80,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 202, 59, 59),
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    "Cancel",
-                    style: TextStyle(color: Color.fromARGB(255, 244, 243, 240)),
-                  ),
-                ),
-              ),
-              Container(
-                width: 80,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 17, 84, 116),
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                child: TextButton(
-                  onPressed: () async {
-                    if (_eventController.text.isEmpty) return;
-
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user == null) return;
-                    final email = user.email!;
-                    final eventTitle = _eventController.text;
-                    final eventDate = DateTime(day.year, day.month, day.day);
-
-                    await FirebaseFirestore.instance
-                        .collection('Login-Info')
-                        .doc(email)
-                        .collection('events')
-                        .add({
-                      'title': eventTitle,
-                      'date': Timestamp.fromDate(eventDate),
-                    });
-
-                    final alarmModel = AlarmModel(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      dateTime: eventDate,
-                    );
-
-                    final presenter = AlarmPresenter(AlarmDummyView());
-
-                    await presenter.setAlarm(alarmModel);
-
-                    setState(() {
-                      final event = Event(eventTitle);
-                      if (kEvents[eventDate] != null) {
-                        kEvents[eventDate]!.add(event);
-                      } else {
-                        kEvents[eventDate] = [event];
-                      }
-                      _selectedEvents.value = _getEventsForDay(eventDate);
-                    });
-
-                    Navigator.pop(context);
-                  },
-
-                  child: const Text(
-                    "Add",
-                    style: TextStyle(color: Color.fromARGB(255, 244, 243, 240)),
-                  ),
-                ),
-              ),
-            ],
-          ),
-    );
   }
 
   void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
@@ -232,23 +67,160 @@ class _MyCalendarPage extends State<MyCalendarPage> {
       _rangeEnd = end;
       _rangeSelectionMode = RangeSelectionMode.toggledOn;
     });
+  }
 
-    // `start` or `end` could be null
-    if (start != null && end != null) {
-      _selectedEvents.value = _getEventsForRange(start, end);
-    } else if (start != null) {
-      _selectedEvents.value = _getEventsForDay(start);
-    } else if (end != null) {
-      _selectedEvents.value = _getEventsForDay(end);
+  void _showAddEventDialog(DateTime day) {
+    final TextEditingController _eventController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+        title: const Text(
+          "Add Event",
+          style: TextStyle(
+            fontFamily: 'inter',
+            color: Color.fromARGB(255, 0, 43, 75),
+          ),
+        ),
+        content: TextField(
+          controller: _eventController,
+          style: const TextStyle(
+            color: Color.fromARGB(255, 34, 124, 157),
+            fontFamily: 'JetB',
+          ),
+          decoration: const InputDecoration(
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Color.fromARGB(255, 17, 84, 116),
+                width: 2.0,
+              ),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Color.fromARGB(255, 34, 124, 157),
+                width: 2.0,
+              ),
+            ),
+            labelText: "Event Title",
+            labelStyle: TextStyle(
+              color: Color.fromARGB(150, 17, 84, 116),
+              fontFamily: 'JetB',
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 202, 59, 59),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (_eventController.text.isEmpty) return;
+
+              final event = _eventController.text;
+              final dateKey = DateUtils.dateOnly(day).toIso8601String();
+
+              try {
+                await FirebaseFirestore.instance
+                    .collection('Login-Info')
+                    .doc(globalEmail)
+                    .collection('Calendar')
+                    .doc(dateKey)
+                    .collection('events')
+                    .add({'title': event});
+                await _loadEvents(DateTime.now());
+
+                final alarmDateTime = DateTime(day.year, day.month, day.day, 9, 0);
+                final alarmModel = AlarmModel(
+                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                  dateTime: alarmDateTime,
+                  title: event,
+                );
+                await _alarmPresenter.setAlarm(alarmModel);
+
+                await _loadEvents(DateTime.now());
+                setState(() {});
+                Navigator.pop(context);
+              } catch (e) {
+                print("Error saving event: $e");
+              }
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 17, 84, 116),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text("Add"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _loadEvents(DateTime dateKey) async {
+    final normalizedDate = DateTime(dateKey.year, dateKey.month, dateKey.day);
+    final docId = normalizedDate.toIso8601String();
+
+    try {
+      final eventSnapshot =
+      await FirebaseFirestore.instance
+          .collection('Login-Info')
+          .doc(globalEmail)
+          .collection('Calendar')
+          .doc(docId)
+          .collection('events')
+          .get();
+
+      final events =
+      eventSnapshot.docs
+          .map((doc) => Event(doc['title'] as String))
+          .toList();
+
+      // Replace the old list instead of appending
+      _events[normalizedDate] = events;
+
+      setState(() {});
+    } catch (e) {
+      print('Error loading events for $docId: $e');
     }
   }
+
+  void _loadEventsForMonth(DateTime focusedDay) {
+    final firstDay = DateTime(focusedDay.year, focusedDay.month, 1);
+    final lastDay = DateTime(focusedDay.year, focusedDay.month + 1, 0);
+
+    for (int i = 0; i < lastDay.day; i++) {
+      final day = firstDay.add(Duration(days: i));
+      _loadEvents(day);
+    }
+  }
+
+  @override
+  void showAlarmSetSuccess() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Alarm set successfully!")),
+    );
+  }
+
+  @override
+  void showAlarmError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Alarm error: $message")),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 244, 243, 240),
-        title: Text(
+        backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+        title: const Text(
           "Calendar",
           style: TextStyle(
             color: Color.fromARGB(255, 0, 43, 75),
@@ -256,34 +228,50 @@ class _MyCalendarPage extends State<MyCalendarPage> {
           ),
         ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Color.fromARGB(255, 0, 43, 75)),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 0, 43, 75)),
       ),
-      backgroundColor: Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       body: Column(
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
             width: 380,
             decoration: BoxDecoration(
-              color: Color.fromARGB(40, 34, 124, 157),
+              color: const Color.fromARGB(40, 34, 124, 157),
               border: Border.all(
-                color: Color.fromARGB(255, 0, 43, 75),
+                color: const Color.fromARGB(255, 0, 43, 75),
                 width: 3.0,
               ),
               borderRadius: BorderRadius.circular(30.0),
             ),
             child: TableCalendar<Event>(
-              firstDay: kFirstDay,
-              lastDay: kLastDay,
+              firstDay: DateTime.utc(2020, 1, 1),
+              lastDay: DateTime.utc(2030, 12, 31),
               focusedDay: _focusedDay,
               selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
               rangeStartDay: _rangeStart,
               rangeEndDay: _rangeEnd,
               calendarFormat: _calendarFormat,
               rangeSelectionMode: _rangeSelectionMode,
-              eventLoader: _getEventsForDay,
+              eventLoader: (day) => _events[DateUtils.dateOnly(day)] ?? [],
               startingDayOfWeek: StartingDayOfWeek.monday,
-              headerStyle: HeaderStyle(
+              onDaySelected: _onDaySelected,
+              onRangeSelected: _onRangeSelected,
+              onFormatChanged: (format) {
+                if (_calendarFormat != format) {
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                }
+                if (true) {
+                  print(_events);
+                }
+              },
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
+                _loadEventsForMonth(focusedDay);
+              },
+              headerStyle: const HeaderStyle(
                 titleCentered: true,
                 titleTextStyle: TextStyle(
                   color: Color.fromARGB(255, 0, 43, 75),
@@ -301,14 +289,14 @@ class _MyCalendarPage extends State<MyCalendarPage> {
                 ),
                 formatButtonDecoration: BoxDecoration(
                   color: Color.fromARGB(255, 0, 43, 75),
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
                 ),
                 formatButtonTextStyle: TextStyle(
                   color: Color.fromARGB(255, 244, 243, 240),
                   fontFamily: 'JetB',
                 ),
               ),
-              daysOfWeekStyle: DaysOfWeekStyle(
+              daysOfWeekStyle: const DaysOfWeekStyle(
                 weekendStyle: TextStyle(
                   color: Color.fromARGB(255, 17, 84, 116),
                   fontFamily: 'inter',
@@ -338,27 +326,26 @@ class _MyCalendarPage extends State<MyCalendarPage> {
                 ),
                 outsideTextStyle: TextStyle(color: Colors.grey),
               ),
-              onDaySelected: _onDaySelected,
-              onRangeSelected: _onRangeSelected,
-              onFormatChanged: (format) {
-                if (_calendarFormat != format) {
-                  setState(() {
-                    _calendarFormat = format;
-                  });
-                }
-              },
-              onPageChanged: (focusedDay) {
-                _focusedDay = focusedDay;
-              },
             ),
           ),
           const SizedBox(height: 8.0),
           Expanded(
-            child: ValueListenableBuilder<List<Event>>(
-              valueListenable: _selectedEvents,
-              builder: (context, value, _) {
+            child: FutureBuilder<List<Event>>(
+              future:
+              _selectedDay != null
+                  ? _getEventsForDay(_selectedDay!)
+                  : Future.value([]),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text("No events."));
+                }
+
+                final events = snapshot.data!;
                 return ListView.builder(
-                  itemCount: value.length,
+                  itemCount: events.length,
                   itemBuilder: (context, index) {
                     return Container(
                       margin: const EdgeInsets.symmetric(
@@ -366,10 +353,10 @@ class _MyCalendarPage extends State<MyCalendarPage> {
                         vertical: 4.0,
                       ),
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 17, 84, 116),
+                        color: const Color.fromARGB(255, 17, 84, 116),
                         borderRadius: BorderRadius.circular(12.0),
                         border: Border.all(
-                          color: Color.fromARGB(255, 0, 43, 75),
+                          color: const Color.fromARGB(255, 0, 43, 75),
                           width: 2.5,
                         ),
                         boxShadow: [
@@ -377,16 +364,14 @@ class _MyCalendarPage extends State<MyCalendarPage> {
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: Offset(0, 3), // changes position of shadow
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
-
                       child: ListTile(
-                        onTap: () => print('${value[index]}'),
                         title: Text(
-                          '${value[index]}',
-                          style: TextStyle(
+                          '${events[index]}',
+                          style: const TextStyle(
                             color: Color.fromARGB(255, 244, 243, 240),
                             fontFamily: 'JetB',
                           ),
@@ -400,13 +385,13 @@ class _MyCalendarPage extends State<MyCalendarPage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: SizedBox(
               width: 250,
               height: 60,
               child: TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 0, 43, 75),
+                  backgroundColor: const Color.fromARGB(255, 0, 43, 75),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     vertical: 12,
@@ -416,8 +401,9 @@ class _MyCalendarPage extends State<MyCalendarPage> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                onPressed: () => _showAddEventDialog(_focusedDay),
-                child: Text(
+                onPressed:
+                    () => _showAddEventDialog(_selectedDay ?? _focusedDay),
+                child: const Text(
                   "Add Interview",
                   style: TextStyle(
                     color: Color.fromARGB(255, 244, 243, 240),
@@ -431,18 +417,5 @@ class _MyCalendarPage extends State<MyCalendarPage> {
         ],
       ),
     );
-  }
-}
-
-// Dummy view reusing code from alarm_view.dart
-class AlarmDummyView implements AlarmView {
-  @override
-  void showAlarmSetSuccess() {
-    print('Alarm created successfully');
-  }
-
-  @override
-  void showAlarmError(String message) {
-    print('Alarm error: $message');
   }
 }
