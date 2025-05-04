@@ -68,7 +68,25 @@ class CompareCitiesScreen extends StatefulWidget {
             child: TextField(
               decoration: const InputDecoration(
                 labelText: 'Search by city',
-                border: OutlineInputBorder(),
+                labelStyle: TextStyle(
+                  color: Color.fromARGB(150, 17, 84, 116),
+                  fontFamily: 'inter',
+                ),
+                filled: true,
+                fillColor: Color.fromARGB(40, 34, 124, 157),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 17, 84, 116),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 34, 124, 157),
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
               ),
               onChanged: (query) {
                 setState(() {

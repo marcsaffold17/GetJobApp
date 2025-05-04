@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../model/calendar_model.dart';
 import '../presenter/global_presenter.dart';
+import '../presenter/alarm_presenter.dart';
+import '../model/alarm_model.dart';
+import '../view/alarm_view.dart';
 
 class MyCalendarPage extends StatefulWidget {
   const MyCalendarPage({super.key});
@@ -11,7 +15,7 @@ class MyCalendarPage extends StatefulWidget {
   _MyCalendarPage createState() => _MyCalendarPage();
 }
 
-class _MyCalendarPage extends State<MyCalendarPage> {
+class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
@@ -19,26 +23,43 @@ class _MyCalendarPage extends State<MyCalendarPage> {
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
   Map<DateTime, List<Event>> _events = {};
+  late AlarmPresenter _alarmPresenter;
 
   @override
   void initState() {
     super.initState();
     _selectedDay = _focusedDay;
     _loadEventsForMonth(_focusedDay);
+    _alarmPresenter = AlarmPresenter(this);
   }
 
   Future<List<Event>> _getEventsForDay(DateTime day) async {
     final dateKey = DateUtils.dateOnly(day).toIso8601String();
     final snapshot =
-        await FirebaseFirestore.instance
-            .collection('Login-Info')
-            .doc(globalEmail)
-            .collection('Calendar')
-            .doc(dateKey)
-            .collection('events')
-            .get();
+    await FirebaseFirestore.instance
+        .collection('Login-Info')
+        .doc(globalEmail)
+        .collection('Calendar')
+        .doc(dateKey)
+        .collection('events')
+        .get();
 
-    return snapshot.docs.map((doc) => Event(doc['title'])).toList();
+    return snapshot.docs.map((doc) {
+      // Retrieve time data and combine it with event title
+      int hour = doc['hour'] ?? 0;
+      int minute = doc['minute'] ?? 0;
+      String formattedTime = _formatTime(hour, minute);
+      return Event("${doc['title']} ($formattedTime)");
+    }).toList();
+  }
+
+
+
+  String _formatTime(int hour, int minute) {
+    final time = TimeOfDay(hour: hour, minute: minute);
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, hour, minute);
+    return TimeOfDay.fromDateTime(dt).format(context);
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -65,85 +86,132 @@ class _MyCalendarPage extends State<MyCalendarPage> {
 
   void _showAddEventDialog(DateTime day) {
     final TextEditingController _eventController = TextEditingController();
+    TimeOfDay selectedTime = TimeOfDay.now();
 
     showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
-            backgroundColor: const Color.fromARGB(255, 244, 243, 240),
-            title: const Text(
-              "Add Event",
-              style: TextStyle(
-                fontFamily: 'inter',
-                color: Color.fromARGB(255, 0, 43, 75),
-              ),
-            ),
-            content: TextField(
-              controller: _eventController,
-              style: const TextStyle(
-                color: Color.fromARGB(255, 34, 124, 157),
-                fontFamily: 'JetB',
-              ),
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 17, 84, 116),
-                    width: 2.0,
-                  ),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 34, 124, 157),
-                    width: 2.0,
-                  ),
-                ),
-                labelText: "Event Title",
-                labelStyle: TextStyle(
-                  color: Color.fromARGB(150, 17, 84, 116),
-                  fontFamily: 'JetB',
-                ),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 202, 59, 59),
-                  foregroundColor: Colors.white,
-                ),
-                child: const Text("Cancel"),
-              ),
-              TextButton(
-                onPressed: () async {
-                  if (_eventController.text.isEmpty) return;
-
-                  final event = _eventController.text;
-                  final dateKey = DateUtils.dateOnly(day).toIso8601String();
-
-                  try {
-                    await FirebaseFirestore.instance
-                        .collection('Login-Info')
-                        .doc(globalEmail)
-                        .collection('Calendar')
-                        .doc(dateKey)
-                        .collection('events')
-                        .add({'title': event});
-                    await _loadEvents(DateTime.now());
-
-                    setState(() {});
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print("Error saving event: $e");
-                  }
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 17, 84, 116),
-                  foregroundColor: Colors.white,
-                ),
-                child: const Text("Add"),
-              ),
-            ],
+        backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+        title: const Text(
+          "Add Event",
+          style: TextStyle(
+            fontFamily: 'inter',
+            color: Color.fromARGB(255, 0, 43, 75),
           ),
+        ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _eventController,
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 34, 124, 157),
+                    fontFamily: 'JetB',
+                  ),
+                  decoration: const InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(255, 17, 84, 116),
+                        width: 2.0,
+                      ),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(255, 34, 124, 157),
+                        width: 2.0,
+                      ),
+                    ),
+                    labelText: "Event Title",
+                    labelStyle: TextStyle(
+                      color: Color.fromARGB(150, 17, 84, 116),
+                      fontFamily: 'JetB',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 17, 84, 116),
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: selectedTime,
+                    );
+                    if (picked != null) {
+                      setState(() {
+                        selectedTime = picked;
+                      });
+                    }
+                  },
+                  child: Text("Pick Time: ${selectedTime.format(context)}"),
+                ),
+              ],
+            ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 202, 59, 59),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (_eventController.text.isEmpty) return;
+
+              final event = _eventController.text;
+              final dateKey = DateUtils.dateOnly(day).toIso8601String();
+
+              final alarmDateTime = DateTime(
+                day.year,
+                day.month,
+                day.day,
+                selectedTime.hour,
+                selectedTime.minute,
+              );
+
+              try {
+                await FirebaseFirestore.instance
+                    .collection('Login-Info')
+                    .doc(globalEmail)
+                    .collection('Calendar')
+                    .doc(dateKey)
+                    .collection('events')
+                    .add({
+                  'title': event,
+                  'hour': selectedTime.hour,
+                  'minute': selectedTime.minute,
+                });
+
+                await _loadEvents(DateTime.now());
+
+                final alarmModel = AlarmModel(
+                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                  dateTime: alarmDateTime,
+                  title: _eventController.text,
+                );
+
+                await _alarmPresenter.setAlarm(alarmModel);
+                await _loadEvents(DateTime.now());
+
+                setState(() {});
+                Navigator.pop(context);
+              } catch (e) {
+                print("Error saving event: $e");
+              }
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 17, 84, 116),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text("Add"),
+          ),
+        ],
+      ),
     );
   }
 
@@ -153,18 +221,18 @@ class _MyCalendarPage extends State<MyCalendarPage> {
 
     try {
       final eventSnapshot =
-          await FirebaseFirestore.instance
-              .collection('Login-Info')
-              .doc(globalEmail)
-              .collection('Calendar')
-              .doc(docId)
-              .collection('events')
-              .get();
+      await FirebaseFirestore.instance
+          .collection('Login-Info')
+          .doc(globalEmail)
+          .collection('Calendar')
+          .doc(docId)
+          .collection('events')
+          .get();
 
       final events =
-          eventSnapshot.docs
-              .map((doc) => Event(doc['title'] as String))
-              .toList();
+      eventSnapshot.docs
+          .map((doc) => Event(doc['title'] as String))
+          .toList();
 
       // Replace the old list instead of appending
       _events[normalizedDate] = events;
@@ -184,6 +252,21 @@ class _MyCalendarPage extends State<MyCalendarPage> {
       _loadEvents(day);
     }
   }
+
+  @override
+  void showAlarmSetSuccess() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Alarm set successfully!")),
+    );
+  }
+
+  @override
+  void showAlarmError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Alarm error: $message")),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -302,9 +385,9 @@ class _MyCalendarPage extends State<MyCalendarPage> {
           Expanded(
             child: FutureBuilder<List<Event>>(
               future:
-                  _selectedDay != null
-                      ? _getEventsForDay(_selectedDay!)
-                      : Future.value([]),
+              _selectedDay != null
+                  ? _getEventsForDay(_selectedDay!)
+                  : Future.value([]),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());

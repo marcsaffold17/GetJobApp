@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'goals_view.dart';
 import 'calendar_view.dart';
+import 'alarm_view.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, this.title, this.username});
@@ -113,6 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
+              SizedBox(height: 50),
             ],
           ),
         ],
