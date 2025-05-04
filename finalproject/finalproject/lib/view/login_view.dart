@@ -260,20 +260,20 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                 // SizedBox(height: 20),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 30),
-                                  child: TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 0,
-                                        horizontal: 0,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          30.0,
-                                        ),
-                                      ),
-                                    ),
-                                    onPressed: () {
+                                  child: GestureDetector(
+                                    // style: TextButton.styleFrom(
+                                    //   backgroundColor: Colors.transparent,
+                                    //   padding: EdgeInsets.symmetric(
+                                    //     vertical: 0,
+                                    //     horizontal: 0,
+                                    //   ),
+                                    //   shape: RoundedRectangleBorder(
+                                    //     borderRadius: BorderRadius.circular(
+                                    //       30.0,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    onTap: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -293,6 +293,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                     ),
                                   ),
                                 ),
+                                SizedBox(height: 10),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 16.0),
                                   child: SizedBox(
@@ -390,23 +391,12 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 17, 84, 116),
                                         fontFamily: 'JetB',
-                                        fontSize: 14,
+                                        fontSize: 16,
                                       ),
                                     ),
-                                    TextButton(
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: Colors.transparent,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 12.0,
-                                          horizontal: 16.0,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            30.0,
-                                          ),
-                                        ),
-                                      ),
-                                      onPressed: () {
+                                    SizedBox(width: 10),
+                                    GestureDetector(
+                                      onTap: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -420,7 +410,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
                                         );
                                       },
                                       child: const Text(
-                                        'Create Account',
+                                        'Sign Up',
                                         style: TextStyle(
                                           decoration: TextDecoration.underline,
                                           color: Color.fromARGB(255, 0, 43, 75),
@@ -741,23 +731,13 @@ class CreateAccountPage extends State<MyCreateAccountPage>
                                       "Already have an account?",
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 17, 84, 116),
+                                        fontSize: 16,
                                         fontFamily: 'JetB',
                                       ),
                                     ),
-                                    TextButton(
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: Colors.transparent,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 12.0,
-                                          horizontal: 16.0,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            30.0,
-                                          ),
-                                        ),
-                                      ),
-                                      onPressed: () {
+                                    SizedBox(width: 10),
+                                    GestureDetector(
+                                      onTap: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
