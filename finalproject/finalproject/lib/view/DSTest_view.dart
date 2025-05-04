@@ -1,6 +1,7 @@
 import '../presenter/DS_List_presenter.dart';
 import '../model/DS_List_model.dart';
 import 'package:flutter/material.dart';
+import 'countrycompare.dart';
 
 class DJobListScreen extends StatefulWidget {
   const DJobListScreen({super.key});
@@ -126,6 +127,33 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                         ),
                       ),
                       onChanged: _filterJobs,
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  CompareCountriesScreen(jobs: _filteredJobs),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 0, 43, 75),
+                      foregroundColor: Color.fromARGB(255, 244, 243, 240),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Compare Salaries by Country',
+                      style: TextStyle(
+                        fontFamily: 'inter',
+                        color: Color.fromARGB(255, 244, 243, 240),
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                   Expanded(
