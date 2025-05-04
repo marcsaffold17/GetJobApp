@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       },
                       child: const Text(
-                        'Calander Page',
+                        'Calander',
                         style: TextStyle(fontSize: 20, fontFamily: 'JetB'),
                       ),
                     ),
