@@ -1,5 +1,6 @@
 import '../presenter/DS_List_presenter.dart';
 import '../model/DS_List_model.dart';
+import '../view/CompanyCompare.dart'; // <-- Make sure this path matches your file name
 import 'package:flutter/material.dart';
 
 class DJobListScreen extends StatefulWidget {
@@ -94,7 +95,7 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: TextField(
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color.fromARGB(255, 17, 84, 116),
                         fontFamily: 'JetB',
                       ),
@@ -114,12 +115,7 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color.fromARGB(
-                              255,
-                              34,
-                              124,
-                              157,
-                            ), // Border when focused
+                            color: Color.fromARGB(255, 34, 124, 157),
                             width: 2.0,
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -128,6 +124,45 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                       onChanged: _filterJobs,
                     ),
                   ),
+
+                  // 👇 NEW BUTTON HERE
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => CompareCompaniesBySizeScreen(
+                                  jobs: _filteredJobs,
+                                ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.business, color: Colors.white),
+                      label: const Text(
+                        'Compare by Company Size',
+                        style: TextStyle(
+                          fontFamily: 'JetB',
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 0, 43, 75),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // 👆 END BUTTON SECTION
                   Expanded(
                     child:
                         _filteredJobs.isEmpty
@@ -218,7 +253,7 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                             const SizedBox(height: 8),
                                             Text(
                                               'Salary: ${job.formattedSalaryInUSD}',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Color.fromARGB(
                                                   255,
                                                   17,
