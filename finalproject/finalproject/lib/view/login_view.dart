@@ -115,10 +115,14 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
   void showSuccess(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+        // backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+        backgroundColor: Color.fromARGB(255, 0, 43, 75),
         content: Text(
           message,
-          style: const TextStyle(color: Color.fromARGB(255, 17, 84, 116)),
+          style: const TextStyle(
+            color: Color.fromARGB(255, 244, 243, 240),
+            fontFamily: 'JetB',
+          ),
         ),
       ),
     );
