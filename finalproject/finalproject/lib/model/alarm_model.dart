@@ -17,7 +17,7 @@ class AlarmModel {
 
   factory AlarmModel.fromMap(Map<String, dynamic> map) {
     return AlarmModel(
-      id: map['id'] ?? '',
+      id: map['id'],
       dateTime: DateTime.parse(map['dateTime']),
       title: map['title'],
     );

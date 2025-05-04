@@ -59,9 +59,9 @@ class AlarmPresenter {
           .collection('alarms')
           .get();
 
-      return snapshot.docs
-          .map((doc) => AlarmModel.fromFirestore(doc))
-          .toList();
+      return snapshot.docs.map((doc) {
+        return AlarmModel.fromMap(doc.data());
+      }).toList();
     } catch (e) {
       view.showAlarmError(e.toString());
       return [];

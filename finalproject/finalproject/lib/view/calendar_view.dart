@@ -188,11 +188,11 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
                 });
 
                 await _loadEvents(DateTime.now());
-                
+
                 final alarmModel = AlarmModel(
                   id: DateTime.now().millisecondsSinceEpoch.toString(),
                   dateTime: alarmDateTime,
-                  title: event,
+                  title: _eventController.text,
                 );
 
                 await _alarmPresenter.setAlarm(alarmModel);

@@ -33,15 +33,6 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
     });
   }
 
-  void _setAlarm() {
-    final model = AlarmModel(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      dateTime: _selectedDateTime,
-      title: 'Alarm', // Change this to user inputted event name
-    );
-    _presenter.setAlarm(model);
-  }
-
   @override
   void showAlarmSetSuccess() {
     ScaffoldMessenger.of(context)
