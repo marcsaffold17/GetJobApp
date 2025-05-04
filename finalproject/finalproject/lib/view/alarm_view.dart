@@ -16,14 +16,27 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
   late AlarmPresenter _presenter;
   DateTime _selectedDateTime = DateTime.now().add(Duration(minutes: 1));
 
+  List<AlarmModel> _alarms = [];
+
   @override
   void initState() {
     super.initState();
     _presenter = AlarmPresenter(this);
+    _loadAlarms();
+  }
+
+  void _loadAlarms() async {
+    final alarms = await _presenter.fetchAlarms();
+    setState(() {
+      _alarms = alarms;
+    });
   }
 
   void _setAlarm() {
-    final model = AlarmModel(id: 1, dateTime: _selectedDateTime);
+    final model = AlarmModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      dateTime: _selectedDateTime,
+    );
     _presenter.setAlarm(model);
   }
 
@@ -31,6 +44,7 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
   void showAlarmSetSuccess() {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('Alarm set successfully!')));
+    _loadAlarms();
   }
 
   @override
@@ -44,14 +58,31 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
     return Scaffold(
       appBar: AppBar(title: Text('Set Alarm')),
       body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          ElevatedButton(
-              onPressed: () => _selectDateTime(context),
-              child: Text('Pick Alarm Time')),
-          SizedBox(height: 16),
-          ElevatedButton(onPressed: _setAlarm, child: Text('Set Alarm')),
-        ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(onPressed: () => _selectDateTime(context), child: Text('Pick Alarm Time')),
+            SizedBox(height: 16),
+            ElevatedButton(onPressed: _setAlarm, child: Text('Set Alarm')),
+            SizedBox(height: 16),
+            Expanded( // Important!
+              child: _alarms.isEmpty
+                  ? Text("No alarms set.")
+                  : ListView.builder(
+                itemCount: _alarms.length,
+                itemBuilder: (context, index) {
+                  final alarm = _alarms[index];
+                  return ListTile(
+                    title: Text('Alarm ID: ${alarm.id}'),
+                    subtitle: Text('Time: ${alarm.dateTime}'),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
+
     );
   }
 
