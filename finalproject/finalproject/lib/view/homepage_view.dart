@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'goals_view.dart';
 import 'calendar_view.dart';
+import 'profile_page.dart'; // Import the profile page
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, this.title, this.username});
@@ -114,6 +115,32 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ],
+          ),
+          // Profile button on top right of the homepage
+          Positioned(
+            top: 40, // Adjust this value to place it higher or lower
+            right: 20, // Adjust this value to position it horizontally
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) =>
+                            ProfilePage(username: widget.username ?? "User"),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.grey[300],
+                child: Icon(
+                  Icons.account_circle,
+                  size: 35,
+                  color: Colors.black,
+                ),
+              ),
+            ),
           ),
         ],
       ),
