@@ -44,7 +44,22 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
         .collection('events')
         .get();
 
-    return snapshot.docs.map((doc) => Event(doc['title'])).toList();
+    return snapshot.docs.map((doc) {
+      // Retrieve time data and combine it with event title
+      int hour = doc['hour'] ?? 0;
+      int minute = doc['minute'] ?? 0;
+      String formattedTime = _formatTime(hour, minute);
+      return Event("${doc['title']} ($formattedTime)");
+    }).toList();
+  }
+
+
+
+  String _formatTime(int hour, int minute) {
+    final time = TimeOfDay(hour: hour, minute: minute);
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, hour, minute);
+    return TimeOfDay.fromDateTime(dt).format(context);
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -71,6 +86,7 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
 
   void _showAddEventDialog(DateTime day) {
     final TextEditingController _eventController = TextEditingController();
+    TimeOfDay selectedTime = TimeOfDay.now();
 
     showDialog(
       context: context,
@@ -84,32 +100,56 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
             color: Color.fromARGB(255, 0, 43, 75),
           ),
         ),
-        content: TextField(
-          controller: _eventController,
-          style: const TextStyle(
-            color: Color.fromARGB(255, 34, 124, 157),
-            fontFamily: 'JetB',
-          ),
-          decoration: const InputDecoration(
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Color.fromARGB(255, 17, 84, 116),
-                width: 2.0,
-              ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _eventController,
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 34, 124, 157),
+                    fontFamily: 'JetB',
+                  ),
+                  decoration: const InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(255, 17, 84, 116),
+                        width: 2.0,
+                      ),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(255, 34, 124, 157),
+                        width: 2.0,
+                      ),
+                    ),
+                    labelText: "Event Title",
+                    labelStyle: TextStyle(
+                      color: Color.fromARGB(150, 17, 84, 116),
+                      fontFamily: 'JetB',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 17, 84, 116),
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: selectedTime,
+                    );
+                    if (picked != null) {
+                      setState(() {
+                        selectedTime = picked;
+                      });
+                    }
+                  },
+                  child: Text("Pick Time: ${selectedTime.format(context)}"),
+                ),
+              ],
             ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Color.fromARGB(255, 34, 124, 157),
-                width: 2.0,
-              ),
-            ),
-            labelText: "Event Title",
-            labelStyle: TextStyle(
-              color: Color.fromARGB(150, 17, 84, 116),
-              fontFamily: 'JetB',
-            ),
-          ),
-        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -126,6 +166,14 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
               final event = _eventController.text;
               final dateKey = DateUtils.dateOnly(day).toIso8601String();
 
+              final alarmDateTime = DateTime(
+                day.year,
+                day.month,
+                day.day,
+                selectedTime.hour,
+                selectedTime.minute,
+              );
+
               try {
                 await FirebaseFirestore.instance
                     .collection('Login-Info')
@@ -133,18 +181,23 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
                     .collection('Calendar')
                     .doc(dateKey)
                     .collection('events')
-                    .add({'title': event});
-                await _loadEvents(DateTime.now());
+                    .add({
+                  'title': event,
+                  'hour': selectedTime.hour,
+                  'minute': selectedTime.minute,
+                });
 
-                final alarmDateTime = DateTime(day.year, day.month, day.day, 9, 0);
+                await _loadEvents(DateTime.now());
+                
                 final alarmModel = AlarmModel(
                   id: DateTime.now().millisecondsSinceEpoch.toString(),
                   dateTime: alarmDateTime,
                   title: event,
                 );
-                await _alarmPresenter.setAlarm(alarmModel);
 
+                await _alarmPresenter.setAlarm(alarmModel);
                 await _loadEvents(DateTime.now());
+
                 setState(() {});
                 Navigator.pop(context);
               } catch (e) {
