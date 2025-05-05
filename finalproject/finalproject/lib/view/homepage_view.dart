@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'goals_view.dart';
 import 'calendar_view.dart';
 import 'alarm_view.dart';
+import 'video_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, this.title, this.username});
@@ -43,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -79,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -114,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -143,6 +144,39 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                       child: const Text(
                         'Alarm',
+                        style: TextStyle(fontSize: 20, fontFamily: 'JetB'),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 300,
+                    height: 60,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 0, 43, 75),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 20,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => VideoPage()),
+                        );
+                      },
+                      child: const Text(
+                        'Videos',
                         style: TextStyle(fontSize: 20, fontFamily: 'JetB'),
                       ),
                     ),
