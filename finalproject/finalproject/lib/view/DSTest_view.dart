@@ -1,6 +1,8 @@
 import '../presenter/DS_List_presenter.dart';
 import '../model/DS_List_model.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../presenter/global_presenter.dart';
 import 'countrycompare.dart';
 
 class DJobListScreen extends StatefulWidget {
