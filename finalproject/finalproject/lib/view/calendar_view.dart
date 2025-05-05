@@ -306,9 +306,18 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
 
   @override
   void showAlarmSetSuccess() {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("Alarm set successfully!")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Color.fromARGB(255, 0, 43, 75),
+        content: Text(
+          "Alarm set successfully!",
+          style: TextStyle(
+            color: Color.fromARGB(255, 244, 243, 240),
+            fontFamily: 'JetB',
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -451,7 +460,16 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text("No events."));
+                  return const Center(
+                    child: Text(
+                      "No Events",
+                      style: TextStyle(
+                        color: Color.fromARGB(130, 34, 124, 157),
+                        fontSize: 20,
+                        fontFamily: 'JetB',
+                      ),
+                    ),
+                  );
                 }
 
                 final events = snapshot.data!;
@@ -521,7 +539,19 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
                               setState(() {});
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Event deleted successfully!"),
+                                  backgroundColor: Color.fromARGB(
+                                    255,
+                                    0,
+                                    43,
+                                    75,
+                                  ),
+                                  content: Text(
+                                    "Event deleted successfully!",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 244, 243, 240),
+                                      fontFamily: 'JetB',
+                                    ),
+                                  ),
                                 ),
                               );
                             } catch (e) {
