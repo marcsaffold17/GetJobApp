@@ -45,6 +45,13 @@ class NavigationMenuView extends StatelessWidget {
                 ),
                 label: 'Favorites',
               ),
+              NavigationDestination(
+                icon: Icon(
+                  Icons.video_collection,
+                  color: Color.fromARGB(255, 0, 43, 75),
+                ),
+                label: 'Videos',
+              )
             ],
           ),
         ),
