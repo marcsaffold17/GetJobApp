@@ -136,6 +136,60 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
                     final picked = await showTimePicker(
                       context: context,
                       initialTime: selectedTime,
+                      builder: (BuildContext context, Widget? child) {
+                        return Theme(
+                          data: ThemeData.light().copyWith(
+                            textTheme: ThemeData.light().textTheme.apply(
+                              fontFamily:
+                                  'inter', // Replace with your font family
+                            ),
+                            colorScheme: ColorScheme.light(
+                              primary: Color.fromARGB(255, 0, 43, 75),
+                              onPrimary: const Color.fromARGB(
+                                255,
+                                230,
+                                230,
+                                226,
+                              ), // header text color
+                              onSurface: const Color.fromARGB(
+                                255,
+                                17,
+                                84,
+                                116,
+                              ), // body text color
+                            ),
+                            timePickerTheme: TimePickerThemeData(
+                              helpTextStyle: TextStyle(
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 0, 43, 75),
+                                fontFamily: 'inter',
+                              ),
+                              backgroundColor: const Color.fromARGB(
+                                255,
+                                244,
+                                243,
+                                240,
+                              ),
+                              dayPeriodColor: WidgetStateColor.resolveWith((
+                                states,
+                              ) {
+                                return states.contains(WidgetState.selected)
+                                    ? Color.fromARGB(255, 0, 43, 75)
+                                    : Colors.white;
+                              }),
+                              dayPeriodTextColor: WidgetStateColor.resolveWith((
+                                states,
+                              ) {
+                                return states.contains(WidgetState.selected)
+                                    ? Color.fromARGB(255, 230, 230, 226)
+                                    : Color.fromARGB(255, 17, 84, 116);
+                              }),
+                            ),
+                          ),
+
+                          child: child!,
+                        );
+                      },
                     );
                     if (picked != null) {
                       setState(() {
