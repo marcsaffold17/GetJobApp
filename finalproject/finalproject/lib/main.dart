@@ -1,9 +1,12 @@
+import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../view/login_view.dart';
+import '../view/alarm_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Alarm.init();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
@@ -17,7 +20,14 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        // scaffoldBackgroundColor: Color.fromARGB(255, 244, 243, 240),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Color.fromARGB(255, 17, 84, 116),
+          selectionColor: Color.fromARGB(100, 34, 124, 157),
+          selectionHandleColor: Color.fromARGB(255, 17, 84, 116),
+        ),
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: const Color.fromARGB(255, 17, 84, 116),
+        ),
       ),
       home: const MyLoginPage(title: 'login Page'),
     );

@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class JobEntry {
   final int workYear;
   final String jobTitle;
@@ -11,6 +13,7 @@ class JobEntry {
   final String workSetting;
   final String companyLocation;
   final String companySize;
+  bool isFavorite = false;
 
   JobEntry({
     required this.workYear,
@@ -25,6 +28,7 @@ class JobEntry {
     required this.workSetting,
     required this.companyLocation,
     required this.companySize,
+    required bool isFavorite,
   });
 
   factory JobEntry.fromMap(Map<String, dynamic> map) {
@@ -41,6 +45,13 @@ class JobEntry {
       workSetting: (map['work_setting'] ?? '').toString(),
       companyLocation: (map['company_location'] ?? '').toString(),
       companySize: (map['company_size'] ?? '').toString(),
+      isFavorite: false,
     );
+  }
+  String get formattedSalaryInUSD {
+    return NumberFormat.currency(
+      symbol: "\$",
+      decimalDigits: 0,
+    ).format(salaryInUSD);
   }
 }
