@@ -169,7 +169,6 @@ class _ChecklistPageState extends State<ChecklistPage> {
                             fontFamily: 'JetB',
                             fontSize: 18,
                           ),
-                          //Theme.of(context).textTheme.titleMedium
                         ),
                       )
                       : ListView.separated(

@@ -107,7 +107,16 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
             Expanded(
               child:
                   _alarms.isEmpty
-                      ? Center(child: Text("No alarms set."))
+                      ? Center(
+                        child: Text(
+                          "No alarms set.",
+                          style: TextStyle(
+                            color: Color.fromARGB(130, 34, 124, 157),
+                            fontFamily: 'JetB',
+                            fontSize: 18,
+                          ),
+                        ),
+                      )
                       : ListView.builder(
                         itemCount: sortedDates.length,
                         padding: const EdgeInsets.all(12.0),
