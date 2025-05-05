@@ -114,7 +114,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
               borderRadius: BorderRadius.circular(12),
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 230, 230, 226),
+                  color: const Color.fromARGB(40, 34, 124, 157),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.symmetric(
@@ -127,9 +127,11 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       child: TextField(
                         controller: _textController,
                         decoration: const InputDecoration(
+                          // filled: true,
+                          // fillColor: Color.fromARGB(40, 34, 124, 157),
                           hintText: 'Add a career goal...',
                           hintStyle: TextStyle(
-                            color: Color.fromARGB(199, 4, 4, 4),
+                            color: Color.fromARGB(140, 17, 84, 116),
                             fontFamily: 'JetB',
                             fontWeight: FontWeight.bold,
                           ),
