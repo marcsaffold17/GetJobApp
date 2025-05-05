@@ -325,7 +325,16 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                                             const SizedBox(height: 8),
                                             Text(
                                               'Salary: ${job.salary}',
-                                              style: _descriptionStyle(),
+                                              style: TextStyle(
+                                                color: Color.fromARGB(
+                                                  255,
+                                                  17,
+                                                  84,
+                                                  116,
+                                                ),
+                                                fontSize: 12,
+                                                fontFamily: 'JetB',
+                                              ),
                                             ),
                                           ],
                                         ),
