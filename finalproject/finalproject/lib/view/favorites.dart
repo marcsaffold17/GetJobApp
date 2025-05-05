@@ -101,7 +101,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     ),
                   ),
                   subtitle: Text(
-                    '${data['Company'] ?? 'Unknown'} • ${data['Location'] ?? 'Unknown'}',
+                    '${data['Company'] ?? data['Category']} • ${data['Location'] ?? 'Unknown'}',
                     style: const TextStyle(
                       fontFamily: 'JetB',
                       color: Color.fromARGB(255, 17, 84, 116),
@@ -120,21 +120,33 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     ),
                     ListTile(
                       title: Text(
-                        'Company Score: ${data['Company Score'] ?? 'N/A'}',
+                        '${data['Company Score'] != null ? 'Company Score' : 'Work Setting'}: ${data['Company Score'] ?? data['Work Setting'] ?? 'N/A'}',
                         style: _descriptionStyle(),
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 4),
+                          if (data['Employment Type'] != null)
+                            Text(
+                              'Employment Type: ${data['Employment Type'] ?? "N/A"}',
+                              style: _descriptionStyle(),
+                            ),
                           Text(
-                            'Date Posted: ${data['Date'] ?? 'N/A'}',
+                            '${data['Date'] != null ? 'Date Posted' : 'Work Year'} : ${data['Date'] ?? data['Year'] ?? "N/A"}',
                             style: _descriptionStyle(),
                           ),
+                          if (data['Size'] != null)
+                            Text(
+                              'Company Size: ${data['Size'] ?? "N/A"}',
+                              style: _descriptionStyle(),
+                            ),
                           const SizedBox(height: 8),
                           Text(
                             'Salary: ${data['Salary'] ?? 'N/A'}',
-                            style: _descriptionStyle(),
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 17, 84, 116),
+                              fontFamily: 'JetB',
+                            ),
                           ),
                         ],
                       ),

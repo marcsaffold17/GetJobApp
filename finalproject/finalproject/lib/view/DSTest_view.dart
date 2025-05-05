@@ -1,6 +1,8 @@
 import '../presenter/DS_List_presenter.dart';
 import '../model/DS_List_model.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../presenter/global_presenter.dart';
 
 class DJobListScreen extends StatefulWidget {
   const DJobListScreen({super.key});
@@ -13,12 +15,18 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
   late JobPresenter presenter;
   List<JobEntry> _allJobs = [];
   List<JobEntry> _filteredJobs = [];
+  Set<String> _favoriteJobIds = {};
   String _searchQuery = '';
   int _currentnum = 20;
   final int _itemsPerPage = 20;
   bool _isLoading = true;
   String? _errorMessage;
   final ScrollController _scrollController = ScrollController();
+
+  final favoritesRef = FirebaseFirestore.instance
+      .collection('Login-Info')
+      .doc(globalEmail)
+      .collection('favorites');
 
   void _loadMoreJobs() {
     if (_currentnum < _filteredJobs.length) {
@@ -53,6 +61,7 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
       _isLoading = false;
       _errorMessage = null;
     });
+    _loadFavorites();
   }
 
   @override
@@ -78,6 +87,72 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
       _filteredJobs = results;
       _currentnum = _itemsPerPage.clamp(0, results.length);
     });
+  }
+
+  Future<void> _loadFavorites() async {
+    final snapshot = await favoritesRef.get();
+    final ids = snapshot.docs.map((doc) => doc.id).toSet();
+
+    setState(() {
+      _favoriteJobIds = ids;
+
+      for (var job in _filteredJobs) {
+        final jobId = job.jobTitle + job.jobCategory + job.employeeResidence;
+        job.isFavorite = _favoriteJobIds.contains(jobId);
+      }
+
+      for (var job in _allJobs) {
+        final jobId = job.jobTitle + job.jobCategory + job.employeeResidence;
+        job.isFavorite = _favoriteJobIds.contains(jobId);
+      }
+    });
+  }
+
+  void _toggleFavorite(JobEntry job) async {
+    final jobId = job.jobTitle + job.jobCategory + job.employeeResidence;
+
+    if (_favoriteJobIds.contains(jobId)) {
+      await favoritesRef.doc(jobId).delete();
+      setState(() {
+        _favoriteJobIds.remove(jobId);
+        job.isFavorite = false;
+      });
+    } else {
+      await favoritesRef.doc(jobId).set({
+        'Title': job.jobTitle,
+        'Category': job.jobCategory,
+        'Work Setting': job.workSetting,
+        'Employment Type': job.employmentType,
+        'Location': job.employeeResidence,
+        'Year': job.workYear,
+        'Salary': job.formattedSalaryInUSD,
+        'Size': job.companySize,
+      });
+      setState(() {
+        _favoriteJobIds.add(jobId);
+        job.isFavorite = true;
+      });
+    }
+  }
+
+  Widget _buildFavoriteIcon(JobEntry job) {
+    return job.isFavorite
+        ? Stack(
+          alignment: Alignment.center,
+          children: const [
+            Icon(
+              Icons.star_border,
+              color: Color.fromARGB(255, 151, 135, 8),
+              size: 32,
+            ),
+            Icon(
+              Icons.star,
+              color: Color.fromARGB(255, 242, 201, 76),
+              size: 24,
+            ),
+          ],
+        )
+        : const Icon(Icons.star_border, color: Colors.grey, size: 32);
   }
 
   @override
@@ -198,6 +273,10 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                         title: Text(
                                           'Work Setting: ${job.workSetting}',
                                           style: _descriptionTextStyle(),
+                                        ),
+                                        trailing: IconButton(
+                                          icon: _buildFavoriteIcon(job),
+                                          onPressed: () => _toggleFavorite(job),
                                         ),
                                         subtitle: Column(
                                           crossAxisAlignment:
