@@ -39,48 +39,30 @@ class _FavoritesPageState extends State<FavoritesPage> {
               ? const Color.fromARGB(255, 80, 80, 80)
               : const Color.fromARGB(255, 244, 243, 240),
       appBar: AppBar(
-<<<<<<< HEAD
         backgroundColor:
             isDarkMode
                 ? const Color.fromARGB(255, 0, 43, 75)
                 : const Color.fromARGB(255, 230, 230, 226),
         elevation: 2,
         centerTitle: true,
-=======
-        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
-        centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Color.fromARGB(255, 244, 243, 240),
-        ),
->>>>>>> main
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
         ),
-<<<<<<< HEAD
-=======
-        elevation: 2,
->>>>>>> main
         title: const Text(
           'Favorite Jobs',
           style: TextStyle(
             fontFamily: 'inter',
             fontSize: 20,
             fontWeight: FontWeight.w600,
-<<<<<<< HEAD
           ),
         ),
         iconTheme: IconThemeData(
           color:
               isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 43, 75),
         ),
-=======
-            color: Color.fromARGB(255, 244, 243, 240),
-          ),
-        ),
->>>>>>> main
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: favoritesRef.snapshots(),
@@ -139,11 +121,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   ),
                   subtitle: Text(
                     '${data['Company'] ?? data['Category']} • ${data['Location'] ?? 'Unknown'}',
-<<<<<<< HEAD
                     style: TextStyle(
-=======
-                    style: const TextStyle(
->>>>>>> main
                       fontFamily: 'JetB',
                       color:
                           isDarkMode
@@ -187,11 +165,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           const SizedBox(height: 8),
                           Text(
                             'Salary: ${data['Salary'] ?? 'N/A'}',
-<<<<<<< HEAD
                             style: const TextStyle(
-=======
-                            style: TextStyle(
->>>>>>> main
                               color: Color.fromARGB(255, 17, 84, 116),
                               fontFamily: 'JetB',
                             ),

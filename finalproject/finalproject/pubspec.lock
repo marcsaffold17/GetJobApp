@@ -520,6 +520,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  shared_preferences:
+    dependency: transitive
   provider:
     dependency: "direct main"
     description:

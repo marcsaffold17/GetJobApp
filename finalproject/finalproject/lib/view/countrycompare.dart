@@ -4,11 +4,7 @@ import '../model/DS_List_model.dart';
 class CompareCountriesScreen extends StatefulWidget {
   final List<JobEntry> jobs;
 
-<<<<<<< HEAD
-  const CompareCountriesScreen({super.key, required this.jobs});
-=======
   CompareCountriesScreen({required this.jobs});
->>>>>>> main
 
   @override
   _CompareCountriesScreenState createState() => _CompareCountriesScreenState();
@@ -29,11 +25,13 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
 
   double averageSalary(List<JobEntry> jobs) {
     final total = jobs.map((j) => j.salaryInUSD).reduce((a, b) => a + b);
-    return total / jobs.length / 1000; // convert to thousands for display
+    return total / jobs.length / 1000;
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final countryJobMap = groupJobsByCountry(widget.jobs);
     final sortedCountries =
         countryJobMap.entries.toList()..sort(
@@ -47,35 +45,33 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+        backgroundColor: isDark ? Colors.grey[900] : const Color(0xFF002B4B),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: const Color.fromARGB(255, 244, 243, 240),
+          color: theme.colorScheme.onPrimary,
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Average Salary By Country',
-          style: TextStyle(
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: theme.colorScheme.onPrimary,
             fontFamily: 'inter',
-            color: Color.fromARGB(255, 244, 243, 240),
           ),
         ),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Search by country',
-                border: OutlineInputBorder(),
+                labelStyle: TextStyle(color: theme.colorScheme.primary),
+                border: const OutlineInputBorder(),
               ),
               onChanged: (query) {
                 setState(() {
@@ -94,27 +90,20 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
                 final avgSalary = averageSalary(countryJobs);
 
                 return Card(
-                  color: const Color.fromARGB(255, 230, 230, 226),
+                  color: isDark ? Colors.grey[800] : const Color(0xFFE6E6E2),
                   margin: const EdgeInsets.symmetric(vertical: 6),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   elevation: 3,
                   child: ExpansionTile(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: BorderSide.none,
-                    ),
-                    collapsedShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: BorderSide.none,
-                    ),
-                    backgroundColor: const Color.fromARGB(255, 230, 230, 226),
+                    backgroundColor:
+                        isDark ? Colors.grey[800] : const Color(0xFFE6E6E2),
                     title: Text(
                       country,
-                      style: const TextStyle(
+                      style: theme.textTheme.bodyLarge?.copyWith(
                         fontFamily: 'inter',
-                        color: Color.fromARGB(255, 0, 43, 75),
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     trailing: Text(
@@ -126,10 +115,7 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
                       ),
                     ),
                     children: [
-                      const Divider(
-                        color: Color.fromARGB(255, 0, 43, 75),
-                        thickness: 1,
-                      ),
+                      const Divider(color: Color(0xFF002B4B), thickness: 1),
                       ...countryJobs.map(
                         (job) => ListTile(
                           dense: true,

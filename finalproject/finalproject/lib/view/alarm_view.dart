@@ -16,7 +16,6 @@ class AlarmScreen extends StatefulWidget {
 class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
   late AlarmPresenter _presenter;
   DateTime _selectedDateTime = DateTime.now().add(Duration(minutes: 1));
-
   List<AlarmModel> _alarms = [];
 
   @override
@@ -50,7 +49,30 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
 
   @override
   Widget build(BuildContext context) {
-    // Alarms are grouped by date
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    final backgroundColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 40, 40, 40)
+            : const Color.fromARGB(255, 244, 243, 240);
+
+    final cardColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 60, 60, 60)
+            : const Color.fromARGB(255, 230, 230, 226);
+
+    final primaryTextColor =
+        isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 43, 75);
+
+    final subtitleColor =
+        isDarkMode ? Colors.grey[300]! : const Color.fromARGB(255, 17, 84, 116);
+
+    final timeColor =
+        isDarkMode
+            ? Colors.lightBlueAccent
+            : const Color.fromARGB(255, 34, 124, 157);
+
+    // Group alarms by date
     final alarmsByDate = <DateTime, List<AlarmModel>>{};
     for (var alarm in _alarms) {
       final date = DateTime(
@@ -61,18 +83,16 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
       alarmsByDate.putIfAbsent(date, () => []).add(alarm);
     }
 
-    // Dates sorted by most to least recent
+    // Sort dates descending
     final sortedDates =
         alarmsByDate.keys.toList()..sort((b, a) => b.compareTo(a));
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+        backgroundColor: primaryTextColor,
         centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Color.fromARGB(255, 244, 243, 240),
-        ),
+        iconTheme: IconThemeData(color: backgroundColor),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
@@ -80,13 +100,13 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
           ),
         ),
         elevation: 2,
-        title: const Text(
+        title: Text(
           'Alarms',
           style: TextStyle(
             fontFamily: 'inter',
             fontSize: 20,
             fontWeight: FontWeight.w600,
-            color: Color.fromARGB(255, 244, 243, 240),
+            color: backgroundColor,
           ),
         ),
       ),
@@ -94,16 +114,6 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Temporarily removing "pick alarm time" and "set alarm" buttons
-            /*
-            ElevatedButton(
-              onPressed: () => _selectDateTime(context),
-              child: Text('Pick Alarm Time'),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(onPressed: _setAlarm, child: Text('Set Alarm')),
-            SizedBox(height: 16),
-            */
             Expanded(
               child:
                   _alarms.isEmpty
@@ -111,7 +121,7 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
                         child: Text(
                           "No alarms set.",
                           style: TextStyle(
-                            color: Color.fromARGB(130, 34, 124, 157),
+                            color: timeColor.withAlpha(180),
                             fontFamily: 'JetB',
                             fontSize: 18,
                           ),
@@ -125,7 +135,7 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
                           final dailyAlarms = alarmsByDate[date]!;
 
                           return Card(
-                            color: const Color.fromARGB(255, 230, 230, 226),
+                            color: cardColor,
                             margin: const EdgeInsets.symmetric(vertical: 6),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -140,48 +150,35 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
                                 borderRadius: BorderRadius.circular(12),
                                 side: BorderSide.none,
                               ),
-                              backgroundColor: const Color.fromARGB(
-                                255,
-                                230,
-                                230,
-                                226,
-                              ),
+                              backgroundColor: cardColor,
                               title: Text(
                                 DateFormat('EEEE, MMMM d, y').format(date),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontFamily: 'inter',
-                                  color: Color.fromARGB(255, 0, 43, 75),
+                                  color: primaryTextColor,
                                 ),
                               ),
                               children: [
-                                const Divider(
-                                  color: Color.fromARGB(255, 0, 43, 75),
-                                  thickness: 1,
-                                ),
+                                Divider(color: primaryTextColor, thickness: 1),
                                 ...dailyAlarms.map(
                                   (alarm) => ListTile(
                                     dense: true,
                                     title: Text(
                                       alarm.title ?? 'Alarm',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'JetB',
                                         fontSize: 12,
-                                        color: Color.fromARGB(255, 17, 84, 116),
+                                        color: subtitleColor,
                                       ),
                                     ),
                                     trailing: Text(
                                       DateFormat(
                                         'hh:mm a',
                                       ).format(alarm.dateTime),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'JetB',
                                         fontSize: 12,
-                                        color: Color.fromARGB(
-                                          255,
-                                          34,
-                                          124,
-                                          157,
-                                        ),
+                                        color: timeColor,
                                       ),
                                     ),
                                   ),
@@ -204,11 +201,34 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
       initialDate: _selectedDateTime,
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+              primary: const Color.fromARGB(255, 0, 43, 75),
+              onPrimary: Colors.white,
+              surface: Theme.of(context).dialogBackgroundColor,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       final time = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.fromDateTime(_selectedDateTime),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: Theme.of(context).colorScheme.copyWith(
+                primary: const Color.fromARGB(255, 0, 43, 75),
+                onPrimary: Colors.white,
+              ),
+            ),
+            child: child!,
+          );
+        },
       );
       if (time != null) {
         setState(() {

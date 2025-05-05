@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'goals_view.dart';
-<<<<<<< HEAD
 
 import 'profile_page.dart'; // Import the profile page
-=======
 import 'calendar_view.dart';
 import 'alarm_view.dart';
->>>>>>> main
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, this.title, this.username});
@@ -105,8 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               SizedBox(height: 50),
-<<<<<<< HEAD
-=======
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -176,7 +171,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
->>>>>>> main
             ],
           ),
           // Profile button on top right of the homepage
