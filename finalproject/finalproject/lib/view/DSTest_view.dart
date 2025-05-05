@@ -1,6 +1,7 @@
 import '../presenter/DS_List_presenter.dart';
 import '../model/DS_List_model.dart';
 import 'package:flutter/material.dart';
+import 'countrycompare.dart';
 
 class DJobListScreen extends StatefulWidget {
   const DJobListScreen({super.key});
@@ -82,88 +83,95 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
 
   @override
   Widget build(BuildContext context) {
-    // Check if the current theme is dark
-    final darkMode = Theme.of(context).brightness == Brightness.dark;
-
-    // Define dark and light mode color schemes
-    final backgroundColor =
-        darkMode
-            ? const Color.fromARGB(255, 80, 80, 80)
-            : const Color.fromARGB(255, 244, 243, 240);
-    final textColor =
-        darkMode ? Colors.white : const Color.fromARGB(255, 17, 84, 116);
-    final cardColor =
-        darkMode
-            ? const Color(0xFF333333)
-            : const Color.fromARGB(255, 230, 230, 226);
-    final inputBorderColor =
-        darkMode ? Colors.white70 : const Color.fromARGB(255, 17, 84, 116);
-    final focusedInputBorderColor =
-        darkMode
-            ? const Color(0xFF34d1ff)
-            : const Color.fromARGB(255, 34, 124, 157);
-
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       body:
           _isLoading
               ? const Center(child: CircularProgressIndicator())
               : _errorMessage != null
-              ? Center(
-                child: Text(_errorMessage!, style: TextStyle(color: textColor)),
-              )
+              ? Center(child: Text(_errorMessage!))
               : Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: TextField(
-                      style: TextStyle(color: textColor, fontFamily: 'JetB'),
-                      decoration: InputDecoration(
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 17, 84, 116),
+                        fontFamily: 'JetB',
+                      ),
+                      decoration: const InputDecoration(
                         labelText: 'Search by job category',
                         labelStyle: TextStyle(
-                          color: inputBorderColor,
+                          color: Color.fromARGB(150, 17, 84, 116),
                           fontFamily: 'inter',
                         ),
                         filled: true,
-                        fillColor:
-                            darkMode
-                                ? const Color(0xFF555555)
-                                : const Color.fromARGB(40, 34, 124, 157),
+                        fillColor: Color.fromARGB(40, 34, 124, 157),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: inputBorderColor),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(255, 17, 84, 116),
                           ),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: focusedInputBorderColor,
+                            color: Color.fromARGB(
+                              255,
+                              34,
+                              124,
+                              157,
+                            ), // Border when focused
                             width: 2.0,
                           ),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
-                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                       ),
                       onChanged: _filterJobs,
                     ),
                   ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  CompareCountriesScreen(jobs: _filteredJobs),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 0, 43, 75),
+                      foregroundColor: Color.fromARGB(255, 244, 243, 240),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Compare Salaries by Country',
+                      style: TextStyle(
+                        fontFamily: 'inter',
+                        color: Color.fromARGB(255, 244, 243, 240),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child:
                         _filteredJobs.isEmpty
-                            ? Center(
-                              child: Text(
-                                'No jobs found.',
-                                style: TextStyle(color: textColor),
-                              ),
-                            )
+                            ? const Center(child: Text('No jobs found.'))
                             : ListView.builder(
                               controller: _scrollController,
                               itemCount: _currentnum,
                               itemBuilder: (context, index) {
                                 final job = _filteredJobs[index];
                                 return Card(
-                                  color: cardColor,
+                                  color: const Color.fromARGB(
+                                    255,
+                                    230,
+                                    230,
+                                    226,
+                                  ),
                                   margin: const EdgeInsets.symmetric(
                                     horizontal: 12,
                                     vertical: 6,
@@ -181,49 +189,30 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                       borderRadius: BorderRadius.circular(12),
                                       side: BorderSide.none,
                                     ),
-                                    backgroundColor: cardColor,
+                                    backgroundColor: const Color.fromARGB(
+                                      255,
+                                      230,
+                                      230,
+                                      226,
+                                    ),
                                     title: Text(
                                       job.jobTitle,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontFamily: 'inter',
-                                        color:
-                                            darkMode
-                                                ? Colors.white
-                                                : const Color.fromARGB(
-                                                  255,
-                                                  0,
-                                                  43,
-                                                  75,
-                                                ),
+                                        color: Color.fromARGB(255, 0, 43, 75),
                                       ),
                                     ),
                                     subtitle: Text(
                                       '${job.jobCategory} • ${job.employeeResidence}',
-                                      style: TextStyle(
-                                        color:
-                                            darkMode
-                                                ? Colors.white70
-                                                : const Color.fromARGB(
-                                                  255,
-                                                  17,
-                                                  84,
-                                                  116,
-                                                ),
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 17, 84, 116),
                                         fontFamily: 'JetB',
                                       ),
                                     ),
                                     trailing: Text(
                                       job.formattedSalaryInUSD,
-                                      style: TextStyle(
-                                        color:
-                                            darkMode
-                                                ? Colors.white70
-                                                : const Color.fromARGB(
-                                                  255,
-                                                  17,
-                                                  84,
-                                                  116,
-                                                ),
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 17, 84, 116),
                                         fontFamily: 'JetB',
                                         fontSize: 12,
                                       ),
@@ -258,15 +247,12 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                             Text(
                                               'Salary: ${job.formattedSalaryInUSD}',
                                               style: TextStyle(
-                                                color:
-                                                    darkMode
-                                                        ? Colors.white70
-                                                        : const Color.fromARGB(
-                                                          255,
-                                                          17,
-                                                          84,
-                                                          116,
-                                                        ),
+                                                color: Color.fromARGB(
+                                                  255,
+                                                  17,
+                                                  84,
+                                                  116,
+                                                ),
                                                 fontFamily: 'JetB',
                                               ),
                                             ),
@@ -285,8 +271,8 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
   }
 
   TextStyle _descriptionTextStyle() {
-    return TextStyle(
-      color: const Color.fromARGB(255, 34, 124, 157),
+    return const TextStyle(
+      color: Color.fromARGB(255, 34, 124, 157),
       fontFamily: 'JetB',
       fontSize: 12,
     );

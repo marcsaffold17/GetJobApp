@@ -1,43 +1,43 @@
 import 'package:flutter/material.dart';
-import '../model/SWE_List_model.dart';
+import '../model/DS_List_model.dart';
 
-class CompareCitiesScreen extends StatefulWidget {
+class CompareCountriesScreen extends StatefulWidget {
   final List<JobEntry> jobs;
 
-  const CompareCitiesScreen({super.key, required this.jobs});
+  const CompareCountriesScreen({super.key, required this.jobs});
 
   @override
-  _CompareCitiesScreenState createState() => _CompareCitiesScreenState();
+  _CompareCountriesScreenState createState() => _CompareCountriesScreenState();
 }
 
-class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
+class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
   String _searchQuery = '';
 
-  Map<String, List<JobEntry>> groupJobsByCity(List<JobEntry> jobs) {
-    final Map<String, List<JobEntry>> cityJobMap = {};
+  Map<String, List<JobEntry>> groupJobsByCountry(List<JobEntry> jobs) {
+    final Map<String, List<JobEntry>> countryJobMap = {};
     for (var job in jobs) {
-      if (job.parsedSalary != null) {
-        cityJobMap.putIfAbsent(job.location, () => []).add(job);
+      if (job.salaryInUSD > 0) {
+        countryJobMap.putIfAbsent(job.companyLocation, () => []).add(job);
       }
     }
-    return cityJobMap;
+    return countryJobMap;
   }
 
   double averageSalary(List<JobEntry> jobs) {
-    final total = jobs.map((j) => j.parsedSalary!).reduce((a, b) => a + b);
-    return total / jobs.length;
+    final total = jobs.map((j) => j.salaryInUSD).reduce((a, b) => a + b);
+    return total / jobs.length / 1000; // convert to thousands for display
   }
 
   @override
   Widget build(BuildContext context) {
-    final cityJobMap = groupJobsByCity(widget.jobs);
-    final sortedCities =
-        cityJobMap.entries.toList()..sort(
+    final countryJobMap = groupJobsByCountry(widget.jobs);
+    final sortedCountries =
+        countryJobMap.entries.toList()..sort(
           (a, b) => averageSalary(b.value).compareTo(averageSalary(a.value)),
         );
 
-    final filteredCities =
-        sortedCities.where((entry) {
+    final filteredCountries =
+        sortedCountries.where((entry) {
           return entry.key.toLowerCase().contains(_searchQuery.toLowerCase());
         }).toList();
 
@@ -49,14 +49,14 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
           color: const Color.fromARGB(255, 244, 243, 240),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          'Average Salary By City',
+        title: const Text(
+          'Average Salary By Country',
           style: TextStyle(
             fontFamily: 'inter',
             color: Color.fromARGB(255, 244, 243, 240),
           ),
         ),
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
@@ -70,26 +70,8 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
             padding: const EdgeInsets.all(12.0),
             child: TextField(
               decoration: const InputDecoration(
-                labelText: 'Search by city',
-                labelStyle: TextStyle(
-                  color: Color.fromARGB(150, 17, 84, 116),
-                  fontFamily: 'inter',
-                ),
-                filled: true,
-                fillColor: Color.fromARGB(40, 34, 124, 157),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 17, 84, 116),
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 34, 124, 157),
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
+                labelText: 'Search by country',
+                border: OutlineInputBorder(),
               ),
               onChanged: (query) {
                 setState(() {
@@ -100,12 +82,12 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: filteredCities.length,
+              itemCount: filteredCountries.length,
               padding: const EdgeInsets.all(12.0),
               itemBuilder: (context, index) {
-                final city = filteredCities[index].key;
-                final cityJobs = filteredCities[index].value;
-                final avgSalary = averageSalary(cityJobs);
+                final country = filteredCountries[index].key;
+                final countryJobs = filteredCountries[index].value;
+                final avgSalary = averageSalary(countryJobs);
 
                 return Card(
                   color: const Color.fromARGB(255, 230, 230, 226),
@@ -125,7 +107,7 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
                     ),
                     backgroundColor: const Color.fromARGB(255, 230, 230, 226),
                     title: Text(
-                      city,
+                      country,
                       style: const TextStyle(
                         fontFamily: 'inter',
                         color: Color.fromARGB(255, 0, 43, 75),
@@ -144,11 +126,11 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
                         color: Color.fromARGB(255, 0, 43, 75),
                         thickness: 1,
                       ),
-                      ...cityJobs.map(
+                      ...countryJobs.map(
                         (job) => ListTile(
                           dense: true,
                           title: Text(
-                            'Company: ${job.company}',
+                            'Company: ${job.jobTitle}',
                             style: const TextStyle(
                               fontFamily: 'JetB',
                               fontSize: 12,
@@ -156,7 +138,7 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
                             ),
                           ),
                           trailing: Text(
-                            '\$${job.parsedSalary!.toStringAsFixed(1)}k',
+                            '\$${(job.salaryInUSD / 1000).toStringAsFixed(1)}k',
                             style: const TextStyle(
                               fontFamily: 'JetB',
                               fontSize: 12,

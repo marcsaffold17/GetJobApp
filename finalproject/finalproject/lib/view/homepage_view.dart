@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'goals_view.dart';
-import 'calendar_view.dart';
+
 import 'profile_page.dart'; // Import the profile page
 
 class MyHomePage extends StatefulWidget {
@@ -100,40 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 300,
-                    height: 60,
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: accentColor,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 20,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MyCalendarPage(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'Calander Page',
-                        style: TextStyle(fontSize: 20, fontFamily: 'JetB'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
           // Profile button on top right of the homepage

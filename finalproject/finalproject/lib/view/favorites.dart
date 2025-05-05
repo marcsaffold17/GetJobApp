@@ -45,6 +45,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 : const Color.fromARGB(255, 230, 230, 226),
         elevation: 2,
         centerTitle: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+        ),
         title: const Text(
           'Favorite Jobs',
           style: TextStyle(
@@ -54,7 +60,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
           ),
         ),
         iconTheme: IconThemeData(
-          color: isDarkMode ? Colors.white : Color.fromARGB(255, 0, 43, 75),
+          color:
+              isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 43, 75),
         ),
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -109,11 +116,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       color:
                           isDarkMode
                               ? Colors.white
-                              : Color.fromARGB(255, 0, 43, 75),
+                              : const Color.fromARGB(255, 0, 43, 75),
                     ),
                   ),
                   subtitle: Text(
-                    '${data['Company'] ?? 'Unknown'} • ${data['Location'] ?? 'Unknown'}',
+                    '${data['Company'] ?? data['Category']} • ${data['Location'] ?? 'Unknown'}',
                     style: TextStyle(
                       fontFamily: 'JetB',
                       color:
@@ -135,21 +142,33 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     ),
                     ListTile(
                       title: Text(
-                        'Company Score: ${data['Company Score'] ?? 'N/A'}',
+                        '${data['Company Score'] != null ? 'Company Score' : 'Work Setting'}: ${data['Company Score'] ?? data['Work Setting'] ?? 'N/A'}',
                         style: _descriptionStyle(),
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 4),
+                          if (data['Employment Type'] != null)
+                            Text(
+                              'Employment Type: ${data['Employment Type'] ?? "N/A"}',
+                              style: _descriptionStyle(),
+                            ),
                           Text(
-                            'Date Posted: ${data['Date'] ?? 'N/A'}',
+                            '${data['Date'] != null ? 'Date Posted' : 'Work Year'} : ${data['Date'] ?? data['Year'] ?? "N/A"}',
                             style: _descriptionStyle(),
                           ),
+                          if (data['Size'] != null)
+                            Text(
+                              'Company Size: ${data['Size'] ?? "N/A"}',
+                              style: _descriptionStyle(),
+                            ),
                           const SizedBox(height: 8),
                           Text(
                             'Salary: ${data['Salary'] ?? 'N/A'}',
-                            style: _descriptionStyle(),
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 17, 84, 116),
+                              fontFamily: 'JetB',
+                            ),
                           ),
                         ],
                       ),
