@@ -287,10 +287,18 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                                         color: Color.fromARGB(255, 17, 84, 116),
                                       ),
                                     ),
-                                    trailing: IconButton(
-                                      icon: _buildFavoriteIcon(job),
-                                      onPressed: () => _toggleFavorite(job),
+                                    trailing: Text(
+                                      job.salary.split('(').first,
+                                      style: TextStyle(
+                                        fontFamily: 'JetB',
+                                        color: Color.fromARGB(255, 17, 84, 116),
+                                        fontSize: 14,
+                                      ),
                                     ),
+                                    // trailing: IconButton(
+                                    //   icon: _buildFavoriteIcon(job),
+                                    //   onPressed: () => _toggleFavorite(job),
+                                    // ),
                                     children: [
                                       const Divider(
                                         color: Color.fromARGB(255, 0, 43, 75),
@@ -300,6 +308,10 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                                         title: Text(
                                           'Company Score: ${job.companyScore}',
                                           style: _descriptionStyle(),
+                                        ),
+                                        trailing: IconButton(
+                                          icon: _buildFavoriteIcon(job),
+                                          onPressed: () => _toggleFavorite(job),
                                         ),
                                         subtitle: Column(
                                           crossAxisAlignment:
