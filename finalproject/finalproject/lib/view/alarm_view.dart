@@ -36,7 +36,7 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
   void showAlarmSetSuccess() {
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text('Alarm set successfully!')));
+    ).showSnackBar(const SnackBar(content: Text('Alarm set successfully!')));
     _loadAlarms();
   }
 
@@ -53,7 +53,7 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
 
     final backgroundColor =
         isDarkMode
-            ? const Color.fromARGB(255, 40, 40, 40)
+            ? const Color.fromARGB(255, 80, 80, 80)
             : const Color.fromARGB(255, 244, 243, 240);
 
     final cardColor =
@@ -61,18 +61,21 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
             ? const Color.fromARGB(255, 60, 60, 60)
             : const Color.fromARGB(255, 230, 230, 226);
 
-    final primaryTextColor =
+    final appBarColor = const Color.fromARGB(255, 0, 43, 75);
+
+    final titleColor =
         isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 43, 75);
 
     final subtitleColor =
-        isDarkMode ? Colors.grey[300]! : const Color.fromARGB(255, 17, 84, 116);
+        isDarkMode
+            ? const Color.fromARGB(255, 151, 151, 151)
+            : const Color.fromARGB(255, 17, 84, 116);
 
     final timeColor =
         isDarkMode
             ? Colors.lightBlueAccent
             : const Color.fromARGB(255, 34, 124, 157);
 
-    // Group alarms by date
     final alarmsByDate = <DateTime, List<AlarmModel>>{};
     for (var alarm in _alarms) {
       final date = DateTime(
@@ -83,14 +86,13 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
       alarmsByDate.putIfAbsent(date, () => []).add(alarm);
     }
 
-    // Sort dates descending
     final sortedDates =
         alarmsByDate.keys.toList()..sort((b, a) => b.compareTo(a));
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: primaryTextColor,
+        backgroundColor: appBarColor,
         centerTitle: true,
         iconTheme: IconThemeData(color: backgroundColor),
         shape: const RoundedRectangleBorder(
@@ -155,11 +157,11 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
                                 DateFormat('EEEE, MMMM d, y').format(date),
                                 style: TextStyle(
                                   fontFamily: 'inter',
-                                  color: primaryTextColor,
+                                  color: titleColor,
                                 ),
                               ),
                               children: [
-                                Divider(color: primaryTextColor, thickness: 1),
+                                Divider(color: titleColor, thickness: 1),
                                 ...dailyAlarms.map(
                                   (alarm) => ListTile(
                                     dense: true,

@@ -30,6 +30,31 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final backgroundColor =
+        isDark
+            ? const Color.fromARGB(255, 80, 80, 80)
+            : const Color.fromARGB(255, 244, 243, 240);
+    final cardColor =
+        isDark
+            ? const Color.fromARGB(255, 60, 60, 60)
+            : const Color.fromARGB(255, 230, 230, 226);
+    final titleColor =
+        isDark ? Colors.white : const Color.fromARGB(255, 0, 43, 75);
+    final subtitleColor =
+        isDark
+            ? const Color.fromARGB(255, 151, 151, 151)
+            : const Color.fromARGB(255, 17, 84, 116);
+    final highlightColor =
+        isDark
+            ? Colors.lightBlueAccent
+            : const Color.fromARGB(255, 34, 124, 157);
+    final inputFill =
+        isDark
+            ? const Color.fromARGB(100, 100, 100, 100)
+            : const Color.fromARGB(40, 34, 124, 157);
+
     final cityJobMap = groupJobsByCity(widget.jobs);
     final sortedCities =
         cityJobMap.entries.toList()..sort(
@@ -37,11 +62,15 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
         );
 
     final filteredCities =
-        sortedCities.where((entry) {
-          return entry.key.toLowerCase().contains(_searchQuery.toLowerCase());
-        }).toList();
+        sortedCities
+            .where(
+              (entry) =>
+                  entry.key.toLowerCase().contains(_searchQuery.toLowerCase()),
+            )
+            .toList();
 
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 0, 43, 75),
         leading: IconButton(
@@ -49,48 +78,43 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
           color: const Color.fromARGB(255, 244, 243, 240),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
+        title: const Text(
           'Average Salary By City',
           style: TextStyle(
             fontFamily: 'inter',
             color: Color.fromARGB(255, 244, 243, 240),
           ),
         ),
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Search by city',
                 labelStyle: TextStyle(
-                  color: Color.fromARGB(150, 17, 84, 116),
+                  color: subtitleColor.withOpacity(0.8),
                   fontFamily: 'inter',
                 ),
                 filled: true,
-                fillColor: Color.fromARGB(40, 34, 124, 157),
+                fillColor: inputFill,
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 17, 84, 116),
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderSide: BorderSide(color: subtitleColor),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 34, 124, 157),
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderSide: BorderSide(color: highlightColor, width: 2.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                 ),
               ),
+              style: TextStyle(color: subtitleColor, fontFamily: 'JetB'),
               onChanged: (query) {
                 setState(() {
                   _searchQuery = query;
@@ -108,7 +132,7 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
                 final avgSalary = averageSalary(cityJobs);
 
                 return Card(
-                  color: const Color.fromARGB(255, 230, 230, 226),
+                  color: cardColor,
                   margin: const EdgeInsets.symmetric(vertical: 6),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -123,20 +147,17 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
                       borderRadius: BorderRadius.circular(12),
                       side: BorderSide.none,
                     ),
-                    backgroundColor: const Color.fromARGB(255, 230, 230, 226),
+                    backgroundColor: cardColor,
                     title: Text(
                       city,
-                      style: const TextStyle(
-                        fontFamily: 'inter',
-                        color: Color.fromARGB(255, 0, 43, 75),
-                      ),
+                      style: TextStyle(fontFamily: 'inter', color: titleColor),
                     ),
                     trailing: Text(
                       '\$${avgSalary.toStringAsFixed(1)}k',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'JetB',
                         fontSize: 12,
-                        color: Color.fromARGB(255, 17, 84, 116),
+                        color: subtitleColor,
                       ),
                     ),
                     children: [
@@ -149,18 +170,18 @@ class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
                           dense: true,
                           title: Text(
                             'Company: ${job.company}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'JetB',
                               fontSize: 12,
-                              color: Color.fromARGB(255, 17, 84, 116),
+                              color: subtitleColor,
                             ),
                           ),
                           trailing: Text(
                             '\$${job.parsedSalary!.toStringAsFixed(1)}k',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'JetB',
                               fontSize: 12,
-                              color: Color.fromARGB(255, 34, 124, 157),
+                              color: highlightColor,
                             ),
                           ),
                         ),
