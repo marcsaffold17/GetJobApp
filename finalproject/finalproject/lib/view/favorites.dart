@@ -32,19 +32,27 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 230, 230, 226),
-        elevation: 2,
+        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
         centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(255, 244, 243, 240),
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+        ),
+        elevation: 2,
         title: const Text(
           'Favorite Jobs',
           style: TextStyle(
             fontFamily: 'inter',
             fontSize: 20,
             fontWeight: FontWeight.w600,
-            color: Color.fromARGB(255, 0, 43, 75),
+            color: Color.fromARGB(255, 244, 243, 240),
           ),
         ),
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 0, 43, 75)),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: favoritesRef.snapshots(),

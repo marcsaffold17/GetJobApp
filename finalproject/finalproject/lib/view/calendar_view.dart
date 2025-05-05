@@ -322,16 +322,24 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 244, 243, 240),
         title: const Text(
           "Calendar",
           style: TextStyle(
-            color: Color.fromARGB(255, 0, 43, 75),
+            color: Color.fromARGB(255, 244, 243, 240),
             fontFamily: 'inter',
           ),
         ),
+        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 0, 43, 75)),
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(255, 244, 243, 240),
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+        ),
       ),
       backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       body: Column(
