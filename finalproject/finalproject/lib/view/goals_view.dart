@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 class ChecklistPage extends StatefulWidget {
   final bool isFromNavbar;
 
-  const ChecklistPage({Key? key, required this.isFromNavbar}) : super(key: key);
+  const ChecklistPage({super.key, required this.isFromNavbar});
 
   @override
   _ChecklistPageState createState() => _ChecklistPageState();
@@ -78,7 +78,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     }
   }
 
-  IconData _selectedIcon = Icons.work;
+  final IconData _selectedIcon = Icons.work;
 
   @override
   Widget build(BuildContext context) {

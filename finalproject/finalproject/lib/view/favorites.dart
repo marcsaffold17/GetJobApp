@@ -21,18 +21,28 @@ class _FavoritesPageState extends State<FavoritesPage> {
         .collection('favorites');
   }
 
-  TextStyle _descriptionStyle() => const TextStyle(
-    color: Color.fromARGB(255, 34, 124, 157),
-    fontFamily: 'JetB',
-    fontSize: 12,
-  );
+  TextStyle _descriptionStyle() {
+    return TextStyle(
+      color: Theme.of(context).textTheme.bodyMedium!.color,
+      fontFamily: 'JetB',
+      fontSize: 12,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor:
+          isDarkMode
+              ? const Color.fromARGB(255, 80, 80, 80)
+              : const Color.fromARGB(255, 244, 243, 240),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 230, 230, 226),
+        backgroundColor:
+            isDarkMode
+                ? const Color.fromARGB(255, 0, 43, 75)
+                : const Color.fromARGB(255, 230, 230, 226),
         elevation: 2,
         centerTitle: true,
         title: const Text(
@@ -41,10 +51,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
             fontFamily: 'inter',
             fontSize: 20,
             fontWeight: FontWeight.w600,
-            color: Color.fromARGB(255, 0, 43, 75),
           ),
         ),
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 0, 43, 75)),
+        iconTheme: IconThemeData(
+          color: isDarkMode ? Colors.white : Color.fromARGB(255, 0, 43, 75),
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: favoritesRef.snapshots(),
@@ -69,7 +80,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
               final data = docs[index].data() as Map<String, dynamic>;
 
               return Card(
-                color: const Color.fromARGB(255, 230, 230, 226),
+                color:
+                    isDarkMode
+                        ? const Color.fromARGB(255, 60, 60, 60)
+                        : const Color.fromARGB(255, 230, 230, 226),
                 margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -84,19 +98,28 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     borderRadius: BorderRadius.circular(12),
                     side: BorderSide.none,
                   ),
-                  backgroundColor: const Color.fromARGB(255, 230, 230, 226),
+                  backgroundColor:
+                      isDarkMode
+                          ? const Color.fromARGB(255, 60, 60, 60)
+                          : const Color.fromARGB(255, 230, 230, 226),
                   title: Text(
                     data['Title'] ?? 'No Title',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'inter',
-                      color: Color.fromARGB(255, 0, 43, 75),
+                      color:
+                          isDarkMode
+                              ? Colors.white
+                              : Color.fromARGB(255, 0, 43, 75),
                     ),
                   ),
                   subtitle: Text(
                     '${data['Company'] ?? 'Unknown'} • ${data['Location'] ?? 'Unknown'}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'JetB',
-                      color: Color.fromARGB(255, 17, 84, 116),
+                      color:
+                          isDarkMode
+                              ? const Color.fromARGB(255, 151, 151, 151)
+                              : const Color.fromARGB(255, 17, 84, 116),
                     ),
                   ),
                   trailing: IconButton(

@@ -4,13 +4,13 @@ import '../model/SWE_List_model.dart';
 class CompareCitiesScreen extends StatefulWidget {
   final List<JobEntry> jobs;
 
-  CompareCitiesScreen({required this.jobs});
+  const CompareCitiesScreen({super.key, required this.jobs});
 
   @override
   _CompareCitiesScreenState createState() => _CompareCitiesScreenState();
 }
 
-  class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
+class _CompareCitiesScreenState extends State<CompareCitiesScreen> {
   String _searchQuery = '';
 
   Map<String, List<JobEntry>> groupJobsByCity(List<JobEntry> jobs) {
@@ -31,12 +31,15 @@ class CompareCitiesScreen extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
     final cityJobMap = groupJobsByCity(widget.jobs);
-    final sortedCities = cityJobMap.entries.toList()
-      ..sort((a, b) => averageSalary(b.value).compareTo(averageSalary(a.value)));
+    final sortedCities =
+        cityJobMap.entries.toList()..sort(
+          (a, b) => averageSalary(b.value).compareTo(averageSalary(a.value)),
+        );
 
-    final filteredCities = sortedCities.where((entry) {
-      return entry.key.toLowerCase().contains(_searchQuery.toLowerCase());
-    }).toList();
+    final filteredCities =
+        sortedCities.where((entry) {
+          return entry.key.toLowerCase().contains(_searchQuery.toLowerCase());
+        }).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +61,7 @@ class CompareCitiesScreen extends StatefulWidget {
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
-        )
+        ),
       ),
       backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       body: Column(
@@ -123,25 +126,27 @@ class CompareCitiesScreen extends StatefulWidget {
                         color: Color.fromARGB(255, 0, 43, 75),
                         thickness: 1,
                       ),
-                      ...cityJobs.map((job) => ListTile(
-                        dense: true,
-                        title: Text(
-                          'Company: ${job.company}',
-                          style: const TextStyle(
-                            fontFamily: 'JetB',
-                            fontSize: 12,
-                            color: Color.fromARGB(255, 17, 84, 116),
+                      ...cityJobs.map(
+                        (job) => ListTile(
+                          dense: true,
+                          title: Text(
+                            'Company: ${job.company}',
+                            style: const TextStyle(
+                              fontFamily: 'JetB',
+                              fontSize: 12,
+                              color: Color.fromARGB(255, 17, 84, 116),
+                            ),
+                          ),
+                          trailing: Text(
+                            '\$${job.parsedSalary!.toStringAsFixed(1)}k',
+                            style: const TextStyle(
+                              fontFamily: 'JetB',
+                              fontSize: 12,
+                              color: Color.fromARGB(255, 34, 124, 157),
+                            ),
                           ),
                         ),
-                        trailing: Text(
-                          '\$${job.parsedSalary!.toStringAsFixed(1)}k',
-                          style: const TextStyle(
-                            fontFamily: 'JetB',
-                            fontSize: 12,
-                            color: Color.fromARGB(255, 34, 124, 157),
-                          ),
-                        ),
-                      )),
+                      ),
                     ],
                   ),
                 );

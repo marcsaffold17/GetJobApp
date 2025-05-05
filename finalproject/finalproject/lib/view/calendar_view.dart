@@ -62,7 +62,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
   }
 
   void _showAddEventDialog(DateTime day) {
-    final TextEditingController _eventController = TextEditingController();
+    final TextEditingController eventController = TextEditingController();
 
     showDialog(
       context: context,
@@ -77,7 +77,7 @@ class _MyCalendarPage extends State<MyCalendarPage> {
               ),
             ),
             content: TextField(
-              controller: _eventController,
+              controller: eventController,
               style: TextStyle(
                 color: Color.fromARGB(255, 34, 124, 157),
                 fontFamily: 'JetB',
@@ -129,10 +129,10 @@ class _MyCalendarPage extends State<MyCalendarPage> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    if (_eventController.text.isEmpty) return;
+                    if (eventController.text.isEmpty) return;
 
                     setState(() {
-                      final event = Event(_eventController.text);
+                      final event = Event(eventController.text);
                       if (kEvents[day] != null) {
                         kEvents[day]!.add(event);
                       } else {

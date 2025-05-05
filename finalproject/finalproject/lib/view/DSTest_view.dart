@@ -82,47 +82,67 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
 
   @override
   Widget build(BuildContext context) {
+    // Check if the current theme is dark
+    final darkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Define dark and light mode color schemes
+    final backgroundColor =
+        darkMode
+            ? const Color.fromARGB(255, 80, 80, 80)
+            : const Color.fromARGB(255, 244, 243, 240);
+    final textColor =
+        darkMode ? Colors.white : const Color.fromARGB(255, 17, 84, 116);
+    final cardColor =
+        darkMode
+            ? const Color(0xFF333333)
+            : const Color.fromARGB(255, 230, 230, 226);
+    final inputBorderColor =
+        darkMode ? Colors.white70 : const Color.fromARGB(255, 17, 84, 116);
+    final focusedInputBorderColor =
+        darkMode
+            ? const Color(0xFF34d1ff)
+            : const Color.fromARGB(255, 34, 124, 157);
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: backgroundColor,
       body:
           _isLoading
               ? const Center(child: CircularProgressIndicator())
               : _errorMessage != null
-              ? Center(child: Text(_errorMessage!))
+              ? Center(
+                child: Text(_errorMessage!, style: TextStyle(color: textColor)),
+              )
               : Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: TextField(
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 17, 84, 116),
-                        fontFamily: 'JetB',
-                      ),
-                      decoration: const InputDecoration(
+                      style: TextStyle(color: textColor, fontFamily: 'JetB'),
+                      decoration: InputDecoration(
                         labelText: 'Search by job category',
                         labelStyle: TextStyle(
-                          color: Color.fromARGB(150, 17, 84, 116),
+                          color: inputBorderColor,
                           fontFamily: 'inter',
                         ),
                         filled: true,
-                        fillColor: Color.fromARGB(40, 34, 124, 157),
+                        fillColor:
+                            darkMode
+                                ? const Color(0xFF555555)
+                                : const Color.fromARGB(40, 34, 124, 157),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(255, 17, 84, 116),
+                          borderSide: BorderSide(color: inputBorderColor),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20),
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color.fromARGB(
-                              255,
-                              34,
-                              124,
-                              157,
-                            ), // Border when focused
+                            color: focusedInputBorderColor,
                             width: 2.0,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20),
+                          ),
                         ),
                       ),
                       onChanged: _filterJobs,
@@ -131,19 +151,19 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                   Expanded(
                     child:
                         _filteredJobs.isEmpty
-                            ? const Center(child: Text('No jobs found.'))
+                            ? Center(
+                              child: Text(
+                                'No jobs found.',
+                                style: TextStyle(color: textColor),
+                              ),
+                            )
                             : ListView.builder(
                               controller: _scrollController,
                               itemCount: _currentnum,
                               itemBuilder: (context, index) {
                                 final job = _filteredJobs[index];
                                 return Card(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    230,
-                                    230,
-                                    226,
-                                  ),
+                                  color: cardColor,
                                   margin: const EdgeInsets.symmetric(
                                     horizontal: 12,
                                     vertical: 6,
@@ -161,30 +181,49 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                       borderRadius: BorderRadius.circular(12),
                                       side: BorderSide.none,
                                     ),
-                                    backgroundColor: const Color.fromARGB(
-                                      255,
-                                      230,
-                                      230,
-                                      226,
-                                    ),
+                                    backgroundColor: cardColor,
                                     title: Text(
                                       job.jobTitle,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'inter',
-                                        color: Color.fromARGB(255, 0, 43, 75),
+                                        color:
+                                            darkMode
+                                                ? Colors.white
+                                                : const Color.fromARGB(
+                                                  255,
+                                                  0,
+                                                  43,
+                                                  75,
+                                                ),
                                       ),
                                     ),
                                     subtitle: Text(
                                       '${job.jobCategory} • ${job.employeeResidence}',
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 17, 84, 116),
+                                      style: TextStyle(
+                                        color:
+                                            darkMode
+                                                ? Colors.white70
+                                                : const Color.fromARGB(
+                                                  255,
+                                                  17,
+                                                  84,
+                                                  116,
+                                                ),
                                         fontFamily: 'JetB',
                                       ),
                                     ),
                                     trailing: Text(
                                       job.formattedSalaryInUSD,
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 17, 84, 116),
+                                      style: TextStyle(
+                                        color:
+                                            darkMode
+                                                ? Colors.white70
+                                                : const Color.fromARGB(
+                                                  255,
+                                                  17,
+                                                  84,
+                                                  116,
+                                                ),
                                         fontFamily: 'JetB',
                                         fontSize: 12,
                                       ),
@@ -219,12 +258,15 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                             Text(
                                               'Salary: ${job.formattedSalaryInUSD}',
                                               style: TextStyle(
-                                                color: Color.fromARGB(
-                                                  255,
-                                                  17,
-                                                  84,
-                                                  116,
-                                                ),
+                                                color:
+                                                    darkMode
+                                                        ? Colors.white70
+                                                        : const Color.fromARGB(
+                                                          255,
+                                                          17,
+                                                          84,
+                                                          116,
+                                                        ),
                                                 fontFamily: 'JetB',
                                               ),
                                             ),
@@ -243,8 +285,8 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
   }
 
   TextStyle _descriptionTextStyle() {
-    return const TextStyle(
-      color: Color.fromARGB(255, 34, 124, 157),
+    return TextStyle(
+      color: const Color.fromARGB(255, 34, 124, 157),
       fontFamily: 'JetB',
       fontSize: 12,
     );
