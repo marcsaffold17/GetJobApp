@@ -480,6 +480,60 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
                         ],
                       ),
                       child: ListTile(
+                        trailing: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Color.fromARGB(255, 244, 243, 240),
+                          ),
+                          onPressed: () async {
+                            final dateKey =
+                                DateUtils.dateOnly(
+                                  _selectedDay!,
+                                ).toIso8601String();
+                            final eventWithTime = events[index].title;
+                            final eventTitle = eventWithTime.split(' (').first;
+                            try {
+                              final snapshot =
+                                  await FirebaseFirestore.instance
+                                      .collection('Login-Info')
+                                      .doc(globalEmail)
+                                      .collection('Calendar')
+                                      .doc(dateKey)
+                                      .collection('events')
+                                      .where('title', isEqualTo: eventTitle)
+                                      .get();
+
+                              for (var doc in snapshot.docs) {
+                                await doc.reference.delete();
+                              }
+                              final snapshot2 =
+                                  await FirebaseFirestore.instance
+                                      .collection('Login-Info')
+                                      .doc(globalEmail)
+                                      .collection('alarms')
+                                      .where('title', isEqualTo: eventTitle)
+                                      .get();
+                              for (var doc in snapshot2.docs) {
+                                await doc.reference.delete();
+                              }
+                              await _loadEvents(_selectedDay!);
+
+                              setState(() {});
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Event deleted successfully!"),
+                                ),
+                              );
+                            } catch (e) {
+                              print("Error deleting event: $e");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Error deleting event: $e"),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                         title: Text(
                           '${events[index]}',
                           style: const TextStyle(
