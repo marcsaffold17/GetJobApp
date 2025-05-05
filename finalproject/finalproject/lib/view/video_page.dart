@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../model/video_model.dart';
 import '../presenter/video_presenter.dart';
@@ -13,6 +13,7 @@ class VideoPage extends StatefulWidget {
 class _VideoPageState extends State<VideoPage> implements VideoView {
   late VideoPresenter _presenter;
   List<VideoModel> _videos = [];
+  final List<YoutubePlayerController> _controllers = [];
 
   @override
   void initState() {
@@ -22,38 +23,70 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
   }
 
   @override
+  void dispose() {
+    for (final controller in _controllers) {
+      controller.close();
+    }
+    super.dispose();
+  }
+
+  @override
   void showVideos(List<VideoModel> videos) {
     setState(() {
       _videos = videos;
+      _controllers.clear();
+      _controllers.addAll(videos.map((video) {
+        return YoutubePlayerController.fromVideoId(
+          videoId: video.videoId,
+          autoPlay: false,
+          params: const YoutubePlayerParams(
+            showFullscreenButton: true,
+            showControls: true,
+          ),
+        );
+      }));
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Interview Prep Videos')),
+      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      appBar: AppBar(
+        title: const Text('Interview Prep Videos'),
+        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+      ),
       body: ListView.builder(
         itemCount: _videos.length,
         itemBuilder: (context, index) {
           final video = _videos[index];
+          final controller = _controllers[index];
+
           return Card(
-            margin: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(12.0),
             elevation: 4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                YoutubePlayer(
-                  controller: YoutubePlayerController(
-                    initialVideoId: video.videoId,
-                    flags: YoutubePlayerFlags(autoPlay: false),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: YoutubePlayer(controller: controller),
                   ),
-                  showVideoProgressIndicator: true,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(video.title, style: TextStyle(fontWeight: FontWeight.bold)),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    video.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
