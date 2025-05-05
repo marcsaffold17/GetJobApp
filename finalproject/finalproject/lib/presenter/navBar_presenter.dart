@@ -8,7 +8,7 @@ import '../view/alarm_view.dart';
 class NavigationMenuPresenter extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
 
-  final screens = [MyHomePage(), TabViewPage(), FavoritesPage(), AlarmScreen()];
+  final screens = [MyHomePage(), TabViewPage(), FavoritesPage()];
 
   void onItemTapped(int index) {
     selectedIndex.value = index;
