@@ -483,7 +483,7 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
                         trailing: IconButton(
                           icon: Icon(
                             Icons.delete,
-                            color: Color.fromARGB(255, 244, 243, 240),
+                            color: Color.fromARGB(255, 202, 59, 59),
                           ),
                           onPressed: () async {
                             final dateKey =
