@@ -51,10 +51,21 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: const Color(0xFFF4F3F0),
       appBar: AppBar(
-        title: const Text('Interview Prep Videos'),
-        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+        title: const Text(
+          'Interview Prep Videos',
+          style: TextStyle(
+            color: Color(0xFFF4F3F0),
+            fontFamily: 'inter',
+          ),
+        ),
+        backgroundColor: const Color(0xFF002B4B),
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Color(0xFFF4F3F0)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+        ),
       ),
       body: ListView.builder(
         itemCount: _videos.length,
@@ -62,14 +73,22 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
           final video = _videos[index];
           final controller = _controllers[index];
 
-          return Card(
-            margin: const EdgeInsets.all(12.0),
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF115474),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFF002B4B), width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -77,13 +96,15 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
                     aspectRatio: 16 / 9,
                     child: YoutubePlayer(controller: controller),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   Text(
                     video.title,
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontFamily: 'JetB',
                       fontSize: 16,
+                      color: Color(0xFFF4F3F0),
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
