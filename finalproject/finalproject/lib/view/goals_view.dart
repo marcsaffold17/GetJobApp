@@ -162,7 +162,12 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       ? Center(
                         child: Text(
                           'No goals yet. Add one!',
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: TextStyle(
+                            color: Color.fromARGB(130, 34, 124, 157),
+                            fontFamily: 'JetB',
+                            fontSize: 18,
+                          ),
+                          //Theme.of(context).textTheme.titleMedium
                         ),
                       )
                       : ListView.separated(

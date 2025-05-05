@@ -465,7 +465,7 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
                       "No Events",
                       style: TextStyle(
                         color: Color.fromARGB(130, 34, 124, 157),
-                        fontSize: 20,
+                        fontSize: 18,
                         fontFamily: 'JetB',
                       ),
                     ),
