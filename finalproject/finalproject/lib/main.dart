@@ -1,13 +1,22 @@
+import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_view.dart';
+<<<<<<< HEAD
 import 'package:provider/provider.dart';
 import '../view/theme_notifier.dart'; // update this path as necessary
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+=======
+import '../view/alarm_view.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Alarm.init();
+>>>>>>> main
   await Firebase.initializeApp();
 
   final prefs = await SharedPreferences.getInstance();

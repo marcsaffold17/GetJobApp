@@ -4,7 +4,11 @@ import '../model/DS_List_model.dart';
 class CompareCountriesScreen extends StatefulWidget {
   final List<JobEntry> jobs;
 
+<<<<<<< HEAD
   const CompareCountriesScreen({super.key, required this.jobs});
+=======
+  CompareCountriesScreen({required this.jobs});
+>>>>>>> main
 
   @override
   _CompareCountriesScreenState createState() => _CompareCountriesScreenState();
