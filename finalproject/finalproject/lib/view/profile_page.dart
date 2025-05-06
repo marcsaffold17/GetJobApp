@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'theme_notifier.dart';
+import 'login_view.dart'; // ✅ Import LoginView
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -185,19 +186,20 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<void> _logout() async {
+    await FirebaseAuth.instance.signOut();
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => MyLoginPage(title: 'sign in')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final darkBlue = const Color(0xFF002B4B);
-    final darkBackground = const Color.fromARGB(
-      255,
-      80,
-      80,
-      80,
-    ); // Dark mode color
-    final lightBackground = Colors.white; // Light mode background color
+    final darkBackground = const Color.fromARGB(255, 80, 80, 80);
+    final lightBackground = Colors.white;
     final textColor = Theme.of(context).textTheme.bodyLarge?.color;
-
-    // Determine if dark mode is enabled
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -206,7 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
+        title: const Text(
           "My Workout Profile",
           style: TextStyle(color: Colors.white),
         ),
@@ -232,10 +234,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       body: Container(
-        color:
-            isDarkMode
-                ? darkBackground
-                : lightBackground, // Apply conditional background color
+        color: isDarkMode ? darkBackground : lightBackground,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
           child: Column(
@@ -304,7 +303,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 decoration: InputDecoration(
                   fillColor: Theme.of(context).colorScheme.surfaceVariant,
                   filled: true,
-                  hintText: 'Write something about yourself...'.toLowerCase(),
+                  hintText: 'write something about yourself...',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -379,6 +378,23 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 onPressed: _addEducation,
                 child: const Text('Add Education'),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                onPressed: _logout,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                icon: const Icon(Icons.logout),
+                label: const Text('Logout'),
               ),
             ],
           ),
