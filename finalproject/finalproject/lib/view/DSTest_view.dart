@@ -203,7 +203,14 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                       style: TextStyle(fontFamily: 'inter', fontSize: 12),
                     ),
                   ),
-
+                  const SizedBox(height: 12),
+                  Text(
+                    'Dataset Credit: Hummaam Qaasim - Kaggle',
+                    style: _descriptionTextStyle(
+                      subtitleColor,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   Expanded(
                     child:
                         _filteredJobs.isEmpty
