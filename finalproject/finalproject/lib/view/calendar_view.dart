@@ -329,6 +329,29 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    final Color backgroundColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 80, 80, 80)
+            : const Color.fromARGB(255, 244, 243, 240);
+
+    final Color appBarColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 0, 43, 75)
+            : const Color.fromARGB(255, 230, 230, 226);
+
+    final Color cardColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 60, 60, 60)
+            : const Color.fromARGB(255, 230, 230, 226);
+
+    final Color titleColor =
+        isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 43, 75);
+    final Color subtitleColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 151, 151, 151)
+            : const Color.fromARGB(255, 17, 84, 116);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -338,7 +361,7 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
             fontFamily: 'inter',
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+        backgroundColor: appBarColor,
         centerTitle: true,
         iconTheme: const IconThemeData(
           color: Color.fromARGB(255, 244, 243, 240),
@@ -350,7 +373,7 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
           ),
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: backgroundColor,
       body: Column(
         children: [
           const SizedBox(height: 20),
