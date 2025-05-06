@@ -30,30 +30,44 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Check if dark mode is enabled
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
+    // Color variables based on theme
     final backgroundColor =
         isDark
-            ? const Color.fromARGB(255, 80, 80, 80)
-            : const Color.fromARGB(255, 244, 243, 240);
+            ? const Color.fromARGB(255, 80, 80, 80) // Dark background
+            : const Color.fromARGB(255, 244, 243, 240); // Light background
 
     final cardColor =
         isDark
-            ? const Color.fromARGB(255, 80, 80, 80)
-            : const Color.fromARGB(255, 230, 230, 226);
+            ? const Color.fromARGB(255, 60, 60, 60) // Dark card color
+            : const Color.fromARGB(255, 230, 230, 226); // Light card color
 
-    final primaryTextColor =
-        isDark ? Colors.white : const Color.fromARGB(255, 255, 255, 255);
-
+    final primaryTextColor = isDark ? Colors.white : Colors.black; // Text color
     final subtitleColor =
-        isDark ? Colors.grey[300]! : const Color.fromARGB(255, 255, 255, 255);
+        isDark
+            ? Colors.grey[300]! // Light grey subtitle text for dark mode
+            : const Color.fromARGB(
+              255,
+              0,
+              43,
+              75,
+            ); // Darker color for light mode
 
     final timeColor =
         isDark
-            ? Colors.lightBlueAccent
-            : const Color.fromARGB(255, 255, 255, 255);
+            ? Colors
+                .lightBlueAccent // Light blue for time in dark mode
+            : const Color.fromARGB(
+              255,
+              34,
+              124,
+              157,
+            ); // Different blue for light mode
 
+    // Group and sort the jobs by country
     final countryJobMap = groupJobsByCountry(widget.jobs);
     final sortedCountries =
         countryJobMap.entries.toList()..sort(
@@ -67,7 +81,7 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primaryTextColor,
+        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: backgroundColor,
@@ -75,7 +89,7 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
         ),
         title: Text(
           'Average Salary By Country',
-          style: TextStyle(fontFamily: 'inter', color: backgroundColor),
+          style: TextStyle(fontFamily: 'inter', color: Colors.white),
         ),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
@@ -90,7 +104,7 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
               decoration: InputDecoration(
                 labelText: 'Search by country',
                 labelStyle: TextStyle(
-                  color: const Color.fromARGB(150, 17, 84, 116),
+                  color: const Color.fromARGB(149, 255, 255, 255),
                   fontFamily: 'inter',
                 ),
                 filled: true,

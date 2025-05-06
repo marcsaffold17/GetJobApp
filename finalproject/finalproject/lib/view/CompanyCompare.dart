@@ -47,6 +47,7 @@ class _CompareCompaniesBySizeScreenState
           workSetting: row[9].toString(),
           companyLocation: row[10].toString(),
           companySize: row[11].toString(),
+          isFavorite: false,
         );
         jobEntries.add(job);
       }
@@ -104,6 +105,31 @@ class _CompareCompaniesBySizeScreenState
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Dark and light mode color settings
+    final Color backgroundColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 80, 80, 80) // Dark background
+            : const Color.fromARGB(255, 244, 243, 240); // Light background
+
+    final Color appBarColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 0, 43, 75) // Dark app bar
+            : const Color.fromARGB(255, 230, 230, 226); // Light app bar
+
+    final Color cardColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 60, 60, 60) // Dark card color
+            : const Color.fromARGB(255, 230, 230, 226); // Light card color
+
+    final Color titleColor =
+        isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 43, 75);
+    final Color subtitleColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 151, 151, 151)
+            : const Color.fromARGB(255, 17, 84, 116);
+
     final sizeJobMap = groupJobsByCompanySize(_jobs);
     final sortedSizes =
         sizeJobMap.entries.toList()..sort(
@@ -130,10 +156,10 @@ class _CompareCompaniesBySizeScreenState
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+        backgroundColor: appBarColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: const Color.fromARGB(255, 244, 243, 240),
+          color: titleColor,
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
@@ -150,14 +176,15 @@ class _CompareCompaniesBySizeScreenState
           ),
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: backgroundColor,
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Search by company size or job title',
+                labelStyle: TextStyle(color: subtitleColor),
                 border: OutlineInputBorder(),
               ),
               onChanged: (query) {
@@ -177,7 +204,7 @@ class _CompareCompaniesBySizeScreenState
                 final avgSalary = averageSalary(sizeJobs);
 
                 return Card(
-                  color: const Color.fromARGB(255, 230, 230, 226),
+                  color: cardColor,
                   margin: const EdgeInsets.symmetric(vertical: 6),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -186,26 +213,21 @@ class _CompareCompaniesBySizeScreenState
                   child: ExpansionTile(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: BorderSide.none,
                     ),
                     collapsedShape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: BorderSide.none,
                     ),
-                    backgroundColor: const Color.fromARGB(255, 230, 230, 226),
+                    backgroundColor: cardColor,
                     title: Text(
                       sizeCategory,
-                      style: const TextStyle(
-                        fontFamily: 'inter',
-                        color: Color.fromARGB(255, 0, 43, 75),
-                      ),
+                      style: TextStyle(fontFamily: 'inter', color: titleColor),
                     ),
                     trailing: Text(
                       '\$${avgSalary.toStringAsFixed(0)}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'JetB',
                         fontSize: 12,
-                        color: Color.fromARGB(255, 17, 84, 116),
+                        color: subtitleColor,
                       ),
                     ),
                     children: [
@@ -225,26 +247,26 @@ class _CompareCompaniesBySizeScreenState
                           ),
                           title: Text(
                             'Job: ${job.jobTitle}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'JetB',
                               fontSize: 12,
-                              color: Color.fromARGB(255, 17, 84, 116),
+                              color: subtitleColor,
                             ),
                           ),
                           subtitle: Text(
                             '${job.jobCategory} • ${job.experienceLevel}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'inter',
                               fontSize: 11,
-                              color: Color.fromARGB(255, 0, 43, 75),
+                              color: titleColor,
                             ),
                           ),
                           trailing: Text(
                             job.formattedSalaryInUSD,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'JetB',
                               fontSize: 12,
-                              color: Color.fromARGB(255, 34, 124, 157),
+                              color: subtitleColor,
                             ),
                           ),
                         ),
@@ -266,19 +288,19 @@ class _CompareCompaniesBySizeScreenState
                     style: TextStyle(
                       fontFamily: 'JetB',
                       fontSize: 14,
-                      color: Color.fromARGB(255, 0, 43, 75),
+                      color: titleColor,
                     ),
                   ),
                   ..._selectedJobs.map(
                     (job) => Card(
-                      color: Colors.grey.shade100,
+                      color: cardColor,
                       child: ListTile(
                         title: Text(
                           job.jobTitle,
                           style: TextStyle(
                             fontFamily: 'JetB',
                             fontSize: 13,
-                            color: Colors.black87,
+                            color: titleColor,
                           ),
                         ),
                         subtitle: Text(

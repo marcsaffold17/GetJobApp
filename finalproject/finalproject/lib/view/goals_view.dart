@@ -82,17 +82,30 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    // Dark and light mode handling
-    final Color backgroundColor = Color.fromARGB(255, 80, 80, 80);
-    final Color appBarColor = Color.fromARGB(255, 0, 43, 75);
-    final Color cardColor = Color.fromARGB(255, 96, 96, 96);
-    final Color titleColor = Color.fromARGB(255, 255, 255, 255);
-    final Color subtitleColor = Color.fromARGB(255, 0, 43, 75);
-    final Color iconColor = Color.fromARGB(255, 0, 43, 75);
+    // Dark and light mode color settings
+    final Color backgroundColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 80, 80, 80) // Dark background
+            : const Color.fromARGB(255, 244, 243, 240); // Light background
+
+    final Color appBarColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 0, 43, 75) // Dark app bar
+            : const Color.fromARGB(255, 230, 230, 226); // Light app bar
+
+    final Color cardColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 60, 60, 60) // Dark card color
+            : const Color.fromARGB(255, 230, 230, 226); // Light card color
+
+    final Color titleColor =
+        isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 43, 75);
+    final Color subtitleColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 151, 151, 151)
+            : const Color.fromARGB(255, 17, 84, 116);
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -101,10 +114,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
         centerTitle: true,
         title: Text(
           'Career Goals',
-          style: textTheme.titleLarge?.copyWith(
-            color: titleColor,
-            fontFamily: 'inter',
-          ),
+          style: TextStyle(color: titleColor, fontFamily: 'inter'),
         ),
         backgroundColor: appBarColor,
         shape: const RoundedRectangleBorder(
@@ -124,7 +134,20 @@ class _ChecklistPageState extends State<ChecklistPage> {
               borderRadius: BorderRadius.circular(12),
               child: Container(
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant,
+                  color:
+                      isDarkMode
+                          ? const Color.fromARGB(
+                            255,
+                            60,
+                            60,
+                            60,
+                          ) // Dark input field
+                          : const Color.fromARGB(
+                            255,
+                            230,
+                            230,
+                            226,
+                          ), // Light input field
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.symmetric(
@@ -173,8 +196,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       ? Center(
                         child: Text(
                           'No goals yet. Add one!',
-                          style: textTheme.bodyLarge?.copyWith(
-                            color: colorScheme.secondary.withOpacity(0.8),
+                          style: TextStyle(
+                            color: subtitleColor.withOpacity(0.8),
                             fontFamily: 'JetB',
                           ),
                         ),
@@ -219,7 +242,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                                 children: [
                                   Row(
                                     children: [
-                                      Icon(_selectedIcon, color: iconColor),
+                                      Icon(_selectedIcon, color: titleColor),
                                       const SizedBox(width: 10),
                                       Expanded(
                                         child: Text(
@@ -271,7 +294,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                                           style: TextStyle(
                                             fontFamily: 'JetB',
                                             fontWeight: FontWeight.bold,
-                                            color: colorScheme.secondary,
+                                            color: subtitleColor,
                                           ),
                                         ),
                                       ),
