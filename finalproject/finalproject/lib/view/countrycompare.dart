@@ -104,7 +104,7 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
               decoration: InputDecoration(
                 labelText: 'Search by country',
                 labelStyle: TextStyle(
-                  color: const Color.fromARGB(149, 255, 255, 255),
+                  color: const Color.fromARGB(255, 34, 124, 157),
                   fontFamily: 'inter',
                 ),
                 filled: true,

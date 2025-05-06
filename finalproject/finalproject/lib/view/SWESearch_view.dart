@@ -270,6 +270,13 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                       style: TextStyle(fontFamily: 'inter', fontSize: 12),
                     ),
                   ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Dataset Credit: Emre Öksüz - Kaggle',
+                    style: TextStyle(color: Color.fromARGB(255, 34, 124, 157), fontFamily: 'JetB', fontSize: 12
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   Expanded(
                     child:
                         _filteredJobs.isEmpty

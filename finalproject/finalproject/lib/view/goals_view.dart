@@ -93,7 +93,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     final Color appBarColor =
         isDarkMode
             ? const Color.fromARGB(255, 0, 43, 75) // Dark app bar
-            : const Color.fromARGB(255, 230, 230, 226); // Light app bar
+            : const Color.fromARGB(255, 0, 43, 75); // Light app bar
 
     final Color cardColor =
         isDarkMode
@@ -101,7 +101,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
             : const Color.fromARGB(255, 230, 230, 226); // Light card color
 
     final Color titleColor =
-        isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 43, 75);
+        isDarkMode ? Colors.white : const Color.fromARGB(255, 244, 243, 240);
     final Color subtitleColor =
         isDarkMode
             ? const Color.fromARGB(255, 151, 151, 151)
