@@ -153,7 +153,7 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
           return Stack(
             children: [
               SizedBox(height: 100),
-              Container(height: 200, width: 200),
+              SizedBox(height: 200, width: 200),
               Container(
                 height: constraints.maxHeight,
                 color: const Color.fromARGB(255, 244, 243, 240),
@@ -473,6 +473,7 @@ class CreateAccountPage extends State<MyCreateAccountPage>
     );
   }
 
+  @override
   void showError(String message) {
     setState(() {
       _emailError = message;

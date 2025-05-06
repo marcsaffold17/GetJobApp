@@ -4,6 +4,8 @@ import '../view/SWESearch_view.dart';
 import '../view/DSTest_view.dart';
 
 class TabViewPage extends StatefulWidget {
+  const TabViewPage({super.key});
+
   @override
   _TabViewPageState createState() => _TabViewPageState();
 }

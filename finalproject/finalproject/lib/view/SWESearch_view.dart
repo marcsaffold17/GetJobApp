@@ -158,8 +158,29 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
 
   @override
   Widget build(BuildContext context) {
+    // Detect current theme
+    final darkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Define dark and light mode color schemes
+    final backgroundColor =
+        darkMode
+            ? const Color.fromARGB(255, 80, 80, 80)
+            : const Color.fromARGB(255, 244, 243, 240);
+    final searchFieldColor =
+        darkMode
+            ? const Color(0xFF555555)
+            : const Color.fromARGB(40, 34, 124, 157);
+    final selectedItemColor =
+        darkMode ? Colors.white : const Color.fromARGB(255, 17, 84, 116);
+    final unselectedItemColor =
+        darkMode ? Colors.grey : const Color.fromARGB(150, 17, 84, 116);
+    final cardColor =
+        darkMode
+            ? const Color(0xFF444444)
+            : const Color.fromARGB(255, 230, 230, 226);
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: backgroundColor,
       body:
           _isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -171,41 +192,55 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                     padding: const EdgeInsets.all(12),
                     child: TextField(
                       style: TextStyle(
-                        color: Color.fromARGB(255, 17, 84, 116),
+                        color:
+                            darkMode
+                                ? Colors.white
+                                : const Color.fromARGB(255, 17, 84, 116),
                         fontFamily: 'JetB',
                       ),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Search by job title',
                         labelStyle: TextStyle(
-                          color: Color.fromARGB(150, 17, 84, 116),
+                          color:
+                              darkMode
+                                  ? Colors.grey
+                                  : const Color.fromARGB(150, 17, 84, 116),
                           fontFamily: 'inter',
                         ),
                         filled: true,
-                        fillColor: Color.fromARGB(40, 34, 124, 157),
+                        fillColor: searchFieldColor,
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color.fromARGB(255, 17, 84, 116),
+                            color:
+                                darkMode
+                                    ? Colors.white
+                                    : const Color.fromARGB(255, 17, 84, 116),
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20),
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color.fromARGB(
-                              255,
-                              34,
-                              124,
-                              157,
-                            ), // Border when focused
+                            color:
+                                darkMode
+                                    ? Colors.white
+                                    : const Color.fromARGB(
+                                      255,
+                                      34,
+                                      124,
+                                      157,
+                                    ), // Border when focused
                             width: 2.0,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(20),
+                          ),
                         ),
                       ),
                       onChanged: _filterJobs,
                     ),
                   ),
-
-                  // Button goes to compareSalariesCities_view.dart
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -218,22 +253,23 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 0, 43, 75),
-                      foregroundColor: Color.fromARGB(255, 244, 243, 240),
+                      backgroundColor:
+                          darkMode
+                              ? const Color.fromARGB(255, 0, 43, 75)
+                              : const Color.fromARGB(255, 0, 43, 75),
+                      foregroundColor:
+                          darkMode
+                              ? Colors.black
+                              : const Color.fromARGB(255, 244, 243, 240),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     child: const Text(
                       'Compare Salaries by City',
-                      style: TextStyle(
-                        fontFamily: 'inter',
-                        color: Color.fromARGB(255, 244, 243, 240),
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(fontFamily: 'inter', fontSize: 12),
                     ),
                   ),
-
                   Expanded(
                     child:
                         _filteredJobs.isEmpty
@@ -244,12 +280,7 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                               itemBuilder: (context, index) {
                                 final job = _filteredJobs[index];
                                 return Card(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    230,
-                                    230,
-                                    226,
-                                  ),
+                                  color: cardColor,
                                   margin: const EdgeInsets.symmetric(
                                     horizontal: 12,
                                     vertical: 6,
@@ -267,24 +298,35 @@ class _SWESearchViewState extends State<SWESearchView> implements JobView {
                                       borderRadius: BorderRadius.circular(12),
                                       side: BorderSide.none,
                                     ),
-                                    backgroundColor: const Color.fromARGB(
-                                      255,
-                                      230,
-                                      230,
-                                      226,
-                                    ),
+                                    backgroundColor: cardColor,
                                     title: Text(
                                       job.jobTitle,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'inter',
-                                        color: Color.fromARGB(255, 0, 43, 75),
+                                        color:
+                                            darkMode
+                                                ? Colors.white
+                                                : const Color.fromARGB(
+                                                  255,
+                                                  0,
+                                                  43,
+                                                  75,
+                                                ),
                                       ),
                                     ),
                                     subtitle: Text(
                                       '${job.company} • ${job.location}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontFamily: 'JetB',
-                                        color: Color.fromARGB(255, 17, 84, 116),
+                                        color:
+                                            darkMode
+                                                ? Colors.white
+                                                : const Color.fromARGB(
+                                                  255,
+                                                  17,
+                                                  84,
+                                                  116,
+                                                ),
                                       ),
                                     ),
                                     trailing: Text(

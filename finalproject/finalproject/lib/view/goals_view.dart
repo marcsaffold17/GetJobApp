@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 class ChecklistPage extends StatefulWidget {
   final bool isFromNavbar;
 
-  const ChecklistPage({Key? key, required this.isFromNavbar}) : super(key: key);
+  const ChecklistPage({super.key, required this.isFromNavbar});
 
   @override
   _ChecklistPageState createState() => _ChecklistPageState();
@@ -78,25 +78,45 @@ class _ChecklistPageState extends State<ChecklistPage> {
     }
   }
 
-  IconData _selectedIcon = Icons.work;
+  final IconData _selectedIcon = Icons.work;
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Dark and light mode color settings
+    final Color backgroundColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 80, 80, 80) // Dark background
+            : const Color.fromARGB(255, 244, 243, 240); // Light background
+
+    final Color appBarColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 0, 43, 75) // Dark app bar
+            : const Color.fromARGB(255, 230, 230, 226); // Light app bar
+
+    final Color cardColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 60, 60, 60) // Dark card color
+            : const Color.fromARGB(255, 230, 230, 226); // Light card color
+
+    final Color titleColor =
+        isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 43, 75);
+    final Color subtitleColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 151, 151, 151)
+            : const Color.fromARGB(255, 17, 84, 116);
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Color.fromARGB(255, 244, 238, 227),
-        ),
+        iconTheme: IconThemeData(color: titleColor),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Career Goals',
-          style: TextStyle(
-            color: Color.fromARGB(255, 244, 238, 227),
-            fontFamily: 'inter',
-          ),
+          style: TextStyle(color: titleColor, fontFamily: 'inter'),
         ),
-        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+        backgroundColor: appBarColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
@@ -114,7 +134,20 @@ class _ChecklistPageState extends State<ChecklistPage> {
               borderRadius: BorderRadius.circular(12),
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(40, 34, 124, 157),
+                  color:
+                      isDarkMode
+                          ? const Color.fromARGB(
+                            255,
+                            60,
+                            60,
+                            60,
+                          ) // Dark input field
+                          : const Color.fromARGB(
+                            255,
+                            230,
+                            230,
+                            226,
+                          ), // Light input field
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.symmetric(
@@ -126,16 +159,18 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     Expanded(
                       child: TextField(
                         controller: _textController,
-                        decoration: const InputDecoration(
-                          // filled: true,
-                          // fillColor: Color.fromARGB(40, 34, 124, 157),
+                        decoration: InputDecoration(
                           hintText: 'Add a career goal...',
                           hintStyle: TextStyle(
-                            color: Color.fromARGB(140, 17, 84, 116),
+                            color: subtitleColor.withOpacity(0.6),
                             fontFamily: 'JetB',
                             fontWeight: FontWeight.bold,
                           ),
                           border: InputBorder.none,
+                        ),
+                        style: TextStyle(
+                          color: subtitleColor,
+                          fontFamily: 'JetB',
                         ),
                         onSubmitted: (text) {
                           if (text.isNotEmpty) _addItem(text);
@@ -143,10 +178,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(
-                        Icons.add_circle_rounded,
-                        color: Color.fromARGB(255, 34, 124, 157),
-                      ),
+                      icon: Icon(Icons.add_circle_rounded, color: appBarColor),
                       onPressed: () {
                         if (_textController.text.isNotEmpty) {
                           _addItem(_textController.text);
@@ -165,9 +197,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         child: Text(
                           'No goals yet. Add one!',
                           style: TextStyle(
-                            color: Color.fromARGB(130, 34, 124, 157),
+                            color: subtitleColor.withOpacity(0.8),
                             fontFamily: 'JetB',
-                            fontSize: 18,
                           ),
                         ),
                       )
@@ -185,7 +216,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                               child: Container(
                                 alignment: Alignment.centerRight,
                                 padding: const EdgeInsets.only(right: 20),
-                                color: const Color.fromARGB(238, 202, 59, 59),
+                                color: Colors.redAccent,
                                 child: const Icon(
                                   Icons.delete,
                                   color: Colors.white,
@@ -196,7 +227,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                               duration: const Duration(milliseconds: 300),
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 230, 230, 226),
+                                color: cardColor,
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: const [
                                   BoxShadow(
@@ -211,10 +242,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                                 children: [
                                   Row(
                                     children: [
-                                      Icon(
-                                        _selectedIcon,
-                                        color: Color.fromARGB(255, 0, 43, 75),
-                                      ),
+                                      Icon(_selectedIcon, color: titleColor),
                                       const SizedBox(width: 10),
                                       Expanded(
                                         child: Text(
@@ -229,23 +257,15 @@ class _ChecklistPageState extends State<ChecklistPage> {
                                                     : TextDecoration.none,
                                             color:
                                                 item.isChecked
-                                                    ? Colors.grey
-                                                    : Color.fromARGB(
-                                                      255,
-                                                      17,
-                                                      84,
-                                                      116,
-                                                    ),
+                                                    ? subtitleColor.withOpacity(
+                                                      0.5,
+                                                    )
+                                                    : subtitleColor,
                                           ),
                                         ),
                                       ),
                                       Checkbox(
-                                        activeColor: const Color.fromARGB(
-                                          255,
-                                          0,
-                                          43,
-                                          75,
-                                        ),
+                                        activeColor: appBarColor,
                                         value: item.isChecked,
                                         onChanged: (_) => _toggleItem(index),
                                       ),
@@ -260,28 +280,21 @@ class _ChecklistPageState extends State<ChecklistPage> {
                                         item.date != null
                                             ? 'Due: ${DateFormat.yMMMd().format(item.date!)}'
                                             : 'No due date',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 14,
-                                          fontFamily:
-                                              'JetB', // or 'MontserratB' or any other you've added
-                                          color: Color.fromARGB(255, 0, 43, 75),
+                                          fontFamily: 'JetB',
+                                          color: subtitleColor,
                                         ),
                                       ),
                                       TextButton(
                                         onPressed:
                                             () => _selectDate(context, index),
-                                        child: const Text(
+                                        child: Text(
                                           'Set Date',
                                           style: TextStyle(
-                                            fontFamily:
-                                                'JetB', // use your preferred font
+                                            fontFamily: 'JetB',
                                             fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(
-                                              255,
-                                              34,
-                                              124,
-                                              157,
-                                            ),
+                                            color: subtitleColor,
                                           ),
                                         ),
                                       ),

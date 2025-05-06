@@ -25,11 +25,49 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
 
   double averageSalary(List<JobEntry> jobs) {
     final total = jobs.map((j) => j.salaryInUSD).reduce((a, b) => a + b);
-    return total / jobs.length / 1000; // convert to thousands for display
+    return total / jobs.length / 1000;
   }
 
   @override
   Widget build(BuildContext context) {
+    // Check if dark mode is enabled
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    // Color variables based on theme
+    final backgroundColor =
+        isDark
+            ? const Color.fromARGB(255, 80, 80, 80) // Dark background
+            : const Color.fromARGB(255, 244, 243, 240); // Light background
+
+    final cardColor =
+        isDark
+            ? const Color.fromARGB(255, 60, 60, 60) // Dark card color
+            : const Color.fromARGB(255, 230, 230, 226); // Light card color
+
+    final primaryTextColor = isDark ? Colors.white : Colors.black; // Text color
+    final subtitleColor =
+        isDark
+            ? Colors.grey[300]! // Light grey subtitle text for dark mode
+            : const Color.fromARGB(
+              255,
+              0,
+              43,
+              75,
+            ); // Darker color for light mode
+
+    final timeColor =
+        isDark
+            ? Colors
+                .lightBlueAccent // Light blue for time in dark mode
+            : const Color.fromARGB(
+              255,
+              34,
+              124,
+              157,
+            ); // Different blue for light mode
+
+    // Group and sort the jobs by country
     final countryJobMap = groupJobsByCountry(widget.jobs);
     final sortedCountries =
         countryJobMap.entries.toList()..sort(
@@ -46,32 +84,44 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
         backgroundColor: const Color.fromARGB(255, 0, 43, 75),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: const Color.fromARGB(255, 244, 243, 240),
+          color: backgroundColor,
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Average Salary By Country',
-          style: TextStyle(
-            fontFamily: 'inter',
-            color: Color.fromARGB(255, 244, 243, 240),
-          ),
+          style: TextStyle(fontFamily: 'inter', color: Colors.white),
         ),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: backgroundColor,
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Search by country',
-                border: OutlineInputBorder(),
+                labelStyle: TextStyle(
+                  color: const Color.fromARGB(149, 255, 255, 255),
+                  fontFamily: 'inter',
+                ),
+                filled: true,
+                fillColor: const Color.fromARGB(40, 34, 124, 157),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 17, 84, 116),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 34, 124, 157),
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
               ),
               onChanged: (query) {
                 setState(() {
@@ -90,7 +140,7 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
                 final avgSalary = averageSalary(countryJobs);
 
                 return Card(
-                  color: const Color.fromARGB(255, 230, 230, 226),
+                  color: cardColor,
                   margin: const EdgeInsets.symmetric(vertical: 6),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -105,44 +155,41 @@ class _CompareCountriesScreenState extends State<CompareCountriesScreen> {
                       borderRadius: BorderRadius.circular(12),
                       side: BorderSide.none,
                     ),
-                    backgroundColor: const Color.fromARGB(255, 230, 230, 226),
+                    backgroundColor: cardColor,
                     title: Text(
                       country,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'inter',
-                        color: Color.fromARGB(255, 0, 43, 75),
+                        color: primaryTextColor,
                       ),
                     ),
                     trailing: Text(
                       '\$${avgSalary.toStringAsFixed(1)}k',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'JetB',
                         fontSize: 12,
-                        color: Color.fromARGB(255, 17, 84, 116),
+                        color: subtitleColor,
                       ),
                     ),
                     children: [
-                      const Divider(
-                        color: Color.fromARGB(255, 0, 43, 75),
-                        thickness: 1,
-                      ),
+                      Divider(color: primaryTextColor, thickness: 1),
                       ...countryJobs.map(
                         (job) => ListTile(
                           dense: true,
                           title: Text(
                             'Company: ${job.jobTitle}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'JetB',
                               fontSize: 12,
-                              color: Color.fromARGB(255, 17, 84, 116),
+                              color: subtitleColor,
                             ),
                           ),
                           trailing: Text(
                             '\$${(job.salaryInUSD / 1000).toStringAsFixed(1)}k',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'JetB',
                               fontSize: 12,
-                              color: Color.fromARGB(255, 34, 124, 157),
+                              color: timeColor,
                             ),
                           ),
                         ),

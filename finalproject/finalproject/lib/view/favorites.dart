@@ -21,38 +21,77 @@ class _FavoritesPageState extends State<FavoritesPage> {
         .collection('favorites');
   }
 
-  TextStyle _descriptionStyle() => const TextStyle(
-    color: Color.fromARGB(255, 34, 124, 157),
-    fontFamily: 'JetB',
-    fontSize: 12,
-  );
+  TextStyle _descriptionStyle() {
+    return TextStyle(
+      color: Theme.of(context).textTheme.bodyMedium!.color,
+      fontFamily: 'JetB',
+      fontSize: 12,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Dark and light mode color settings
+    final Color backgroundColor =
+        isDarkMode
+            ? const Color.fromARGB(
+              255,
+              80,
+              80,
+              80,
+            ) // Custom dark background color
+            : const Color.fromARGB(
+              255,
+              244,
+              243,
+              240,
+            ); // Custom light background color
+
+    final Color appBarColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 0, 43, 75) // Custom dark appBar color
+            : const Color.fromARGB(
+              255,
+              230,
+              230,
+              226,
+            ); // Custom light appBar color
+
+    final Color cardColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 60, 60, 60) // Dark card color
+            : const Color.fromARGB(255, 230, 230, 226); // Light card color
+
+    final Color titleColor =
+        isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 43, 75);
+    final Color subtitleColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 151, 151, 151)
+            : const Color.fromARGB(255, 17, 84, 116);
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+        backgroundColor: appBarColor,
+        elevation: 2,
         centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Color.fromARGB(255, 244, 243, 240),
-        ),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
         ),
-        elevation: 2,
         title: const Text(
           'Favorite Jobs',
           style: TextStyle(
             fontFamily: 'inter',
             fontSize: 20,
             fontWeight: FontWeight.w600,
-            color: Color.fromARGB(255, 244, 243, 240),
           ),
         ),
+        iconTheme: IconThemeData(color: titleColor),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: favoritesRef.snapshots(),
@@ -77,7 +116,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
               final data = docs[index].data() as Map<String, dynamic>;
 
               return Card(
-                color: const Color.fromARGB(255, 230, 230, 226),
+                color: cardColor,
                 margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -92,20 +131,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     borderRadius: BorderRadius.circular(12),
                     side: BorderSide.none,
                   ),
-                  backgroundColor: const Color.fromARGB(255, 230, 230, 226),
+                  backgroundColor: cardColor,
                   title: Text(
                     data['Title'] ?? 'No Title',
-                    style: const TextStyle(
-                      fontFamily: 'inter',
-                      color: Color.fromARGB(255, 0, 43, 75),
-                    ),
+                    style: TextStyle(fontFamily: 'inter', color: titleColor),
                   ),
                   subtitle: Text(
                     '${data['Company'] ?? data['Category']} • ${data['Location'] ?? 'Unknown'}',
-                    style: const TextStyle(
-                      fontFamily: 'JetB',
-                      color: Color.fromARGB(255, 17, 84, 116),
-                    ),
+                    style: TextStyle(fontFamily: 'JetB', color: subtitleColor),
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
@@ -143,7 +176,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           const SizedBox(height: 8),
                           Text(
                             'Salary: ${data['Salary'] ?? 'N/A'}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Color.fromARGB(255, 17, 84, 116),
                               fontFamily: 'JetB',
                             ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'goals_view.dart';
+
+import 'profile_page.dart'; // Import the profile page
 import 'calendar_view.dart';
 import 'alarm_view.dart';
 import 'video_page.dart';
@@ -17,10 +19,27 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    const darkBlue = Color(0xFF003366); // Example dark blue
+    final darkMode = Theme.of(context).brightness == Brightness.dark;
+
+    final backgroundColor =
+        darkMode
+            ? const Color.fromARGB(
+              255,
+              80,
+              80,
+              80,
+            ) // Dark mode background color
+            : const Color.fromARGB(255, 244, 243, 240); // Light mode background
+
+    final primaryColor =
+        darkMode ? Color(0xFF003366) : Color.fromARGB(255, 0, 43, 75);
+    final accentColor =
+        darkMode
+            ? const Color.fromARGB(255, 0, 43, 75)
+            : Color.fromARGB(255, 0, 43, 75); // Match profile page colors
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+      backgroundColor: backgroundColor,
       body: Stack(
         children: [
           Column(
@@ -30,7 +49,10 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 'I N L I N K',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 0, 43, 75),
+                  color:
+                      darkMode
+                          ? const Color.fromARGB(255, 0, 43, 75)
+                          : primaryColor,
                   fontFamily: 'inter',
                   fontSize: 80,
                 ),
@@ -53,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: 60,
                     child: TextButton(
                       style: TextButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 0, 43, 75),
+                        backgroundColor: accentColor,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
                           vertical: 12,
@@ -184,6 +206,28 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ],
+          ),
+          // Profile button on top right of the homepage
+          Positioned(
+            top: 40, // Adjust this value to place it higher or lower
+            right: 20, // Adjust this value to position it horizontally
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                );
+              },
+              child: CircleAvatar(
+                radius: 30,
+                backgroundColor: darkMode ? Colors.grey[600] : Colors.grey[300],
+                child: Icon(
+                  Icons.account_circle,
+                  size: 35,
+                  color: darkMode ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
           ),
         ],
       ),
