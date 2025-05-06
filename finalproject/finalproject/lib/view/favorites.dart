@@ -23,7 +23,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
   TextStyle _descriptionStyle() {
     return TextStyle(
-      color: Theme.of(context).textTheme.bodyMedium!.color,
+      // color: Theme.of(context).textTheme.bodyMedium!.color,
+      color: Color.fromARGB(255, 34, 124, 157),
       fontFamily: 'JetB',
       fontSize: 12,
     );
