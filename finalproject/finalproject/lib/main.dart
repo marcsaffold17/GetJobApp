@@ -1,14 +1,26 @@
 import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../view/login_view.dart';
+import 'package:provider/provider.dart';
+import '../view/theme_notifier.dart'; // update this path as necessary
 import '../view/alarm_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Alarm.init();
   await Firebase.initializeApp();
-  runApp(MyApp());
+
+  final prefs = await SharedPreferences.getInstance();
+  final isDarkMode = prefs.getBool('isDarkMode') ?? false;
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeNotifier()..setDarkMode(isDarkMode),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,20 +28,42 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        textSelectionTheme: TextSelectionThemeData(
+        brightness: Brightness.light,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xFF002B4B),
+          brightness: Brightness.light,
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Color.fromARGB(255, 17, 84, 116),
           selectionColor: Color.fromARGB(100, 34, 124, 157),
           selectionHandleColor: Color.fromARGB(255, 17, 84, 116),
         ),
-        progressIndicatorTheme: ProgressIndicatorThemeData(
-          color: const Color.fromARGB(255, 17, 84, 116),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: Color.fromARGB(255, 17, 84, 116),
         ),
       ),
-      home: const MyLoginPage(title: 'login Page'),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xFF002B4B),
+          brightness: Brightness.dark,
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color.fromARGB(255, 17, 84, 116),
+          selectionColor: Color.fromARGB(100, 34, 124, 157),
+          selectionHandleColor: Color.fromARGB(255, 17, 84, 116),
+        ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: Color.fromARGB(255, 17, 84, 116),
+        ),
+      ),
+      themeMode: themeNotifier.currentTheme,
+      home: const MyLoginPage(title: 'Login Page'),
     );
   }
 }
