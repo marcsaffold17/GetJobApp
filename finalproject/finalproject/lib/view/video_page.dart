@@ -35,16 +35,18 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
     setState(() {
       _videos = videos;
       _controllers.clear();
-      _controllers.addAll(videos.map((video) {
-        return YoutubePlayerController.fromVideoId(
-          videoId: video.videoId,
-          autoPlay: false,
-          params: const YoutubePlayerParams(
-            showFullscreenButton: true,
-            showControls: true,
-          ),
-        );
-      }));
+      _controllers.addAll(
+        videos.map((video) {
+          return YoutubePlayerController.fromVideoId(
+            videoId: video.videoId,
+            autoPlay: false,
+            params: const YoutubePlayerParams(
+              showFullscreenButton: true,
+              showControls: true,
+            ),
+          );
+        }),
+      );
     });
   }
 
@@ -53,8 +55,24 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 243, 240),
       appBar: AppBar(
-        title: const Text('Interview Prep Videos'),
+        title: const Text(
+          'Interview Prep Videos',
+          style: TextStyle(
+            color: Color.fromARGB(255, 244, 243, 240),
+            fontFamily: 'inter',
+          ),
+        ),
         backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(255, 244, 243, 240),
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+        ),
       ),
       body: ListView.builder(
         itemCount: _videos.length,
@@ -63,6 +81,7 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
           final controller = _controllers[index];
 
           return Card(
+            color: Color.fromARGB(255, 17, 84, 116),
             margin: const EdgeInsets.all(12.0),
             elevation: 4,
             shape: RoundedRectangleBorder(
@@ -81,8 +100,10 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
                   Text(
                     video.title,
                     style: const TextStyle(
+                      color: Color.fromARGB(255, 244, 243, 240),
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
+                      fontFamily: 'JetB',
                     ),
                   ),
                 ],
