@@ -181,6 +181,11 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
     final subtitleColor =
         isDark
             ? const Color.fromARGB(255, 150, 200, 220)
+            : const Color.fromARGB(255, 17, 84, 116);
+
+    final subsubtitleColor =
+        isDark
+            ? const Color.fromARGB(255, 150, 200, 220)
             : const Color.fromARGB(255, 34, 124, 157);
 
     final fillColor =
@@ -339,7 +344,7 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                         title: Text(
                                           'Work Setting: ${job.workSetting}',
                                           style: _descriptionTextStyle(
-                                            subtitleColor,
+                                            subsubtitleColor,
                                           ),
                                         ),
                                         trailing: IconButton(
@@ -353,19 +358,19 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
                                             Text(
                                               'Employment Type: ${job.employmentType}',
                                               style: _descriptionTextStyle(
-                                                subtitleColor,
+                                                subsubtitleColor,
                                               ),
                                             ),
                                             Text(
                                               'Work Year: ${job.workYear}',
                                               style: _descriptionTextStyle(
-                                                subtitleColor,
+                                                subsubtitleColor,
                                               ),
                                             ),
                                             Text(
                                               'Company Size: ${job.companySize}',
                                               style: _descriptionTextStyle(
-                                                subtitleColor,
+                                                subsubtitleColor,
                                               ),
                                             ),
                                             const SizedBox(height: 8),
