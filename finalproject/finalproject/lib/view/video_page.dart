@@ -58,15 +58,23 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Interview Prep Videos'),
-        backgroundColor:
-            theme.appBarTheme.backgroundColor ??
-            (isDark
-                ? const Color.fromARGB(255, 0, 43, 75)
-                : const Color.fromARGB(255, 0, 43, 75)),
-        foregroundColor: Colors.black ?? Colors.white,
+        title: const Text(
+          'Interview Prep Videos',
+          style: TextStyle(
+            color: Color.fromARGB(255, 244, 243, 240),
+            fontFamily: 'inter',
+          ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(255, 244, 243, 240),
+        ),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
         ),
       ),
       body: ListView.builder(
@@ -76,7 +84,7 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
           final controller = _controllers[index];
 
           return Card(
-            color: theme.cardColor,
+            color: Color.fromARGB(255, 17, 84, 116),
             margin: const EdgeInsets.all(12.0),
             elevation: 4,
             shape: RoundedRectangleBorder(
@@ -94,10 +102,11 @@ class _VideoPageState extends State<VideoPage> implements VideoView {
                   const SizedBox(height: 8),
                   Text(
                     video.title,
-                    style: TextStyle(
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 244, 243, 240),
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: theme.textTheme.bodyLarge?.color,
+                      fontFamily: 'JetB',
                     ),
                   ),
                 ],
