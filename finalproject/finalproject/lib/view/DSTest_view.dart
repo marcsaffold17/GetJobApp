@@ -112,8 +112,8 @@ class _DJobListScreenState extends State<DJobListScreen> implements JobView {
 
     final fillColor =
         isDark
-            ? const Color.fromARGB(80, 0, 43, 75)
-            : const Color.fromARGB(40, 0, 43, 75);
+            ? const Color(0xFF555555)
+            : const Color.fromARGB(40, 34, 124, 157);
 
     return Scaffold(
       backgroundColor: backgroundColor,
