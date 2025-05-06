@@ -52,12 +52,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     final Color appBarColor =
         isDarkMode
             ? const Color.fromARGB(255, 0, 43, 75) // Custom dark appBar color
-            : const Color.fromARGB(
-              255,
-              230,
-              230,
-              226,
-            ); // Custom light appBar color
+            : const Color.fromARGB(255, 0, 43, 75); // Custom light appBar color
 
     final Color cardColor =
         isDarkMode
@@ -71,6 +66,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
             ? const Color.fromARGB(255, 151, 151, 151)
             : const Color.fromARGB(255, 17, 84, 116);
 
+    final Color textColor =
+        isDarkMode
+            ? const Color.fromARGB(255, 151, 151, 151)
+            : const Color.fromARGB(255, 17, 84, 116);
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -138,7 +137,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   ),
                   subtitle: Text(
                     '${data['Company'] ?? data['Category']} • ${data['Location'] ?? 'Unknown'}',
-                    style: TextStyle(fontFamily: 'JetB', color: subtitleColor),
+                    style: TextStyle(fontFamily: 'JetB', color: Colors.white),
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),

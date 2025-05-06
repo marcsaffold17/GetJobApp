@@ -208,7 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         title: Text(
           "My Workout Profile",
-          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+          style: TextStyle(color: Colors.white),
         ),
         iconTheme: IconThemeData(
           color: Theme.of(context).colorScheme.onPrimary,

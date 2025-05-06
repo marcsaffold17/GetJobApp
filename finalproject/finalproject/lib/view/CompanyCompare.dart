@@ -116,7 +116,7 @@ class _CompareCompaniesBySizeScreenState
     final Color appBarColor =
         isDarkMode
             ? const Color.fromARGB(255, 0, 43, 75) // Dark app bar
-            : const Color.fromARGB(255, 230, 230, 226); // Light app bar
+            : const Color.fromARGB(255, 0, 43, 75); // Light app bar
 
     final Color cardColor =
         isDarkMode
@@ -163,7 +163,7 @@ class _CompareCompaniesBySizeScreenState
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          'Average Salary by Company Size',
+          'company size vs salary',
           style: TextStyle(
             fontFamily: 'inter',
             color: Color.fromARGB(255, 244, 243, 240),

@@ -108,7 +108,7 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
             fontFamily: 'inter',
             fontSize: 20,
             fontWeight: FontWeight.w600,
-            color: backgroundColor,
+            color: Colors.white,
           ),
         ),
       ),
