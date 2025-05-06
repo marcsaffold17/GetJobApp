@@ -15,8 +15,15 @@ class AlarmScreen extends StatefulWidget {
 
 class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
   late AlarmPresenter _presenter;
-  DateTime _selectedDateTime = DateTime.now().add(Duration(minutes: 1));
+  DateTime _selectedDateTime = DateTime.now();
+
   List<AlarmModel> _alarms = [];
+
+  final TextEditingController _alarmTitleController = TextEditingController();
+  TimeOfDay _selectedAlarmTime = TimeOfDay.now();
+
+  DateTime _selectedAlarmDate = DateTime.now();
+
 
   @override
   void initState() {
@@ -32,7 +39,7 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
     });
   }
 
-  @override
+    @override
   void showAlarmSetSuccess() {
     ScaffoldMessenger.of(
       context,
@@ -46,6 +53,221 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
       context,
     ).showSnackBar(SnackBar(content: Text('Error: $message')));
   }
+
+  void _showAddAlarmDialog() {
+    final DateTime today = DateTime.now();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 244, 243, 240),
+        title: const Text(
+          "Add Alarm",
+          style: TextStyle(
+            fontFamily: 'inter',
+            color: Color.fromARGB(255, 0, 43, 75),
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _alarmTitleController,
+              style: const TextStyle(
+                color: Color.fromARGB(255, 34, 124, 157),
+                fontFamily: 'JetB',
+              ),
+              decoration: const InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 17, 84, 116),
+                    width: 2.0,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color.fromARGB(255, 34, 124, 157),
+                    width: 2.0,
+                  ),
+                ),
+                labelText: "Alarm Title",
+                labelStyle: TextStyle(
+                  color: Color.fromARGB(150, 17, 84, 116),
+                  fontFamily: 'JetB',
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: () async {
+                final pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: _selectedAlarmDate,
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime.now().add(const Duration(days: 365)),
+                  builder: (BuildContext context, Widget? child) {
+                    return Theme(
+                      data: ThemeData.light().copyWith(
+                        textTheme: ThemeData.light().textTheme.apply(
+                          fontFamily: 'inter',
+                        ),
+                        colorScheme: ColorScheme.light(
+                          primary: Color.fromARGB(255, 0, 43, 75),
+                          onPrimary: Color.fromARGB(255, 230, 230, 226), // selected text
+                          onSurface: Color.fromARGB(255, 17, 84, 116), // default text
+                        ),
+                        dialogBackgroundColor: Color.fromARGB(255, 244, 243, 240),
+                        datePickerTheme: DatePickerThemeData(
+                          headerBackgroundColor: Color.fromARGB(255, 0, 43, 75),
+                          headerForegroundColor: Color.fromARGB(255, 230, 230, 226),
+                          backgroundColor: Color.fromARGB(255, 244, 243, 240),
+                          dayStyle: TextStyle(
+                            fontFamily: 'inter',
+                            color: Color.fromARGB(255, 17, 84, 116),
+                          ),
+                          weekdayStyle: TextStyle(
+                            fontFamily: 'inter',
+                            color: Color.fromARGB(150, 17, 84, 116),
+                          ),
+                        ),
+                      ),
+                      child: child!,
+                    );
+                  },
+                );
+                if (pickedDate != null) {
+                  setState(() {
+                    _selectedAlarmDate = pickedDate;
+                  });
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 17, 84, 116),
+                foregroundColor: Colors.white,
+              ),
+              child: Text(
+                "Pick Date: ${_selectedAlarmDate.month}/${_selectedAlarmDate.day}/${_selectedAlarmDate.year}",
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 17, 84, 116),
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () async {
+                final picked = await showTimePicker(
+                  context: context,
+                  initialTime: _selectedAlarmTime,
+                  builder: (BuildContext context, Widget? child) {
+                    return Theme(
+                      data: ThemeData.light().copyWith(
+                        textTheme: ThemeData.light().textTheme.apply(
+                          fontFamily:
+                          'inter',
+                        ),
+                        colorScheme: ColorScheme.light(
+                          primary: Color.fromARGB(255, 0, 43, 75),
+                          onPrimary: const Color.fromARGB(
+                            255,
+                            230,
+                            230,
+                            226,
+                          ),
+                          onSurface: const Color.fromARGB(
+                            255,
+                            17,
+                            84,
+                            116,
+                          ),
+                        ),
+                        timePickerTheme: TimePickerThemeData(
+                          helpTextStyle: TextStyle(
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 0, 43, 75),
+                            fontFamily: 'inter',
+                          ),
+                          backgroundColor: const Color.fromARGB(
+                            255,
+                            244,
+                            243,
+                            240,
+                          ),
+                          dayPeriodColor: WidgetStateColor.resolveWith((
+                              states,
+                              ) {
+                            return states.contains(WidgetState.selected)
+                                ? Color.fromARGB(255, 0, 43, 75)
+                                : Colors.white;
+                          }),
+                          dayPeriodTextColor: WidgetStateColor.resolveWith((
+                              states,
+                              ) {
+                            return states.contains(WidgetState.selected)
+                                ? Color.fromARGB(255, 230, 230, 226)
+                                : Color.fromARGB(255, 17, 84, 116);
+                          }),
+                        ),
+                      ),
+
+                      child: child!,
+                    );
+                  },
+                );
+                if (picked != null) {
+                  setState(() {
+                    _selectedAlarmTime = picked;
+                  });
+                }
+              },
+              child: Text("Pick Time: ${_selectedAlarmTime.format(context)}"),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 202, 59, 59),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (_alarmTitleController.text.isEmpty) return;
+
+              final now = DateTime.now();
+              final selectedDateTime = DateTime(
+                _selectedAlarmDate.year,
+                _selectedAlarmDate.month,
+                _selectedAlarmDate.day,
+                _selectedAlarmTime.hour,
+                _selectedAlarmTime.minute,
+              );
+
+              final alarmModel = AlarmModel(
+                id: DateTime.now().millisecondsSinceEpoch.toString(),
+                dateTime: selectedDateTime.isBefore(now)
+                    ? selectedDateTime.add(Duration(days: 1))
+                    : selectedDateTime,
+                title: _alarmTitleController.text,
+              );
+
+              await _presenter.setAlarm(alarmModel);
+              _alarmTitleController.clear();
+              Navigator.pop(context);
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 17, 84, 116),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text("Add"),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +338,19 @@ class _AlarmScreenState extends State<AlarmScreen> implements AlarmView {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _showAddAlarmDialog,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 0, 43, 75),
+                foregroundColor: Colors.white,
+              ),
+              child: const Text(
+                'Add Alarm',
+                style: TextStyle(fontSize: 20, fontFamily: 'JetB'),
+              ),
+            ),
+
             Expanded(
               child:
                   _alarms.isEmpty
