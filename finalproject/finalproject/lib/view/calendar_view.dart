@@ -339,7 +339,7 @@ class _MyCalendarPage extends State<MyCalendarPage> implements AlarmView {
     final Color appBarColor =
         isDarkMode
             ? const Color.fromARGB(255, 0, 43, 75)
-            : const Color.fromARGB(255, 230, 230, 226);
+            : const Color.fromARGB(255, 0, 43, 75);
 
     final Color cardColor =
         isDarkMode

@@ -12,13 +12,6 @@ class ResetPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: const Color.fromARGB(255, 244, 243, 240),
-      //   leading: IconButton(
-      //     icon: const Icon(Icons.arrow_back),
-      //     onPressed: () => Navigator.pop(context),
-      //   ),
-      // ),
       body: Stack(
         children: [
           Container(
@@ -150,288 +143,313 @@ class LoginPage extends State<MyLoginPage> implements LoginView {
       resizeToAvoidBottomInset: true,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          return Stack(
-            children: [
-              SizedBox(height: 100),
-              SizedBox(height: 200, width: 200),
-              Container(
-                height: constraints.maxHeight,
-                color: const Color.fromARGB(255, 244, 243, 240),
-              ),
-              SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 20, 50, 31),
-                          ),
-                        ),
-                        SizedBox(height: 100),
-                        SizedBox(
-                          width: 200,
-                          height: 200,
-                          child: Image(
-                            image: AssetImage("assets/images/Logo.png"),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: RichText(
-                            text: TextSpan(
-                              style: TextStyle(
-                                fontFamily: 'MontserratB',
-                                fontSize: 40,
-                                color: const Color.fromARGB(255, 0, 43, 75),
-                              ),
-                              children: const <TextSpan>[
-                                TextSpan(
-                                  text: '\n  Sign In',
-                                  style: TextStyle(fontFamily: 'inter'),
-                                ),
-                              ],
+          return SingleChildScrollView(
+            child: Stack(
+              children: [
+                SizedBox(height: 100),
+                SizedBox(height: 200, width: 200),
+                Container(
+                  height: constraints.maxHeight,
+                  color: const Color.fromARGB(255, 244, 243, 240),
+                ),
+                SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                              color: Color.fromARGB(255, 20, 50, 31),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        Positioned(
-                          left: -5,
-                          right: -5,
-                          top: 200,
-                          bottom: -15,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                SizedBox(height: 20),
-                                LoginTextField(
-                                  userNameText: emailText,
-                                  hintText: 'Email',
-                                  obscure: false,
-                                  onChanged: (_) => _clearError(),
+                          SizedBox(height: 100),
+                          SizedBox(
+                            width: 200,
+                            height: 200,
+                            child: Image(
+                              image: AssetImage("assets/images/Logo.png"),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontFamily: 'MontserratB',
+                                  fontSize: 40,
+                                  color: const Color.fromARGB(255, 0, 43, 75),
                                 ),
-                                SizedBox(height: 12),
-                                LoginTextField(
-                                  userNameText: passWordText,
-                                  hintText: 'Password',
-                                  obscure: true,
-                                  onChanged: (_) => _clearError(),
-                                ),
-                                if (_loginError != null)
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 10,
-                                      right: 60,
-                                    ),
-                                    child: Container(
-                                      width: 270,
-                                      decoration: BoxDecoration(
-                                        color: Color.fromARGB(255, 202, 59, 59),
-                                        borderRadius: BorderRadius.circular(
-                                          30.0,
-                                        ),
+                                children: const <TextSpan>[
+                                  TextSpan(
+                                    text: '\n  Sign In',
+                                    style: TextStyle(fontFamily: 'inter'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Positioned(
+                            left: -5,
+                            right: -5,
+                            top: 200,
+                            bottom: -15,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  SizedBox(height: 20),
+                                  LoginTextField(
+                                    userNameText: emailText,
+                                    hintText: 'Email',
+                                    obscure: false,
+                                    onChanged: (_) => _clearError(),
+                                  ),
+                                  SizedBox(height: 12),
+                                  LoginTextField(
+                                    userNameText: passWordText,
+                                    hintText: 'Password',
+                                    obscure: true,
+                                    onChanged: (_) => _clearError(),
+                                  ),
+                                  if (_loginError != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 10,
+                                        right: 60,
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 8.0,
-                                          bottom: 8.0,
-                                        ),
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          _loginError!,
-                                          style: TextStyle(
-                                            color: Color.fromARGB(
-                                              255,
-                                              229,
-                                              221,
-                                              212,
-                                            ),
-                                            fontFamily: 'JetB',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
+                                      child: Container(
+                                        width: 270,
+                                        decoration: BoxDecoration(
+                                          color: Color.fromARGB(
+                                            255,
+                                            202,
+                                            59,
+                                            59,
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                // SizedBox(height: 20),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 30),
-                                  child: GestureDetector(
-                                    // style: TextButton.styleFrom(
-                                    //   backgroundColor: Colors.transparent,
-                                    //   padding: EdgeInsets.symmetric(
-                                    //     vertical: 0,
-                                    //     horizontal: 0,
-                                    //   ),
-                                    //   shape: RoundedRectangleBorder(
-                                    //     borderRadius: BorderRadius.circular(
-                                    //       30.0,
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder:
-                                              (context) => ResetPasswordPage(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Forgot Password?',
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 0, 43, 75),
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'JetB',
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 16.0),
-                                  child: SizedBox(
-                                    width: 200,
-                                    height: 60,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color.fromARGB(
-                                          255,
-                                          0,
-                                          43,
-                                          75,
-                                        ),
-                                        shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
                                             30.0,
                                           ),
                                         ),
-                                      ),
-                                      onPressed: () async {
-                                        FocusScope.of(context).unfocus();
-                                        if (emailText.text.isEmpty ||
-                                            passWordText.text.isEmpty) {
-                                          showError(
-                                            "Please enter both email and password",
-                                          );
-                                          return;
-                                        }
-                                        bool success =
-                                            await showDialog<bool>(
-                                              context: context,
-                                              barrierDismissible: false,
-                                              builder: (context) {
-                                                return FutureBuilder<bool>(
-                                                  future: presenter.login(
-                                                    emailText.text.trim(),
-                                                    passWordText.text,
-                                                  ),
-                                                  builder: (context, snapshot) {
-                                                    if (snapshot
-                                                            .connectionState ==
-                                                        ConnectionState
-                                                            .waiting) {
-                                                      return const Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      );
-                                                    }
-                                                    Navigator.of(context).pop(
-                                                      snapshot.data ?? false,
-                                                    );
-                                                    return Container();
-                                                  },
-                                                );
-                                              },
-                                            ) ??
-                                            false;
-
-                                        if (success && mounted) {
-                                          globalEmail = emailText.text;
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) =>
-                                                      NavigationMenuView(),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 8.0,
+                                            bottom: 8.0,
+                                          ),
+                                          child: Text(
+                                            textAlign: TextAlign.center,
+                                            _loginError!,
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                255,
+                                                229,
+                                                221,
+                                                212,
+                                              ),
+                                              fontFamily: 'JetB',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
                                             ),
-                                          );
-                                        }
-                                      },
-                                      child: const Text(
-                                        'Login',
-                                        style: TextStyle(
-                                          fontFamily: 'JetB',
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color.fromARGB(
-                                            255,
-                                            244,
-                                            238,
-                                            227,
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                SizedBox(height: 100),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(width: 10),
-                                    Text(
-                                      "Don't have an account?",
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 17, 84, 116),
-                                        fontFamily: 'JetB',
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    GestureDetector(
+                                  // SizedBox(height: 20),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 30),
+                                    child: GestureDetector(
+                                      // style: TextButton.styleFrom(
+                                      //   backgroundColor: Colors.transparent,
+                                      //   padding: EdgeInsets.symmetric(
+                                      //     vertical: 0,
+                                      //     horizontal: 0,
+                                      //   ),
+                                      //   shape: RoundedRectangleBorder(
+                                      //     borderRadius: BorderRadius.circular(
+                                      //       30.0,
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       onTap: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder:
                                                 (context) =>
-                                                    const MyCreateAccountPage(
-                                                      title:
-                                                          'Create Account Page',
-                                                    ),
+                                                    ResetPasswordPage(),
                                           ),
                                         );
                                       },
                                       child: const Text(
-                                        'Sign Up',
+                                        'Forgot Password?',
                                         style: TextStyle(
-                                          decoration: TextDecoration.underline,
                                           color: Color.fromARGB(255, 0, 43, 75),
                                           fontWeight: FontWeight.bold,
                                           fontFamily: 'JetB',
-                                          fontSize: 18,
+                                          fontSize: 20,
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                  SizedBox(height: 10),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 16.0),
+                                    child: SizedBox(
+                                      width: 200,
+                                      height: 60,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color.fromARGB(
+                                            255,
+                                            0,
+                                            43,
+                                            75,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              30.0,
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          FocusScope.of(context).unfocus();
+                                          if (emailText.text.isEmpty ||
+                                              passWordText.text.isEmpty) {
+                                            showError(
+                                              "Please enter both email and password",
+                                            );
+                                            return;
+                                          }
+                                          bool success =
+                                              await showDialog<bool>(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder: (context) {
+                                                  return FutureBuilder<bool>(
+                                                    future: presenter.login(
+                                                      emailText.text.trim(),
+                                                      passWordText.text,
+                                                    ),
+                                                    builder: (
+                                                      context,
+                                                      snapshot,
+                                                    ) {
+                                                      if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting) {
+                                                        return const Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        );
+                                                      }
+                                                      Navigator.of(context).pop(
+                                                        snapshot.data ?? false,
+                                                      );
+                                                      return Container();
+                                                    },
+                                                  );
+                                                },
+                                              ) ??
+                                              false;
+
+                                          if (success && mounted) {
+                                            globalEmail = emailText.text;
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (context) =>
+                                                        NavigationMenuView(),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: const Text(
+                                          'Login',
+                                          style: TextStyle(
+                                            fontFamily: 'JetB',
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(
+                                              255,
+                                              244,
+                                              238,
+                                              227,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 100),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(width: 10),
+                                      Text(
+                                        "Don't have an account?",
+                                        style: TextStyle(
+                                          color: Color.fromARGB(
+                                            255,
+                                            17,
+                                            84,
+                                            116,
+                                          ),
+                                          fontFamily: 'JetB',
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      SizedBox(width: 10),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (
+                                                    context,
+                                                  ) => const MyCreateAccountPage(
+                                                    title:
+                                                        'Create Account Page',
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text(
+                                          'Sign Up',
+                                          style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            color: Color.fromARGB(
+                                              255,
+                                              0,
+                                              43,
+                                              75,
+                                            ),
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'JetB',
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),
