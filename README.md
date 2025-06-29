@@ -1,0 +1,1 @@
+Android application written in Dart and using the Flutter library. Worked in a group of 6 for 1 week. Uses MVP architecture, Firebase, and agile scrum. My contributions include the data science salary comparison page and alarm implementation.
